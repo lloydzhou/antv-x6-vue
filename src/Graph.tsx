@@ -28,7 +28,6 @@ const Graph = defineComponent({
       width: Number(width),
       layout: {},
       options: { ...otherOptions },
-      isReady: false
     })
     const isReady = ref(false)
 

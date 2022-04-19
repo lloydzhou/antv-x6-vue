@@ -1,6 +1,9 @@
 // @ts-nocheck
 import Graph from './Graph'
 import Shape, { Node, Rect, Edge, Cell } from './Shape'
+import Grid from './components/Grid'
+import Background from './components/Background'
+
 
 const components = [
   Graph,
@@ -23,6 +26,8 @@ export {
   Rect,
   Edge,
   Cell,
+  Grid,
+  Background,
 }
 
 export default Graph
