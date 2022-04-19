@@ -6,7 +6,7 @@
 
 ```
 import { defineComponent, reactive } from 'vue'
-import Graph, { Node, Edge } from 'antv-x6-vue'
+import Graph, { Node, Edge, Grid, Background } from 'antv-x6-vue'
 
 
 export default defineComponent({
