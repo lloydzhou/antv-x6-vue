@@ -1,17 +1,14 @@
 <template>
   <Graph>
-    <Node id="1"></Node>
-    <Node id="2" />
+    <Node id="1" :x="100" :y="100" />
+    <Node id="2" :x="200" :y="200" />
     <Edge id="e1" source="1" target="2" />
-    <Cell id="4" shape="rect" />
-    <Cell id="5" shape="rect" />
-    <Cell id="6" shape="edge" source="4" target="5" />
   </Graph>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import Graph, { Node, Edge, Cell } from './index'
+import Graph, { Node, Rect, Edge } from './index'
 
 
 @Options({
@@ -19,7 +16,6 @@ import Graph, { Node, Edge, Cell } from './index'
     Graph,
     Node,
     Edge,
-    Cell,
   },
 })
 export default class App extends Vue {

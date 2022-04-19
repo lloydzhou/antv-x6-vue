@@ -1,6 +1,6 @@
 // @ts-nocheck
 import Graph from './Graph'
-import Cell, { Node, Edge } from './Cell'
+import Shape, { Node, Rect, Edge, Cell } from './Shape'
 
 const components = [
   Graph,
@@ -18,13 +18,12 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 export {
   Graph,
-  Cell,
+  Shape,
   Node,
+  Rect,
   Edge,
+  Cell,
 }
-
-export * as X6 from '@antv/x6'
-
 
 export default Graph
 

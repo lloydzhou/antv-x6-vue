@@ -1,22 +1,14 @@
 // @ts-nocheck
-import { defineComponent, onMounted, onUnmounted, ref, watch, toRaw, toRef, markRaw, shallowReactive, Fragment } from 'vue';
+import { defineComponent, onMounted, ref, watch, markRaw, shallowReactive, Fragment } from 'vue';
 
 import * as X6 from '@antv/x6'
 import {createContext} from './GraphContext'
-import clone from '@antv/util/es/clone'
+// import clone from '@antv/util/es/clone'
 import './index.less'
 
 const Graph = defineComponent({
   name: 'Graph',
   props: {
-    data: {
-      type: Object,
-      default: () => ({})
-    },
-    layout: {
-      type: Object,
-      default: () => ({})
-    },
     height: {
       type: Number,
       default: () => 600
@@ -26,8 +18,8 @@ const Graph = defineComponent({
       default: () => 800
     },
   },
-  setup(props, {slots}) {
-    const { data, layout, width, height, ...otherOptions } = props;
+  setup(props) {
+    const { data, width, height, ...otherOptions } = props;
     const self = markRaw({
       props,
       data,
@@ -38,6 +30,7 @@ const Graph = defineComponent({
       options: { ...otherOptions },
       isReady: false
     })
+    const isReady = ref(false)
 
     // self.props不会同步变化
     watch(() => props, (newProps) => self.props = {...newProps})
@@ -48,15 +41,12 @@ const Graph = defineComponent({
     /** createContext内的数据 */
     const contextRef = shallowReactive({
       graph: {},
-      layout: {},
     });
 
     createContext(contextRef);
     
     const initGraphInstance = () => {
       const {
-        data,
-        layout,
         width,
         height,
         autoResize,
@@ -78,7 +68,7 @@ const Graph = defineComponent({
 
       self.graph = new X6.Graph(self.options)
       contextRef.graph = self.graph
-      self.isReady = true
+      isReady.value = true
     }
     onMounted(() => {
       initGraphInstance()
@@ -86,11 +76,11 @@ const Graph = defineComponent({
 
     return {
       graphDOM,
-      isReady: toRef(self, 'isReady')
+      isReady,
     }
   },
   render() {
-    const { graphDOM, isReady, $slots: slots } = this
+    const { isReady, $slots: slots } = this
     return (
       <div id="graph-contaner">
         <div data-testid="custom-element" class="graph-core" ref="graphDOM">
