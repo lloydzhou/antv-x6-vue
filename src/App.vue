@@ -1,18 +1,30 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <Graph>
+    <Node id="1"></Node>
+    <Node id="2" />
+    <Edge id="e1" source="1" target="2" />
+    <Cell id="4" shape="rect" />
+    <Cell id="5" shape="rect" />
+    <Cell id="6" shape="edge" source="4" target="5" />
+  </Graph>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import HelloWorld from './components/HelloWorld.vue';
+import Graph, { Node, Edge, Cell } from './index'
+
 
 @Options({
   components: {
-    HelloWorld,
+    Graph,
+    Node,
+    Edge,
+    Cell,
   },
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  
+}
 </script>
 
 <style>
@@ -22,6 +34,5 @@ export default class App extends Vue {}
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

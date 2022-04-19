@@ -1,24 +1,26 @@
 # antv-x6-vue
 
-## Project setup
+
+
 ```
-yarn install
+import { defineComponent, reactive } from 'vue'
+import Graph, { Node, Edge } from 'antv-x6-vue'
+
+
+export default defineComponent({
+  setup(props) {
+    const state = reactive({
+      nodes: [],
+      edges: [],
+    })
+    return () => (
+      <Graph>
+        {nodes.map(node => <Node :key="node.id" :model="node" />)}
+        {edges.map(edge => <Edge :key="edge.id" :model="edge" />)}
+      </Graph>
+    )
+  }
+})
+
 ```
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
