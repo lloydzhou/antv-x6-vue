@@ -1,0 +1,37 @@
+.*
+package-lock.json
+yarn.lock
+/.git/
+/.vscode/
+*.log
+
+.DS_Store
+/src
+/dist
+/example
+/node_modules
+/public
+/tests
+.browserslistrc
+vue.config.js
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea
+.vscode
+.gitignore
+.npmignore
+.npmrc
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
