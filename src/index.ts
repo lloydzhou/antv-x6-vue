@@ -6,6 +6,7 @@ import Background from './components/Background'
 import Clipboard from './components/Clipboard'
 import Snapline from './components/Snapline'
 import Selection from './components/Selection'
+import Scroller from './components/Scroller'
 import Keyboard from './components/Keyboard'
 
 
@@ -35,6 +36,7 @@ export {
   Clipboard,
   Snapline,
   Selection,
+  Scroller,
   Keyboard,
 }
 

@@ -4,6 +4,7 @@
     <Node id="2" :x="200" :y="200" />
     <Edge id="e1" source="1" target="2" />
     <Grid :visible="showGrid" />
+    <Scroller :enabled="showScroller" />
     <Background />
     <Snapline />
     <Selection />
@@ -15,7 +16,7 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import Graph, { Node, Edge } from './index'
-import { Grid, Background, Clipboard, Snapline, Selection, Keyboard } from './index'
+import { Grid, Background, Clipboard, Snapline, Selection, Keyboard, Scroller } from './index'
 
 
 @Options({
@@ -28,16 +29,19 @@ import { Grid, Background, Clipboard, Snapline, Selection, Keyboard } from './in
     Clipboard,
     Snapline,
     Selection,
+    Scroller,
     Keyboard,
   },
 })
 export default class App extends Vue {
 
   showGrid = true
+  showScroller = true
 
   created() {
     setTimeout(() => {
       this.showGrid = false
+      this.showScroller= false
     }, 5000)
   }
 }
