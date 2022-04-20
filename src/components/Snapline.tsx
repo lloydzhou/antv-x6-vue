@@ -5,29 +5,25 @@ import { mergeOption } from '../utils'
 
 
 const defaultOptions = {
-  size: 10,
-  visible: true,
-  type: 'dot',
-  args: {
-    color: '#a0a0a0',
-    thickness: 1,
-  }
+  tolerance: 10,
 }
 
 export default defineComponent({
   name: 'Snapline',
-  props: ['className', 'tolerance', 'sharp', 'resizing', 'filter'],
+  props: ['enabled', 'className', 'tolerance', 'sharp', 'resizing', 'clean', 'filter'],
   inject: [contextSymbol],
   setup(props) {
     const { graph } = useContext()
-    const draw = () => {
-      // const options = mergeOption(defaultOptions, {...props})
-      graph.hideSnapline()
+    const updateSnapline = () => {
+      graph.disableSnapline()
+      const options = mergeOption(defaultOptions, {...props, enabled: props.enabled !== false})
+      const snapline = mergeOption(options, graph.snapline.widget.options)
+      console.log('update snapline options', options, graph)
       graph.enableSnapline()
     }
-    watch(() => props, () => draw(), {deep: true})
-    onMounted(() => draw())
-    onUnmounted(() => graph.clearGrid())
+    watch(() => props, () => updateSnapline(), {deep: true})
+    onMounted(() => updateSnapline())
+    onUnmounted(() => graph.disableSnapline())
     return () => null
   }
 })

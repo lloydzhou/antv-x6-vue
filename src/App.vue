@@ -5,13 +5,16 @@
     <Edge id="e1" source="1" target="2" />
     <Grid :visible="showGrid" />
     <Background />
+    <Snapline />
+    <Selection />
+    <Clipboard />
   </Graph>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import Graph, { Node, Edge } from './index'
-import { Grid, Background } from './index'
+import { Grid, Background, Clipboard, Snapline, Selection } from './index'
 
 
 @Options({
@@ -21,6 +24,9 @@ import { Grid, Background } from './index'
     Edge,
     Grid,
     Background,
+    Clipboard,
+    Snapline,
+    Selection,
   },
 })
 export default class App extends Vue {

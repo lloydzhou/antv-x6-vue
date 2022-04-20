@@ -10,13 +10,13 @@ const defaultOptions = {
 
 export default defineComponent({
   name: 'Background',
-  props: ['color', 'image', 'position', 'size', 'repeat', 'opacity', 'quality', 'angle'],
+  props: ['enabled', 'color', 'image', 'position', 'size', 'repeat', 'opacity', 'quality', 'angle'],
   inject: [contextSymbol],
   setup(props) {
     const { graph } = useContext()
     const draw = () => {
       // console.log('draw Background', props)
-      const options = mergeOption(defaultOptions, {...props})
+      const options = mergeOption(defaultOptions, {...props, enabled: props.enabled !== false})
       graph.clearBackground()
       graph.drawBackground(options)
     }

@@ -3,6 +3,9 @@ import Graph from './Graph'
 import Shape, { Node, Rect, Edge, Cell } from './Shape'
 import Grid from './components/Grid'
 import Background from './components/Background'
+import Clipboard from './components/Clipboard'
+import Snapline from './components/Snapline'
+import Selection from './components/Selection'
 
 
 const components = [
@@ -28,6 +31,9 @@ export {
   Cell,
   Grid,
   Background,
+  Clipboard,
+  Snapline,
+  Selection,
 }
 
 export default Graph
