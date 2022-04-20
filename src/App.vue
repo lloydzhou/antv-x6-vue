@@ -8,13 +8,14 @@
     <Snapline />
     <Selection />
     <Clipboard />
+    <Keyboard />
   </Graph>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import Graph, { Node, Edge } from './index'
-import { Grid, Background, Clipboard, Snapline, Selection } from './index'
+import { Grid, Background, Clipboard, Snapline, Selection, Keyboard } from './index'
 
 
 @Options({
@@ -27,6 +28,7 @@ import { Grid, Background, Clipboard, Snapline, Selection } from './index'
     Clipboard,
     Snapline,
     Selection,
+    Keyboard,
   },
 })
 export default class App extends Vue {

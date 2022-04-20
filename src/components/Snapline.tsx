@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { defineComponent, onMounted, onUnmounted, ref, watch } from 'vue';
+import { defineComponent, onMounted, onUnmounted, watch } from 'vue';
 import { useContext, contextSymbol } from '../GraphContext'
 import { mergeOption } from '../utils'
 
@@ -18,7 +18,6 @@ export default defineComponent({
       graph.disableSnapline()
       const options = mergeOption(defaultOptions, {...props, enabled: props.enabled !== false})
       const snapline = mergeOption(options, graph.snapline.widget.options)
-      console.log('update snapline options', options, graph)
       graph.enableSnapline()
     }
     watch(() => props, () => updateSnapline(), {deep: true})

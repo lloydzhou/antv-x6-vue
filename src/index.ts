@@ -6,6 +6,7 @@ import Background from './components/Background'
 import Clipboard from './components/Clipboard'
 import Snapline from './components/Snapline'
 import Selection from './components/Selection'
+import Keyboard from './components/Keyboard'
 
 
 const components = [
@@ -34,6 +35,7 @@ export {
   Clipboard,
   Snapline,
   Selection,
+  Keyboard,
 }
 
 export default Graph

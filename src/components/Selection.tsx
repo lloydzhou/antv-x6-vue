@@ -35,7 +35,6 @@ export default defineComponent({
           }
         )
       )
-      console.log('create selecting', defaultOptions, graph.selection.widgetOptions, otherOptions, selecting, graph)
       graph.options.selecting = selecting
       graph.selection.widget = graph.hook.createSelection()
       graph.enableSelection()
