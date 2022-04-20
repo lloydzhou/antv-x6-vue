@@ -17,12 +17,19 @@ const Graph = defineComponent({
       type: Number,
       default: () => 800
     },
+    autoResize: {
+      type: Boolean,
+      default: () => true
+    },
+    panning: {
+      type: Boolean,
+      default: () => true
+    },
   },
   setup(props) {
-    const { data, width, height, ...otherOptions } = props;
+    const { width, height, ...otherOptions } = props;
     const self = markRaw({
       props,
-      data,
       graph: {},
       height: Number(height),
       width: Number(width),
@@ -49,6 +56,7 @@ const Graph = defineComponent({
         width,
         height,
         autoResize,
+        panning,
         ...otherOptions
       } = props;
       /**  width and height */
@@ -62,6 +70,7 @@ const Graph = defineComponent({
         width: self.width,
         height: self.height,
         autoResize: autoResize !== false,
+        panning: panning !== false,
         ...otherOptions,
       })
 
@@ -81,8 +90,13 @@ const Graph = defineComponent({
   render() {
     const { isReady, $slots: slots } = this
     return (
-      <div id="graph-contaner">
-        <div data-testid="custom-element" class="graph-core" ref="graphDOM">
+      <div id="graph-contaner" style={{
+        width: '100%',
+        height: '100%',
+        position: 'relative',
+      }}>
+        <div data-testid="custom-element" class="graph-core" ref="graphDOM" />
+        <div class="graph-component">
           {isReady && <Fragment>
             {slots.default ? slots.default() : null}
             {slots.components ? slots.components() : null}

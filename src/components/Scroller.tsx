@@ -37,6 +37,7 @@ export default defineComponent({
       )
       graph.options.scroller = scroller
       graph.scroller.widget = graph.hook.createScroller()
+      graph.drawGrid(graph.options.grid)
     }
     watch(() => props, () => create(), {deep: true})
     onMounted(() => create())

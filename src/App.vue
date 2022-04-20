@@ -3,21 +3,26 @@
     <Node id="1" :x="100" :y="100" />
     <Node id="2" :x="200" :y="200" />
     <Edge id="e1" source="1" target="2" />
-    <Grid :visible="showGrid" />
-    <Scroller :enabled="showScroller" />
+    <Scroller />
     <Background />
+    <Grid :visible="showGrid" />
     <Snapline />
     <Selection />
     <Clipboard />
     <Keyboard />
+    <MouseWheel />
+    <MiniMap />
   </Graph>
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import { Options, Vue } from 'vue-class-component';
 import Graph, { Node, Edge } from './index'
-import { Grid, Background, Clipboard, Snapline, Selection, Keyboard, Scroller } from './index'
+import { Grid, Background, Clipboard, Snapline, Selection, Keyboard, Scroller, MouseWheel, MiniMap } from './index'
 
+import { test } from './history.test'
+test()
 
 @Options({
   components: {
@@ -31,6 +36,8 @@ import { Grid, Background, Clipboard, Snapline, Selection, Keyboard, Scroller } 
     Selection,
     Scroller,
     Keyboard,
+    MouseWheel,
+    MiniMap,
   },
 })
 export default class App extends Vue {
@@ -40,8 +47,8 @@ export default class App extends Vue {
 
   created() {
     setTimeout(() => {
-      this.showGrid = false
-      this.showScroller= false
+      // this.showGrid = false
+      // this.showScroller= false
     }, 5000)
   }
 }

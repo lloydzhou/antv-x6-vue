@@ -8,6 +8,7 @@ const defaultOptions = {
   multiple: true,
   rubberband: true,
   showNodeSelectionBox: true,
+  modifiers: 'shift',
 }
 
 export default defineComponent({

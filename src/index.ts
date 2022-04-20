@@ -8,6 +8,8 @@ import Snapline from './components/Snapline'
 import Selection from './components/Selection'
 import Scroller from './components/Scroller'
 import Keyboard from './components/Keyboard'
+import MouseWheel from './components/MouseWheel'
+import MiniMap from './components/MiniMap'
 
 
 const components = [
@@ -38,6 +40,8 @@ export {
   Selection,
   Scroller,
   Keyboard,
+  MouseWheel,
+  MiniMap,
 }
 
 export default Graph
