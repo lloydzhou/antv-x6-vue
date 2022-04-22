@@ -5,46 +5,19 @@
 2. 针对复杂的自定义图形，利用x6支持渲染vue组件[@antv/x6-vue-shape](https://www.npmjs.com/package/@antv/x6-vue-shape)的功能，同时利用slots将节点渲染交给当前组件，将图形相关逻辑交给x6。
 ```
 import { VueShape as VueShapeContainer } from '@antv/x6-vue-shape';
-const VueShape = defineComponent({
-  name: 'VueShape',
-  props: [...NodeProps, 'primer', 'useForeignObject', 'component'],
-  inject: [contextSymbol],
-  setup(props, { slots, emit }) {
-    const { graph } = useContext()
-    const {
-      id,
-      width=60, height=60,
-      primer='circle', useForeignObject=true, component,  // 这几个是@antv/x6-vue-shape独有的参数
-      ...otherOptions
-    } = props
-    const cell = ref()
-    const create = () => {
-      cell.value = new VueShapeContainer({
-        id, width, height,
-        primer, useForeignObject,
-        // 这里将自己的slots中的内容强行放到画布中去
-        // 这样图结构的交互还有一些操作逻辑交给x6
-        // 通过vue绘制的组件渲染和组件内部交互逻辑交给用户
-        component: component
-          ? component
-          : () => h('div', {key: id, class: 'vue-shape'}, slots.default ? slots.default({props, item: cell}) : null),
-        ...otherOptions,
-      })
-      graph.addCell(cell.value)
-    }
-    // 监听其他变化
-    watch(() => otherOptions, (options) => {
-      Object.keys(options).filter(key => options[key] !== undefined).forEach((key) => {
-        cell.value.setProp(key, options[key])
-      })
-    })
-    onMounted(() =>create())
-    onUnmounted(() => {
-      graph.removeCell(id)
-    })
-    return () => null
-  }
+
+cell.value = new VueShapeContainer({
+  id, width, height,
+  primer, useForeignObject,
+  // 这里将自己的slots中的内容强行放到画布中去
+  // 这样图结构的交互还有一些操作逻辑交给x6
+  // 通过vue绘制的组件渲染和组件内部交互逻辑交给用户
+  component: component
+    ? component
+    : () => h('div', {key: id, class: 'vue-shape'}, slots.default ? slots.default({props, item: cell}) : null),
+  ...otherOptions,
 })
+graph.addCell(cell.value)
 
 ```
 
