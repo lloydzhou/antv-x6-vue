@@ -3,8 +3,9 @@
     <Node id="1" :x="100" :y="100" />
     <Node id="2" :x="200" :y="200" />
     <Edge id="e1" source="1" target="2" />
-    <VueShape primer="rect" id="3" :x="200" :y="300" :width="160" :attrs="{rect: {fill: '#ddd', stroke: '#333'}}" label="VueShape">
+    <VueShape primer="rect" id="3" :x="200" :y="300" :width="160" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}">
       <div>这里是一个vue的组件</div>
+      <img style="width: 30px;height:30px;" src="https://v3.cn.vuejs.org/logo.png" />
     </VueShape>
     <Edge id="e2" source="1" target="3" />
     <!-- <Scroller /> -->
@@ -25,8 +26,8 @@ import { Options, Vue } from 'vue-class-component';
 import Graph, { Node, Edge, VueShape } from './index'
 import { Grid, Background, Clipboard, Snapline, Selection, Keyboard, Scroller, MouseWheel, MiniMap } from './index'
 
-import { test } from './history.test'
-test()
+// import { test } from './history.test'
+// test()
 
 @Options({
   components: {
