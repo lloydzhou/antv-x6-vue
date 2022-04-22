@@ -1,6 +1,6 @@
 {
   "name": "antv-x6-vue",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "the vue toolkit for graph analysis based on x6",
   "scripts": {
     "prepare": "install-peers",
@@ -18,7 +18,8 @@
     "vue": "^3.2.31"
   },
   "dependencies": {
-    "@antv/x6": "^1.31.3"
+    "@antv/x6": "^1.31.3",
+    "@antv/x6-vue-shape": "^1.3.2"
   },
   "devDependencies": {
     "@antv/graphin-icons": "^1.0.0",

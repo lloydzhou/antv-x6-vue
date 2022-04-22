@@ -36,11 +36,12 @@ export const useCell = (props, Shape=BaseShape) => {
   })
 }
 
-const CellProps = ['id', 'markup', 'attrs', 'shape', 'view', 'zIndex', 'visible', 'data', 'parent']
+export const CellProps = ['id', 'markup', 'attrs', 'shape', 'view', 'zIndex', 'visible', 'data', 'parent']
+export const EdgeProps = CellProps.concat('source', 'target', 'vertices', 'router', 'connector', 'labels', 'defaultLabel')
+export const NodeProps = CellProps.concat('x', 'y', 'width', 'height', 'angle', 'ports', 'label')
 
 const Cell = defineComponent({
   name: 'Cell',
-  // props: ['id', 'shape', ....],
   props: CellProps,
   inject: [contextSymbol],
   setup(props) {
@@ -53,12 +54,9 @@ const Shapes = {}
 
 Object.keys(Shape).forEach(name => {
   const ShapeClass = Shape[name]
-  const props = /Edge/.test(name)
-    ? [...CellProps, 'source', 'target', 'vertices', 'router', 'connector', 'labels', 'defaultLabel']
-    : [...CellProps, 'x', 'y', 'width', 'height', 'angle', 'ports', 'label'];
   Shapes[name] = defineComponent({
     name,
-    props,
+    props: /Edge/.test(name) ? EdgeProps : NodeProps,
     inject: [contextSymbol],
     setup(props) {
       const { shape: defaultShape } = ShapeClass.defaults || {}

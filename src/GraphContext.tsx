@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { provide, inject } from 'vue'
 
-export const contextSymbol = String(Symbol('contextSymbol'))
+export const contextSymbol = String(Symbol('x6ContextSymbol'))
 
 export const createContext = (context) => {
   provide(contextSymbol, context)

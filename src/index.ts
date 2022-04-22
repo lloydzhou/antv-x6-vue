@@ -1,6 +1,8 @@
 // @ts-nocheck
 import Graph from './Graph'
-import Shape, { Node, Rect, Edge, Cell } from './Shape'
+import * as GraphContext from './GraphContext'
+import Shape, { Node, Rect, Edge, Cell, useCell } from './Shape'
+import VueShape from './VueShape'
 import Grid from './components/Grid'
 import Background from './components/Background'
 import Clipboard from './components/Clipboard'
@@ -33,6 +35,8 @@ export {
   Rect,
   Edge,
   Cell,
+  useCell,
+  VueShape,
   Grid,
   Background,
   Clipboard,
@@ -42,6 +46,7 @@ export {
   Keyboard,
   MouseWheel,
   MiniMap,
+  GraphContext,
 }
 
 export default Graph
