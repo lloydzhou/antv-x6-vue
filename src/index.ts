@@ -2,7 +2,7 @@
 import Graph from './Graph'
 import * as GraphContext from './GraphContext'
 import Shape, { Node, Rect, Edge, Cell, useCell } from './Shape'
-import VueShape from './VueShape'
+import VueShape, { useVueShape, VueShapeProps } from './VueShape'
 import Grid from './components/Grid'
 import Background from './components/Background'
 import Clipboard from './components/Clipboard'
@@ -36,7 +36,7 @@ export {
   Edge,
   Cell,
   useCell,
-  VueShape,
+  VueShape, useVueShape, VueShapeProps,
   Grid,
   Background,
   Clipboard,

@@ -7,12 +7,14 @@
       <div>这里是一个vue的组件</div>
       <img style="width: 30px;height:30px;" src="https://v3.cn.vuejs.org/logo.png" />
     </VueShape>
+    <CustomNode v-if="visible" primer="circle" id="4" :x="400" :y="y" :attrs="{circle: {fill: '#ddd', stroke: '#333'}, label: {text: 'CustomNode'}}" @added="added" @click="click">
+      <span>Hello</span>
+    </CustomNode>
     <Edge id="e2" source="1" target="3" />
     <!-- <Scroller /> -->
     <Background />
     <Grid :visible="showGrid" />
     <Snapline />
-    <Selection />
     <Clipboard />
     <Keyboard />
     <MouseWheel />
@@ -22,12 +24,34 @@
 
 <script lang="ts">
 // @ts-nocheck
+import { defineComponent, onMounted, onUnmounted } from 'vue'
 import { Options, Vue } from 'vue-class-component';
-import Graph, { Node, Edge, VueShape } from './index'
+import Graph, { Node, Edge, VueShape, useVueShape, VueShapeProps, GraphContext } from './index'
 import { Grid, Background, Clipboard, Snapline, Selection, Keyboard, Scroller, MouseWheel, MiniMap } from './index'
 
-// import { test } from './history.test'
-// test()
+const { useContext, contextSymbol } = GraphContext
+
+const CustomNode = defineComponent({
+  name: 'CustomNode',
+  props: [...VueShapeProps, 'otherOptions'],
+  inject: [contextSymbol],
+  setup(props, context) {
+    const cell = useVueShape(props, context)
+
+    const click = (e) => {
+      console.log('dblclick', e)
+      context.emit('click', e)
+    }
+    onMounted(() => {
+      console.log('onMounted', cell.value, click)
+      cell.value.on('node:dblclick', click)
+    })
+    onUnmounted(() => {
+      cell.value.off('node:dblclick', click)
+    })
+    return () => null
+  }
+})
 
 @Options({
   components: {
@@ -44,21 +68,29 @@ import { Grid, Background, Clipboard, Snapline, Selection, Keyboard, Scroller, M
     MouseWheel,
     MiniMap,
     VueShape,
+    CustomNode,
   },
 })
 export default class App extends Vue {
 
   showGrid = true
   showScroller = true
+  visible = true
+  y = 0
 
   created() {
     setTimeout(() => {
       // this.showGrid = false
       // this.showScroller= false
+      // this.visible = false
+      this.y = 400
     }, 5000)
   }
   added(e) {
     console.log('added', e)
+  }
+  click(e) {
+    console.log('click', e)
   }
 }
 </script>

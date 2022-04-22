@@ -34,17 +34,17 @@ export const useCell = (props, { emit }, Shape=BaseShape) => {
   })
   onMounted(() => {
     cell.value = new Shape({id, shape, ...otherOptions})
-    cell.value.on('added', added)
-    cell.value.on('removed', removed)
+    cell.value.once('added', added)
+    cell.value.once('removed', removed)
     cell.value.on('changed', changed)
     graph.addCell(cell.value)
   })
   onUnmounted(() => {
-    cell.value.off('added', added)
     cell.value.off('changed', changed)
     graph.removeCell(id)
-    cell.value.off('removed', removed)
   })
+
+  return cell
 }
 
 export const CellProps = ['id', 'markup', 'attrs', 'shape', 'view', 'zIndex', 'visible', 'data', 'parent']
