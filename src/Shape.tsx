@@ -5,7 +5,7 @@ import { Shape, Cell as BaseShape } from '@antv/x6'
 import { useContext, contextSymbol } from './GraphContext'
 
 
-export const useCell = (props, Shape=BaseShape) => {
+export const useCell = (props, { emit }, Shape=BaseShape) => {
   const { graph } = useContext()
   const { id, shape, ...otherOptions } = props
   if ('width' in otherOptions && otherOptions.width === undefined) {
@@ -15,6 +15,11 @@ export const useCell = (props, Shape=BaseShape) => {
     otherOptions.height = 40
   }
   const cell = ref()
+
+  const added = (e) => emit('added', e)
+  const removed = (e) => emit('removed', e)
+  const changed = (e) => emit('changed', e)
+
   // shape变化
   watch(() => shape, (shape) => {
     graph.removeCell(id)
@@ -29,10 +34,16 @@ export const useCell = (props, Shape=BaseShape) => {
   })
   onMounted(() => {
     cell.value = new Shape({id, shape, ...otherOptions})
+    cell.value.on('added', added)
+    cell.value.on('removed', removed)
+    cell.value.on('changed', changed)
     graph.addCell(cell.value)
   })
   onUnmounted(() => {
+    cell.value.off('added', added)
+    cell.value.off('changed', changed)
     graph.removeCell(id)
+    cell.value.off('removed', removed)
   })
 }
 
@@ -44,8 +55,8 @@ const Cell = defineComponent({
   name: 'Cell',
   props: CellProps,
   inject: [contextSymbol],
-  setup(props) {
-    useCell(props, BaseShape)
+  setup(props, context) {
+    useCell(props, context, BaseShape)
     return () => null
   }
 })
@@ -58,10 +69,10 @@ Object.keys(Shape).forEach(name => {
     name,
     props: /Edge/.test(name) ? EdgeProps : NodeProps,
     inject: [contextSymbol],
-    setup(props) {
+    setup(props, context) {
       const { shape: defaultShape } = ShapeClass.defaults || {}
       const { shape=defaultShape } = props
-      useCell({...props, shape}, ShapeClass)
+      useCell({...props, shape}, context, ShapeClass)
       return () => null
     }
   })
