@@ -3,14 +3,14 @@
     <Node id="1" :x="100" :y="100" @added="added" />
     <Node id="2" :x="200" :y="200"/>
     <Edge id="e1" source="1" target="2" @added="added" />
-    <VueShape primer="rect" id="3" :x="200" :y="300" :width="160" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}" @added="added">
+    <VueShape primer="rect" id="3" :x="200" :y="300" :width="160" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}" @added="added" @cell:change:zIndex="changed">
       <div>这里是一个vue的组件</div>
       <img style="width: 30px;height:30px;" src="https://v3.cn.vuejs.org/logo.png" />
     </VueShape>
-    <CustomNode v-if="visible" primer="circle" id="4" :x="400" :y="y" :attrs="{circle: {fill: '#ddd', stroke: '#333'}, label: {text: 'CustomNode'}}" @added="added" @click="click">
+    <CustomNode v-if="visible" primer="circle" id="4" :x="400" :y="y" :attrs="{circle: {fill: '#ddd', stroke: '#333'}, label: {text: 'CustomNode'}}" @added="added" @click="click" @cell:change:position="changed" >
       <span>Hello</span>
     </CustomNode>
-    <Edge id="e2" source="1" target="3" />
+    <Edge id="e2" source="1" target="3" @added="added" />
     <!-- <Scroller /> -->
     <Background />
     <Grid :visible="showGrid" />
@@ -26,7 +26,7 @@
 // @ts-nocheck
 import { defineComponent, onMounted, onUnmounted } from 'vue'
 import { Options, Vue } from 'vue-class-component';
-import Graph, { Node, Edge, VueShape, useVueShape, VueShapeProps, GraphContext } from './index'
+import Graph, { Node, Edge, VueShape, useVueShape, VueShapeProps, GraphContext, useCellEvent } from './index'
 import { Grid, Background, Clipboard, Snapline, Selection, Keyboard, Scroller, MouseWheel, MiniMap } from './index'
 
 const { useContext, contextSymbol } = GraphContext
@@ -37,18 +37,7 @@ const CustomNode = defineComponent({
   inject: [contextSymbol],
   setup(props, context) {
     const cell = useVueShape(props, context)
-
-    const click = (e) => {
-      console.log('dblclick', e)
-      context.emit('click', e)
-    }
-    onMounted(() => {
-      console.log('onMounted', cell.value, click)
-      cell.value.on('node:dblclick', click)
-    })
-    onUnmounted(() => {
-      cell.value.off('node:dblclick', click)
-    })
+    useCellEvent('node:click', (e) => context.emit('click', e), { cell })
     return () => null
   }
 })
@@ -91,6 +80,9 @@ export default class App extends Vue {
   }
   click(e) {
     console.log('click', e)
+  }
+  changed(e) {
+    console.log('changed', e)
   }
 }
 </script>

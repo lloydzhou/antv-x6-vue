@@ -1,7 +1,7 @@
 // @ts-nocheck
 import Graph from './Graph'
 import * as GraphContext from './GraphContext'
-import Shape, { Node, Rect, Edge, Cell, useCell } from './Shape'
+import Shape, { Node, Rect, Edge, Cell, useCell, useCellEvent } from './Shape'
 import VueShape, { useVueShape, VueShapeProps } from './VueShape'
 import Grid from './components/Grid'
 import Background from './components/Background'
@@ -34,8 +34,7 @@ export {
   Node,
   Rect,
   Edge,
-  Cell,
-  useCell,
+  Cell, useCell, useCellEvent,
   VueShape, useVueShape, VueShapeProps,
   Grid,
   Background,
