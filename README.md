@@ -24,7 +24,7 @@ graph.addCell(cell.value)
 ![image](https://user-images.githubusercontent.com/1826685/164878557-0c1ef06e-4e82-4204-b6a8-9347c8fd351e.png)
 
 3. 提供`useVueShape`，可以很容易的自定义一个vue组件定制出来的节点。
-4. 使用`useCellEvent`，可以比较方便的给当前节点绑定事件。
+4. 提供`useCellEvent`，可以比较方便的给当前节点绑定事件。
 ```
 const CustomNode = defineComponent({
   name: 'CustomNode',
