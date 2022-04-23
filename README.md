@@ -21,6 +21,23 @@ graph.addCell(cell.value)
 
 ```
 
+![image](https://user-images.githubusercontent.com/1826685/164878557-0c1ef06e-4e82-4204-b6a8-9347c8fd351e.png)
+
+3. 提供`useVueShape`，可以很容易的自定义一个vue组件定制出来的节点。
+4. 使用`useCellEvent`，可以比较方便的给当前节点绑定事件。
+```
+const CustomNode = defineComponent({
+  name: 'CustomNode',
+  props: [...VueShapeProps, 'otherOptions'],
+  inject: [contextSymbol],
+  setup(props, context) {
+    const cell = useVueShape(props, context)
+    useCellEvent('node:click', (e) => context.emit('click', e), { cell })
+    return () => null
+  }
+})
+```
+
 ## 安装
 ```
 yarn add antv-x6-vue
@@ -38,8 +55,21 @@ export default defineComponent({
     // ...
     const state = reactive({
       showGrid: true,
+      y: 10,
+      visible: true,
     })
-    return { ...toRefs(state) }
+    const methods = {
+      added(e) {
+        console.log('added', e)
+      },
+      click(e) {
+        console.log('click', e)
+      },
+      changed(e) {
+        console.log('changed', e)
+      },
+    }
+    return { ...toRefs(state), ...methods }
   },
 })
 
@@ -53,6 +83,18 @@ export default defineComponent({
       <div>这里是一个vue的组件</div>
       <img style="width: 30px;height:30px;" src="https://v3.cn.vuejs.org/logo.png" />
     </VueShape>
+    <CustomNode
+      v-if="visible"
+      primer="circle"
+      id="4"
+      :x="400" :y="y"
+      :attrs="{circle: {fill: '#ddd', stroke: '#333'}, label: {text: 'CustomNode'}}"
+      @added="added"
+      @click="click"
+      @cell:change:position="changed"
+    >
+      <span>Hello</span>
+    </CustomNode>
     <Edge id="e2" source="1" target="3" />
     <Background />
     <Grid :visible="showGrid" />
