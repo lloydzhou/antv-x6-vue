@@ -106,6 +106,6 @@ export default defineComponent({
 
 ```
 
-![image](https://user-images.githubusercontent.com/1826685/164745288-4badbaec-ab74-4136-bc13-986c91aef782.png)
+![image](https://user-images.githubusercontent.com/1826685/164883742-d114eaac-9751-4373-aa37-0c2e2971e14b.png)
 
 
