@@ -33,7 +33,7 @@ export default defineComponent({
       // 1. 先停止监听
       clear()
       // 2. 重新生成对应的widget（由于manager在graph上是readonly的只能更改内层的widget）
-      const { enabled, style={}, ...otherOptions } = props
+      const { enabled, ...otherOptions } = props
       const options = mergeOption(
         graph.options.minimap || {},
         mergeOption(

@@ -123,7 +123,7 @@ Object.keys(Shape).forEach(name => {
     setup(props, context) {
       const { shape: defaultShape } = ShapeClass.defaults || {}
       const { shape=defaultShape } = props
-      const cell = useCell({...props, shape}, context, ShapeClass)
+      useCell({...props, shape}, context, ShapeClass)
       return () => null
     }
   })

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { defineComponent, onMounted, onUnmounted, ref, watch } from 'vue';
+import { defineComponent, onMounted, onUnmounted, watch } from 'vue';
 import { useContext, contextSymbol } from '../GraphContext'
 import { mergeOption } from '../utils'
 
@@ -15,11 +15,19 @@ export default defineComponent({
   name: 'Selection',
   props: ['enabled', 'multiple', 'rubberband', 'rubberNode', 'rubberEdge', 'strict', 'modifiers', 'movable', 'content', 'filter'],
   inject: [contextSymbol],
-  setup(props) {
+  setup(props, { emit }) {
     const { graph } = useContext()
+
+    const selected = (e) => emit('selected', e)
+    const unselected = (e) => emit('unselected', e)
+    const changed = (e) => emit('changed', e)
+
     const clear = () => {
       graph.cleanSelection()
       graph.disableSelection()
+      graph.off('cell:selected', selected)
+      graph.off('cell:unselected', unselected)
+      graph.off('selection:changed', changed)
     }
     const create = () => {
       // 1. 先停止监听
@@ -40,6 +48,9 @@ export default defineComponent({
       graph.selection.widget = graph.hook.createSelection()
       graph.enableSelection()
       graph.selection.enable()
+      graph.on('cell:selected', selected)
+      graph.on('cell:unselected', unselected)
+      graph.on('selection:changed', changed)
     }
     watch(() => props, () => create(), {deep: true})
     onMounted(() => create())
