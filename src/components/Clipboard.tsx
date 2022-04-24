@@ -1,12 +1,12 @@
 // @ts-nocheck
-import { defineComponent, onMounted, onUnmounted, ref, watch } from 'vue';
+import { defineComponent, onMounted, onUnmounted, watch } from 'vue';
 import { useContext, contextSymbol } from '../GraphContext'
 
 export default defineComponent({
   name: 'Clipboard',
   props: ['enabled'],
   inject: [contextSymbol],
-  setup(props) {
+  setup(props, { emit }) {
     const { graph } = useContext()
     const enableClipboard = (enabled) => {
       // console.log('draw Background', props)
@@ -20,6 +20,7 @@ export default defineComponent({
       const cells = graph.getSelectedCells()
       if (cells.length) {
         graph.copy(cells)
+        emit('copy', { cells, graph })
       }
     }
     const paste = () => {
@@ -27,6 +28,7 @@ export default defineComponent({
         const cells = graph.paste({ offset: 32 })
         graph.cleanSelection()
         graph.select(cells)
+        emit('paste', { cells, graph })
       }
     }
     onMounted(() => {

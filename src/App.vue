@@ -16,9 +16,9 @@
       <!-- <Scroller /> -->
       <Background />
       <Grid :visible="showGrid" />
-      <Selection />
+      <Selection @selected="selected" @unselected="unselected" @changed="changed" />
       <Snapline />
-      <Clipboard />
+      <Clipboard @copy="copy" @paste="paste" />
       <Keyboard />
       <MouseWheel />
       <MiniMap />
@@ -96,11 +96,23 @@ export default class App extends Vue {
       this.y = 400
     }, 5000)
   }
+  copy(e) {
+    console.log('copy', e)
+  }
+  paste(e) {
+    console.log('paste', e)
+  }
   added(e) {
     console.log('added', e)
   }
   click(e) {
     console.log('click', e)
+  }
+  selected(e) {
+    console.log('selected', e)
+  }
+  unselected(e) {
+    console.log('unselected', e)
   }
   changed(e) {
     console.log('changed', e)
