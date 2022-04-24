@@ -17,7 +17,7 @@ export default defineComponent({
     const updateSnapline = () => {
       graph.disableSnapline()
       const options = mergeOption(defaultOptions, {...props, enabled: props.enabled !== false})
-      const snapline = mergeOption(options, graph.snapline.widget.options)
+      mergeOption(options, graph.snapline.widget.options)
       graph.enableSnapline()
     }
     watch(() => props, () => updateSnapline(), {deep: true})
