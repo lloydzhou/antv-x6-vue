@@ -6,26 +6,21 @@ import {createContext} from './GraphContext'
 // import clone from '@antv/util/es/clone'
 import './index.less'
 
+
+export const GraphProps = [
+  'width', 'height', 'autoResize', 'panning',
+  'grid', 'background', 'snapline', 'scroller', 'minimap', 'history', 'clipboard', 'keyboard', 'mousewheel', 'selecting',
+  'rotating', 'resizing', 'translating', 'transforming', 'embedding', 'connecting', 'highlighting', 'interacting', 'sorting',
+  'async', 'frozen', 'checkView', 'magnetThreshold', 'moveThreshold', 'clickThreshold',
+  'preventDefaultContextMenu', 'preventDefaultBlankAction',
+  'guard', 'allowRubberband', 'allowPanning',
+  'getCellView', 'createCellView', 'getHTMLComponent',
+  'onPortRendered', 'onEdgeLabelRendered', 'onToolItemCreated', 'model',
+]
+
 const Graph = defineComponent({
   name: 'Graph',
-  props: {
-    height: {
-      type: Number,
-      default: () => 600
-    },
-    width: {
-      type: Number,
-      default: () => 800
-    },
-    autoResize: {
-      type: Boolean,
-      default: () => true
-    },
-    panning: {
-      type: Boolean,
-      default: () => true
-    },
-  },
+  props: GraphProps,
   setup(props) {
     const { width, height, ...otherOptions } = props;
     const self = markRaw({

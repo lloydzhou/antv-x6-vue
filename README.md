@@ -43,6 +43,65 @@ const CustomNode = defineComponent({
 yarn add antv-x6-vue
 ```
 
+## Components
+- [x] 提供`Graph`容器以及`GraphContext.useContext`获取`x6`的`graph`对象。可以利用这个对象操作画布，绑定事件。
+- [x] 包装`Shape`作为`vue`组件＋使用`x6-vue-shape`封装自定义组件，暴露的组件有：
+
+类 | shape 名称| 描述
+-- | -- | --
+Node | rect | 等同于Shape.Rect
+Edge | edge | 等同于Shape.Edge
+VueShape | vue-shape | 使用`@antv/x6-vue`渲染的自定义`vue`组件的容器，可以将`slots.default`内容渲染到节点内。
+Shape.Rect | rect | 矩形。
+Shape.Circle | circle | 圆形。
+Shape.Ellipse | ellipse | 椭圆。
+Shape.Polygon | polygon | 多边形。
+Shape.Polyline | polyline | 折线。
+Shape.Path | path | 路径。
+Shape.Image | image | 图片。
+Shape.HTML | html | HTML 节点，使用 foreignObject 渲染 HTML 片段。
+Shape.TextBlock | text-block | 文本节点，使用 foreignObject 渲染文本。
+Shape.BorderedImage | image-bordered | 带边框的图片。
+Shape.EmbeddedImage | image-embedded | 内嵌入矩形的图片。
+Shape.InscribedImage | image-inscribed | 内嵌入椭圆的图片。
+Shape.Cylinder | cylinder | 圆柱。
+Shape.Edge | edge | 边。
+Shape.DoubleEdge | double-edge | 双线边。
+Shape.ShadowEdge | shadow-edge | 阴影边。
+
+**另外提供帮助函数**
+名称| 描述
+ -- | --
+useCell | 使用这个函数可以通过传递markup之类的参数自定义节点
+useVueShape | 使用这个函数自定义vue的渲染内容定制更加复杂的节点
+useCellEvent | 通过这个函数绑定事件到cell上面
+
+- [x] 提供内置的一些组件
+
+名称| 描述
+ -- | --
+Grid | 渲染网格
+Background | 渲染背景
+Scroller | 滚动组件
+Clipboard | 剪贴板，配合`Keyboard`组件可以使用`ctrl+c`/`ctrl+x`/`ctrl+v`
+Keyboard | 键盘快捷键
+MouseWheel | 鼠标滚轮，支持使用滚轮实现画布放大缩小
+
+- [x] Widgets
+
+名称| 描述
+ -- | --
+Snapline | 对齐线
+Selection | 点选/框选
+MiniMap | 小地图
+Stencil | 内置的带分组和搜索功能的拖拽组件，还提供`StencilGroup`以实现分组功能
+
+## TODO
+- [ ] Stencil支持默认分组（不使用`StencilGroup`的情况）
+- [ ] Dnd也作为组件实现
+- [x] ContextMenu：实现一个默认的menu，同时暴露一个useContextMenu方便用户定制
+
+
 ## DEMO
 
 ```
