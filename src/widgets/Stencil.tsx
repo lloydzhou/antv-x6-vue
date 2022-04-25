@@ -11,7 +11,7 @@ export const StencilGroup = defineComponent({
   props: ['name', 'title', 'collapsed', 'collapsable', 'graphWidth', 'graphHeight', 'graphPadding', 'graphOptions', 'layout', 'layoutOptions'],
   inject: [stencilContextSymbol],
   setup(props, { slots }) {
-    const { groups=[], stencil } = inject(stencilContextSymbol)
+    const { stencil } = inject(stencilContextSymbol)
 
     /** createContext内的数据 */
     const contextRef = shallowReactive({
@@ -24,21 +24,13 @@ export const StencilGroup = defineComponent({
       // 调用loadGroup，重置一下
       // 防止子组件循环注册的时候，多次调用
       stencil.value.loadGroup(contextRef.graph.getNodes(), props.name)
-    }, 20)
-    watch(() => stencil.value, (stencil) => {
-      contextRef.graph = stencil.getGraph(props.name)
-      const model = stencil.getModel(props.name)
-      model.on('node:added', reset)
-    })
+    }, 200)
     onMounted(() => {
-      groups.push({...props})
-    })
-    onUnmounted(() => {
-      const index = groups.map((g, i) => g.name == props.name ? i + 1 : -1).filter(i => i > -1).pop()
-      // console.log('onUnmounted', index)
-      if (index) {
-        groups.splice(index - 1, 1)
-      }
+      nextTick(() => {
+        contextRef.graph = stencil.value.getGraph(props.name)
+        const model = stencil.value.getModel(props.name)
+        model.on('node:added', reset)
+      })
     })
     return () => <div>{contextRef.graph && slots.default ? slots.default({ stencil }) : null}</div>
   }
@@ -60,28 +52,21 @@ export default defineComponent({
     const defaultContainer = ref()
     const stencil = ref()
     const contextRef = shallowReactive({
-      groups: props.groups || [],
       stencil,
     })
-    const init = FunctionExt.debounce((options) => {
-      if (stencil.value) {
-        stencil.value.onRemove()
+
+    provide(stencilContextSymbol, contextRef)
+
+    onMounted(() => {
+      const options = {
+        ...props,
+        target: graph,
       }
+      // debounce的时候，实际运行传递的参数是之前传递进来的
+      // 运行的时候，重新从props等参数再生成一遍，使用最新的
       stencil.value = new Stencil(mergeOption(defaultOptions, options));
       // 挂载节点
       (props.container ? props.container.value || props.container : defaultContainer.value).appendChild(stencil.value.container)
-    }, 20)
-
-    // 监听groups变化，如果这个变化，就覆盖contextRef.groups。这个逻辑估计不会执行，通常会被子组件注册的
-    watch(() => props.groups, (groups) => contextRef.groups = groups)
-    // 监听contextRef.groups变化
-    watch(() => ({...props, groups: [...contextRef.groups], target: graph}), init, {deep: true})
-    provide(stencilContextSymbol, contextRef)
-    onMounted(() => {
-      nextTick(() => {
-        // nexttick能拿到下一层级注册进来的group列表
-        init({...props, groups: contextRef.groups, target: graph})
-      })
     })
     onUnmounted(() => {
       if (stencil.value) {

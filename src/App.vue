@@ -22,7 +22,7 @@
       <Keyboard />
       <MouseWheel />
       <MiniMap />
-      <Stencil :container="stencil" :layoutOptions="{columns: 1, columnWidth: 200, rowHeight: 60}" :stencilGraphWidth="200" :validateNode="validateNode">
+      <Stencil :container="stencil" :layoutOptions="{columns: 1, columnWidth: 200, rowHeight: 60}" :stencilGraphWidth="200" :validateNode="validateNode" :groups="[{name: 'group1', graphHeight: 160}, {name: 'group2', graphHeight: 160}]">
         <StencilGroup name="group1" :graphHeight="160" :graphWidth="200">
           <Node id="1" @added="added" label="group node1" :width="160" />
           <Node id="2" label="group node2" :width="160" />
