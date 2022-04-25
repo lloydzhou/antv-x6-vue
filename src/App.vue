@@ -41,6 +41,14 @@
           </Menu>
         </template>
       </ContextMenu>
+      <ContextMenu bindType="edge" bindEvent="click">
+        <template #default="scope">
+          <Menu @click="hendleContextMenuClick(scope, $event)">
+            <MenuItem key="1">edge Item 1</MenuItem>
+            <MenuItem key="2">edge Item 2</MenuItem>
+          </Menu>
+        </template>
+      </ContextMenu>
     </Graph>
   </div>
 </template>

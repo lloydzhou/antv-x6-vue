@@ -7,7 +7,6 @@ import {createContext} from './GraphContext'
 import './index.less'
 
 
-console.log('X6Graph', X6.Graph)
 export const GraphProps = [
   'width', 'height', 'autoResize', 'panning',
   'grid', 'background', 'snapline', 'scroller', 'minimap', 'history', 'clipboard', 'keyboard', 'mousewheel', 'selecting',

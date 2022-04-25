@@ -99,7 +99,7 @@ Stencil | 内置的带分组和搜索功能的拖拽组件，还提供`StencilGr
 ## TODO
 - [ ] Stencil支持默认分组（不使用`StencilGroup`的情况）
 - [ ] Dnd也作为组件实现
-- [ ] ContextMenu：实现一个默认的menu，同时暴露一个useContextMenu方便用户定制
+- [x] ContextMenu：实现一个默认的menu，同时暴露一个useContextMenu方便用户定制
 
 
 ## DEMO
