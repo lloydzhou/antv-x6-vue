@@ -23,6 +23,13 @@ export default defineComponent({
         emit('copy', { cells, graph })
       }
     }
+    const cut = () => {
+      const cells = graph.getSelectedCells()
+      if (cells.length) {
+        graph.cut(cells)
+        emit('cut', { cells, graph })
+      }
+    }
     const paste = () => {
       if (!graph.isClipboardEmpty()) {
         const cells = graph.paste({ offset: 32 })
@@ -34,11 +41,13 @@ export default defineComponent({
     onMounted(() => {
       enableClipboard()
       graph.bindKey('ctrl+c', copy)
+      graph.bindKey('ctrl+x', cut)
       graph.bindKey('ctrl+v', paste)
     })
     onUnmounted(() => {
       graph.disableClipboard()
       graph.unbindKey('ctrl+c', copy)
+      graph.unbindKey('ctrl+x', cut)
       graph.unbindKey('ctrl+v', paste)
     })
     return () => null
