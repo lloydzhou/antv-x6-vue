@@ -11,7 +11,7 @@ import Keyboard from './components/Keyboard'
 import MouseWheel from './components/MouseWheel'
 
 import Widgets from './widgets'
-const { Snapline, Selection, MiniMap, Stencil, StencilGroup } = Widgets
+const { Snapline, Selection, MiniMap, Stencil, StencilGroup, ContextMenu, useContextMenu } = Widgets
 
 
 const components = [
@@ -48,6 +48,7 @@ export {
   MiniMap,
   Snapline,
   Stencil, StencilGroup,
+  ContextMenu, useContextMenu,
 }
 
 export default Graph

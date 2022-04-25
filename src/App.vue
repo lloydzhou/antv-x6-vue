@@ -33,6 +33,14 @@
         </StencilGroup>
       </Stencil>
       <Node v-for="node in addedNodes" :key="node.id" v-bind="node" />
+      <ContextMenu>
+        <template #default="scope">
+          <Menu @click="hendleContextMenuClick(scope, $event)">
+            <MenuItem key="1">Item 1</MenuItem>
+            <MenuItem key="2">Item 2</MenuItem>
+          </Menu>
+        </template>
+      </ContextMenu>
     </Graph>
   </div>
 </template>
@@ -44,8 +52,12 @@ import { Options, Vue } from 'vue-class-component';
 import Graph, { Node, Edge, VueShape, useVueShape, VueShapeProps, GraphContext, useCellEvent } from './index'
 import { Grid, Background, Clipboard, Snapline, Selection, Keyboard, Scroller, MouseWheel, MiniMap } from './index'
 import { Stencil, StencilGroup } from './index'
+import { ContextMenu } from './index'
+import { Menu } from 'ant-design-vue'
+import 'ant-design-vue/es/menu/style/css'
 
 const { contextSymbol } = GraphContext
+const MenuItem = Menu.Item
 
 const CustomNode = defineComponent({
   name: 'CustomNode',
@@ -76,6 +88,7 @@ const CustomNode = defineComponent({
     CustomNode,
     Stencil,
     StencilGroup,
+    ContextMenu, Menu, MenuItem,
   },
 })
 export default class App extends Vue {
@@ -132,6 +145,10 @@ export default class App extends Vue {
     })
     // 这里将数据存到当前对象，永远返回false，拖拽的节点不放入画布，使用一个新的节点替换位置
     return Promise.resolve(false)
+  }
+  hendleContextMenuClick(data, e) {
+    console.log('hendleContextMenuClick', data, e)
+    data.onClose()
   }
 }
 </script>

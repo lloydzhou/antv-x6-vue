@@ -33,6 +33,13 @@ export const StencilGroup = defineComponent({
     onMounted(() => {
       groups.push({...props})
     })
+    onUnmounted(() => {
+      const index = groups.map((g, i) => g.name == props.name ? i + 1 : -1).filter(i => i > -1).pop()
+      // console.log('onUnmounted', index)
+      if (index) {
+        groups.splice(index - 1, 1)
+      }
+    })
     return () => <div>{contextRef.graph && slots.default ? slots.default({ stencil }) : null}</div>
   }
 })
@@ -56,11 +63,11 @@ export default defineComponent({
       groups: props.groups || [],
       stencil,
     })
-    const init = FunctionExt.debounce((groups) => {
+    const init = FunctionExt.debounce((options) => {
       if (stencil.value) {
         stencil.value.onRemove()
       }
-      stencil.value = new Stencil(mergeOption(defaultOptions, {...props, groups, target: graph}));
+      stencil.value = new Stencil(mergeOption(defaultOptions, options));
       // 挂载节点
       (props.container ? props.container.value || props.container : defaultContainer.value).appendChild(stencil.value.container)
     }, 20)
@@ -68,17 +75,20 @@ export default defineComponent({
     // 监听groups变化，如果这个变化，就覆盖contextRef.groups。这个逻辑估计不会执行，通常会被子组件注册的
     watch(() => props.groups, (groups) => contextRef.groups = groups)
     // 监听contextRef.groups变化
-    watch(() => ({...props, groups: contextRef.groups}), init, {deep: 1})
+    watch(() => ({...props, groups: [...contextRef.groups], target: graph}), init, {deep: true})
     provide(stencilContextSymbol, contextRef)
     onMounted(() => {
       nextTick(() => {
         // nexttick能拿到下一层级注册进来的group列表
-        init(contextRef.groups)
+        init({...props, groups: contextRef.groups, target: graph})
       })
     })
     onUnmounted(() => {
-      stencil.value.onRemove()
+      if (stencil.value) {
+        stencil.value.onRemove()
+      }
     })
+    // 如果没有group的时候
     return () => (
       <div ref={node => defaultContainer.value = node}>
         {slots.default ? slots.default({ stencil }) : null}
