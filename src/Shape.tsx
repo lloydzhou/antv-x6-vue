@@ -1,8 +1,10 @@
 // @ts-nocheck
-import { defineComponent, onMounted, onUnmounted, ref, watch } from 'vue';
+import { defineComponent, onMounted, onUnmounted, ref, watch, provide, shallowReactive } from 'vue';
 
 import { Shape, Cell as BaseShape } from '@antv/x6'
 import { useContext, contextSymbol } from './GraphContext'
+
+export const cellContextSymbol = String(Symbol('x6cellContextSymbol'))
 
 export const useCellEvent = (name, handler, options={}) => {
   const { graph } = useContext()
@@ -47,6 +49,9 @@ export const useCell = (props, { emit }, Shape=BaseShape) => {
   }
   const cell = ref()
 
+  const context = shallowReactive({ cell: null })
+  provide(cellContextSymbol, context)
+
   const added = (e) => emit('added', e)
   const removed = (e) => emit('removed', e)
 
@@ -62,6 +67,8 @@ export const useCell = (props, { emit }, Shape=BaseShape) => {
     }
     cell.value.once('added', added)
     cell.value.once('removed', removed)
+    // 共享给子组件
+    context.cell = cell.value
     graph.addCell(cell.value)
   })
   onUnmounted(() => {
@@ -106,8 +113,10 @@ const Cell = defineComponent({
   props: CellProps,
   inject: [contextSymbol],
   setup(props, context) {
-    useCell(props, context, BaseShape)
-    return () => null
+    const cell = useCell(props, context, BaseShape)
+    // 优先判断名字是port的slot在不在，不存在的时候渲染默认的slot
+    const { default: _default, port } = context.slots
+    return () => cell.value ? port ? port() : _default ? _default() : null : null;
   }
 })
 
@@ -122,8 +131,10 @@ Object.keys(Shape).forEach(name => {
     setup(props, context) {
       const { shape: defaultShape } = ShapeClass.defaults || {}
       const { shape=defaultShape } = props
-      useCell({...props, shape}, context, ShapeClass)
-      return () => null
+      const cell = useCell({...props, shape}, context, ShapeClass)
+      // 优先判断名字是port的slot在不在，不存在的时候渲染默认的slot
+      const { default: _default, port } = context.slots
+      return () => cell.value ? port ? port() : _default ? _default() : null : null;
     }
   })
 })

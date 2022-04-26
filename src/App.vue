@@ -2,12 +2,25 @@
   <div class="container">
     <div ref="stencil" class="stencil"/>
     <Graph>
-      <Node id="1" :x="100" :y="100" @added="added" label="node1" />
-      <Node id="2" :x="200" :y="200" label="node2" />
+      <Node id="1" :x="100" :y="100" @added="added" label="node1">
+        <PortGroup name="in" position="top" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
+          <Port id="id1" />
+          <Port id="id2" :magnet="false" />
+        </PortGroup>
+      </Node>
+      <Node id="2" :x="200" :y="200" label="node2">
+        <Port id="id1" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}" />
+      </Node>
       <Edge id="e1" source="1" target="2" @added="added" label="edge1" />
       <VueShape primer="rect" id="3" :x="200" :y="300" :width="160" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}" @added="added" @cell:change:zIndex="changed">
         <div>这里是一个vue的组件</div>
         <img style="width: 30px;height:30px;" src="https://v3.cn.vuejs.org/logo.png" />
+        <template #port>
+        <PortGroup name="in" position="top" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
+          <Port id="id1" />
+          <Port id="id2" :magnet="false" />
+        </PortGroup>
+        </template>
       </VueShape>
       <CustomNode v-if="visible" primer="circle" id="4" :x="400" :width="100" :height="100" :y="y" :attrs="{circle: {fill: '#ddd', stroke: '#333'}, label: {text: 'CustomNode'}}" @added="added" @click="click" @cell:change:position="changed" :magnet="true" >
         <span style="text-align: center;display: inline-block;width: 100%;margin-top: 20px;">Hello {{name}}</span>
@@ -65,6 +78,7 @@ import { ContextMenu } from './index'
 import { Menu } from 'ant-design-vue'
 import 'ant-design-vue/es/menu/style/css'
 import { Connecting } from './index'
+import { Port, PortGroup } from './index'
 
 const { contextSymbol } = GraphContext
 const MenuItem = Menu.Item
@@ -100,6 +114,7 @@ const CustomNode = defineComponent({
     Stencil,
     StencilGroup,
     ContextMenu, Menu, MenuItem,
+    Port, PortGroup,
   },
 })
 export default class App extends Vue {

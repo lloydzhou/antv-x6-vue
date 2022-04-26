@@ -1,8 +1,8 @@
 // @ts-nocheck
-import { h, defineComponent, onMounted, onUnmounted, ref, watch } from 'vue';
+import { h, defineComponent, onMounted, onUnmounted, ref, watch, provide, shallowReactive } from 'vue';
 import { VueShape as VueShapeContainer } from '@antv/x6-vue-shape';
 import { useContext, contextSymbol } from './GraphContext'
-import { NodeProps, useCellEvent, useWatchProps } from './Shape'
+import { NodeProps, useCellEvent, useWatchProps, cellContextSymbol } from './Shape'
 
 export const VueShapeProps = NodeProps.concat('primer', 'useForeignObject', 'component')
 
@@ -16,6 +16,9 @@ export const useVueShape = (props, { slots, emit }) => {
     ...otherOptions
   } = props
   const cell = ref()
+
+  const context = shallowReactive({ cell: null })
+  provide(cellContextSymbol, context)
 
   const added = (e) => emit('added', e)
   const removed = (e) => emit('removed', e)
@@ -38,6 +41,8 @@ export const useVueShape = (props, { slots, emit }) => {
     }
     cell.value.once('added', added)
     cell.value.once('removed', removed)
+    // 共享给子组件
+    context.cell = cell.value
     graph.addCell(cell.value)
   }
   // 监听其他变化
@@ -62,10 +67,12 @@ const VueShape = defineComponent({
   props: VueShapeProps,
   inject: [contextSymbol],
   setup(props, context) {
-    useVueShape(props, context)
+    const cell = useVueShape(props, context)
     useCellEvent('node:change:*', e => context.emit('changed', e))
     useCellEvent('changed', e => context.emit('changed', e))
-    return () => null
+    // 优先判断名字是port的slot在不在，不存在的时候渲染默认的slot
+    const { default: _default, port } = context.slots
+    return () => cell.value ? port ? port() : _default ? _default() : null : null;
   }
 })
 

@@ -76,6 +76,25 @@ useCell | 使用这个函数可以通过传递markup之类的参数自定义节�
 useVueShape | 使用这个函数自定义vue的渲染内容定制更加复杂的节点
 useCellEvent | 通过这个函数绑定事件到cell上面
 
+- [x] 抽象连接桩为组件使用
+
+名称| 描述
+ -- | --
+PortGroup | 提供`ports/groups/<group_name>`相关的配置，同时也作为Port组件的容器，提供一个默认的group名称
+Port | 调用addPort/removePort操作当前连接桩，比x6官方多提供一个magnet参数（默认情况需要使用`attrs/circle/magnet`进行配置）。另外，Port也可以独立使用
+
+```
+<Node id="1" :x="100" :y="100" label="node1">
+  <PortGroup name="in" position="top" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
+    <Port id="id1" />
+    <Port id="id2" :magnet="false" />
+  </PortGroup>
+</Node>
+<Node id="2" :x="200" :y="200" label="node2">
+  <Port id="id1" />
+</Node>
+```
+
 - [x] 提供内置的一些组件
 
 名称| 描述
@@ -86,6 +105,7 @@ Scroller | 滚动组件
 Clipboard | 剪贴板，配合`Keyboard`组件可以使用`ctrl+c`/`ctrl+x`/`ctrl+v`
 Keyboard | 键盘快捷键
 MouseWheel | 鼠标滚轮，支持使用滚轮实现画布放大缩小
+Connecting | 配置连线相关参数和帮助方法
 
 - [x] Widgets
 
@@ -100,6 +120,7 @@ Stencil | 内置的带分组和搜索功能的拖拽组件，还提供`StencilGr
 - [ ] Stencil支持默认分组（不使用`StencilGroup`的情况）
 - [ ] Dnd也作为组件实现
 - [x] ContextMenu：实现一个默认的menu，同时暴露一个useContextMenu方便用户定制
+- [x] 实现Connecting，也作为组件使用
 
 
 ## DEMO
