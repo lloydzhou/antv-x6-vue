@@ -188,7 +188,7 @@ export default defineComponent({
 
 ```
 
-![image](https://user-images.githubusercontent.com/1826685/165352830-7bca87f5-a83c-4ce2-8fc8-141aec75c421.png)
+![image](https://user-images.githubusercontent.com/1826685/165353091-0f5a009d-fad6-4137-bd44-219bf0b872a3.png)
 
 
 
