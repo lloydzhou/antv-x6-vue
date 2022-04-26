@@ -38,7 +38,7 @@ export const useCellEvent = (name, handler, options={}) => {
 
 export const useCell = (props, { emit }, Shape=BaseShape) => {
   const { graph } = useContext()
-  const { id, shape, ...otherOptions } = props
+  const { id, shape, magnet, ...otherOptions } = props
   if ('width' in otherOptions && otherOptions.width === undefined) {
     otherOptions.width = 80
   }
@@ -50,12 +50,6 @@ export const useCell = (props, { emit }, Shape=BaseShape) => {
   const added = (e) => emit('added', e)
   const removed = (e) => emit('removed', e)
 
-  // shape变化，原则上其实不需要更改这个图形...
-  watch(() => shape, (shape) => {
-    graph.removeCell(id)
-    cell.value = new Shape({id, shape, ...otherOptions})
-    graph.addCell(cell.value)
-  })
   // 监听其他变化
   useWatchProps(cell, props)
   // 默认给组件绑定一个监听change:*的回调
@@ -63,6 +57,9 @@ export const useCell = (props, { emit }, Shape=BaseShape) => {
 
   onMounted(() => {
     cell.value = new Shape({id, shape, ...otherOptions})
+    if (magnet === false || magnet === true) {
+      cell.value.setAttrByPath(`${cell.value.shape}/magnet`, !!props.magnet)
+    }
     cell.value.once('added', added)
     cell.value.once('removed', removed)
     graph.addCell(cell.value)
@@ -76,7 +73,7 @@ export const useCell = (props, { emit }, Shape=BaseShape) => {
 
 export const CellProps = ['id', 'markup', 'attrs', 'shape', 'view', 'zIndex', 'visible', 'data', 'parent']
 export const EdgeProps = CellProps.concat('source', 'target', 'vertices', 'router', 'connector', 'labels', 'defaultLabel')
-export const NodeProps = CellProps.concat('x', 'y', 'width', 'height', 'angle', 'ports', 'label')
+export const NodeProps = CellProps.concat('x', 'y', 'width', 'height', 'angle', 'ports', 'label', 'magnet')
 
 export const useWatchProps = (cell, props) => {
   watch(() => props.markup, markup => cell.value.setMarkup(markup))
@@ -99,6 +96,8 @@ export const useWatchProps = (cell, props) => {
   // TODO ports 感觉还是自己手动处理更新逻辑？
   // 自己使用useCell，拿到cell.value，通过insertPort/removePort/setPortProp这几个方法处理
   watch(() => props.label, label => cell.value.setLabel(label))
+  // 增加配置是否可以连线
+  watch(() => props.magnet, magnet => (magnet === false || magnet === true) && cell.value.setAttrByPath(`${cell.value.shape}/magnet`, !!magnet))
 }
 
 

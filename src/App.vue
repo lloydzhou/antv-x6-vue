@@ -49,6 +49,7 @@
           </Menu>
         </template>
       </ContextMenu>
+      <Connecting :validateEdge="validateEdge" />
     </Graph>
   </div>
 </template>
@@ -63,6 +64,7 @@ import { Stencil, StencilGroup } from './index'
 import { ContextMenu } from './index'
 import { Menu } from 'ant-design-vue'
 import 'ant-design-vue/es/menu/style/css'
+import { Connecting } from './index'
 
 const { contextSymbol } = GraphContext
 const MenuItem = Menu.Item
@@ -91,6 +93,7 @@ const CustomNode = defineComponent({
     Scroller,
     Keyboard,
     MouseWheel,
+    Connecting,
     MiniMap,
     VueShape,
     CustomNode,
@@ -152,6 +155,7 @@ export default class App extends Vue {
       y,
       width,
       height,
+      magnet: true, // 直接通过这个变量控制是否能连接
     })
     // 这里将数据存到当前对象，永远返回false，拖拽的节点不放入画布，使用一个新的节点替换位置
     return Promise.resolve(false)
@@ -159,6 +163,10 @@ export default class App extends Vue {
   hendleContextMenuClick(data, e) {
     console.log('hendleContextMenuClick', data, e)
     data.onClose()
+  }
+  validateEdge({edge}) {
+    console.log('validateEdge', edge)
+    return true
   }
 }
 </script>

@@ -9,6 +9,7 @@ import Clipboard from './components/Clipboard'
 import Scroller from './components/Scroller'
 import Keyboard from './components/Keyboard'
 import MouseWheel from './components/MouseWheel'
+import Connecting from './components/Connecting'
 
 import Widgets from './widgets'
 const { Snapline, Selection, MiniMap, Stencil, StencilGroup, ContextMenu, useContextMenu } = Widgets
@@ -43,6 +44,7 @@ export {
   Scroller,
   Keyboard,
   MouseWheel,
+  Connecting,
   GraphContext,
   Widgets,
   MiniMap,
