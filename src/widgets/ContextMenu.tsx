@@ -32,7 +32,12 @@ export const useContextMenu = (props) => {
     contextRef.x = px
     contextRef.y = py
     if (bindType == 'node' || bindType == 'edge') {
-      const views = graph.findViewsFromPoint(x, y)
+      const views = graph.findViewsFromPoint(x, y).filter(v => {
+        if (bindType == 'edge') {
+          return !!v.targetView
+        }
+        return !v.targetView
+      })
       if (views.length) {
         const view = views.sort((a, b) => a.cell.getZIndex() < b.cell.getZIndex()).pop()
         contextRef.view = view

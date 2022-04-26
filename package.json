@@ -1,6 +1,6 @@
 {
   "name": "antv-x6-vue",
-  "version": "1.0.2",
+  "version": "1.0.2-beta2",
   "description": "the vue toolkit for graph analysis based on x6",
   "scripts": {
     "prepare": "install-peers",
