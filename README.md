@@ -81,7 +81,9 @@ useCellEvent | 通过这个函数绑定事件到cell上面
 名称| 描述
  -- | --
 PortGroup | 提供`ports/groups/<group_name>`相关的配置，同时也作为Port组件的容器，提供一个默认的group名称
-Port | 调用addPort/removePort操作当前连接桩，比x6官方多提供一个magnet参数（默认情况需要使用`attrs/circle/magnet`进行配置）。另外，Port也可以独立使用
+Port | 调用addPort/removePort操作当前连接桩，比x6官方多提供一个magnet参数（默认情况需要使用`attrs/circle/magnet`进行配置）。另外，Port也可以独立使用。
+
+> 使用Port和PortGroup的时候，可以放在一个以`port`命名的slot里面（考虑到默认的VueShape会将默认的slot认为是用户自定义的节点，这里使用slots.port区分一下），也可以直接使用默认的slot
 
 ```
 <Node id="1" :x="100" :y="100" label="node1">
