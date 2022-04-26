@@ -2,14 +2,27 @@
   <div class="container">
     <div ref="stencil" class="stencil"/>
     <Graph>
-      <Node id="1" :x="100" :y="100" @added="added" label="node1" />
-      <Node id="2" :x="200" :y="200" label="node2" />
+      <Node id="1" :x="100" :y="100" @added="added" label="node1">
+        <PortGroup name="in" position="top" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
+          <Port id="id1" />
+          <Port id="id2" :magnet="false" />
+        </PortGroup>
+      </Node>
+      <Node id="2" :x="200" :y="200" label="node2">
+        <Port id="id1" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}" />
+      </Node>
       <Edge id="e1" source="1" target="2" @added="added" label="edge1" />
       <VueShape primer="rect" id="3" :x="200" :y="300" :width="160" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}" @added="added" @cell:change:zIndex="changed">
         <div>这里是一个vue的组件</div>
         <img style="width: 30px;height:30px;" src="https://v3.cn.vuejs.org/logo.png" />
+        <template #port>
+        <PortGroup name="in" position="top" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
+          <Port id="id1" />
+          <Port id="id2" :magnet="false" />
+        </PortGroup>
+        </template>
       </VueShape>
-      <CustomNode v-if="visible" primer="circle" id="4" :x="400" :width="100" :height="100" :y="y" :attrs="{circle: {fill: '#ddd', stroke: '#333'}, label: {text: 'CustomNode'}}" @added="added" @click="click" @cell:change:position="changed" >
+      <CustomNode v-if="visible" primer="circle" id="4" :x="400" :width="100" :height="100" :y="y" :attrs="{circle: {fill: '#ddd', stroke: '#333'}, label: {text: 'CustomNode'}}" @added="added" @click="click" @cell:change:position="changed" :magnet="true" >
         <span style="text-align: center;display: inline-block;width: 100%;margin-top: 20px;">Hello {{name}}</span>
       </CustomNode>
       <Edge id="e2" source="1" target="3" @added="added" />
@@ -49,6 +62,7 @@
           </Menu>
         </template>
       </ContextMenu>
+      <Connecting :validateEdge="validateEdge" />
     </Graph>
   </div>
 </template>
@@ -63,6 +77,8 @@ import { Stencil, StencilGroup } from './index'
 import { ContextMenu } from './index'
 import { Menu } from 'ant-design-vue'
 import 'ant-design-vue/es/menu/style/css'
+import { Connecting } from './index'
+import { Port, PortGroup } from './index'
 
 const { contextSymbol } = GraphContext
 const MenuItem = Menu.Item
@@ -91,12 +107,14 @@ const CustomNode = defineComponent({
     Scroller,
     Keyboard,
     MouseWheel,
+    Connecting,
     MiniMap,
     VueShape,
     CustomNode,
     Stencil,
     StencilGroup,
     ContextMenu, Menu, MenuItem,
+    Port, PortGroup,
   },
 })
 export default class App extends Vue {
@@ -152,6 +170,7 @@ export default class App extends Vue {
       y,
       width,
       height,
+      magnet: true, // 直接通过这个变量控制是否能连接
     })
     // 这里将数据存到当前对象，永远返回false，拖拽的节点不放入画布，使用一个新的节点替换位置
     return Promise.resolve(false)
@@ -159,6 +178,10 @@ export default class App extends Vue {
   hendleContextMenuClick(data, e) {
     console.log('hendleContextMenuClick', data, e)
     data.onClose()
+  }
+  validateEdge({edge}) {
+    console.log('validateEdge', edge)
+    return true
   }
 }
 </script>
