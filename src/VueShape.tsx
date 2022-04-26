@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { h, defineComponent, onMounted, onUnmounted, ref } from 'vue';
+import { h, defineComponent, onMounted, onUnmounted, ref, watch } from 'vue';
 import { VueShape as VueShapeContainer } from '@antv/x6-vue-shape';
 import { useContext, contextSymbol } from './GraphContext'
 import { NodeProps, useCellEvent, useWatchProps } from './Shape'
@@ -12,6 +12,7 @@ export const useVueShape = (props, { slots, emit }) => {
     id,
     width=60, height=60,
     primer='circle', useForeignObject=true, component,  // 这几个是@antv/x6-vue-shape独有的参数
+    magnet,
     ...otherOptions
   } = props
   const cell = ref()
@@ -31,6 +32,10 @@ export const useVueShape = (props, { slots, emit }) => {
         : () => h('div', {key: id, class: 'vue-shape'}, slots.default ? slots.default({props, item: cell}) : null),
       ...otherOptions,
     })
+    // 增加配置是否可连接
+    if (magnet === false || magnet === true) {
+      cell.value.setAttrByPath(`fo/magnet`, !!props.magnet)
+    }
     cell.value.once('added', added)
     cell.value.once('removed', removed)
     graph.addCell(cell.value)
@@ -38,6 +43,8 @@ export const useVueShape = (props, { slots, emit }) => {
   // 监听其他变化
   useWatchProps(cell, props)
   // 默认给组件绑定一个监听change:*的回调
+  // 增加配置是否可以连线
+  watch(() => props.magnet, magnet => (magnet === false || magnet === true) && cell.value.setAttrByPath(`fo/magnet`, !!magnet))
   useCellEvent('cell:change:*', ({ key, ...ev }) => emit(`cell:change:${key}`, ev), { cell })
   
   onMounted(() => {
