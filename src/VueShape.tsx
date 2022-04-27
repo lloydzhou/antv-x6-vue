@@ -36,8 +36,10 @@ export const useVueShape = (props, { slots, emit }) => {
       ...otherOptions,
     })
     // 增加配置是否可连接
+    // 实际测试的时候，发现foreignObject永远会覆盖primer对应的元素
+    // 设置了之后，能被别的线连上，不能触发自己连线的动作
     if (magnet === false || magnet === true) {
-      cell.value.setAttrByPath(`fo/magnet`, !!props.magnet)
+      cell.value.setAttrByPath(`${primer}/magnet`, !!props.magnet)
     }
     cell.value.once('added', added)
     cell.value.once('removed', removed)
@@ -49,7 +51,7 @@ export const useVueShape = (props, { slots, emit }) => {
   useWatchProps(cell, props)
   // 默认给组件绑定一个监听change:*的回调
   // 增加配置是否可以连线
-  watch(() => props.magnet, magnet => (magnet === false || magnet === true) && cell.value.setAttrByPath(`fo/magnet`, !!magnet))
+  watch(() => props.magnet, magnet => (magnet === false || magnet === true) && cell.value.setAttrByPath(`${primer}/magnet`, !!magnet))
   useCellEvent('cell:change:*', ({ key, ...ev }) => emit(`cell:change:${key}`, ev), { cell })
   
   onMounted(() => {

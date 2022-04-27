@@ -99,7 +99,6 @@ const Graph = defineComponent({
         </div>
       </div>
     )
-  }
+  },
 })
-
 export default Graph

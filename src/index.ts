@@ -19,16 +19,32 @@ const { Snapline, Selection, MiniMap, Stencil, StencilGroup, ContextMenu, useCon
 
 const components = [
   Graph,
+  ...Object.values(Shape), // 这里将Shape这个里面所有的组件都注册一下
+  VueShape,
+  Port, PortGroup,
+  Grid,
+  Background,
+  Clipboard,
+  Scroller,
+  Keyboard,
+  MouseWheel,
+  Connecting,
+  Snapline,
+  Selection,
+  MiniMap,
+  StencilGroup, Stencil,
+  ContextMenu,
 ]
-Graph.install = function (Vue) {
+
+const install = function (Vue) {
   components.forEach(component => {
-    Vue.component(component.name, component);
+    Vue.component(`X6${component.name}`, component);
   });
 }
 
 /* istanbul ignore if */
 if (typeof window !== 'undefined' && window.Vue) {
-  Graph.install(window.Vue);
+  install(window.Vue);
 }
 
 export {
@@ -54,7 +70,10 @@ export {
   Stencil, StencilGroup,
   ContextMenu, useContextMenu,
   Port, PortGroup,
+  install,
 }
+
+Graph.install = install
 
 export default Graph
 

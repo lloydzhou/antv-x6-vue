@@ -6,11 +6,15 @@
         <PortGroup name="in" position="top" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
           <Port id="id1" />
           <Port id="id2" :magnet="false" />
+          <x6-port id="id3" />
         </PortGroup>
       </Node>
       <Node id="2" :x="200" :y="200" label="node2">
         <Port id="id1" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}" />
       </Node>
+      <x6-node id="44" :x="400" :y="300" label="node4">
+        <x6-port id="id1" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}" />
+      </x6-node>
       <Edge id="e1" source="1" target="2" @added="added" label="edge1" />
       <VueShape primer="rect" id="3" :x="200" :y="300" :width="160" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}" @added="added" @cell:change:zIndex="changed">
         <div>这里是一个vue的组件</div>

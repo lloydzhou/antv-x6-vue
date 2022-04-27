@@ -141,6 +141,7 @@ Object.keys(Shape).forEach(name => {
 
 const { Rect, Edge } = Shapes
 const Node = Rect
+Node.name = 'Node'
 export {
   Shape,
   Cell,
