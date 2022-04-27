@@ -123,6 +123,14 @@ Stencil | 内置的带分组和搜索功能的拖拽组件，还提供`StencilGr
 - [ ] Dnd也作为组件实现
 - [x] ContextMenu：实现一个默认的menu，同时暴露一个useContextMenu方便用户定制
 - [x] 实现Connecting，也作为组件使用
+- [x] 提供PluginInstallFunction，支持全局注册组件（组件有`x6-`或者`X6`前缀，例如`X6Node`,`x6-node`都会对应前面提到的`Node`组件）
+```
+<x6-node id="44" :x="400" :y="300" label="node4">
+  <x6-port-group name="in" position="top" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
+    <x6-port id="id1" />
+  </x6-port-group>
+</x6-node>
+```
 
 
 ## DEMO
