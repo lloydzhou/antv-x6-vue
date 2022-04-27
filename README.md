@@ -51,7 +51,7 @@ yarn add antv-x6-vue
 -- | -- | --
 Node | rect | 等同于Shape.Rect
 Edge | edge | 等同于Shape.Edge
-VueShape | vue-shape | 使用`@antv/x6-vue`渲染的自定义`vue`组件的容器，可以将`slots.default`内容渲染到节点内。
+VueShape | vue-shape | 使用`@antv/x6-vue-shape`渲染的自定义`vue`组件的容器，可以将`slots.default`内容渲染到节点内。
 Shape.Rect | rect | 矩形。
 Shape.Circle | circle | 圆形。
 Shape.Ellipse | ellipse | 椭圆。
