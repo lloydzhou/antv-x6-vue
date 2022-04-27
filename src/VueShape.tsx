@@ -1,31 +1,26 @@
 // @ts-nocheck
-import { h, defineComponent, onMounted, onUnmounted, ref, watch, provide, shallowReactive } from 'vue';
+import { h, defineComponent } from 'vue';
 import { VueShape as VueShapeContainer } from '@antv/x6-vue-shape';
-import { useContext, contextSymbol } from './GraphContext'
-import { NodeProps, useCellEvent, useWatchProps, cellContextSymbol } from './Shape'
+import { contextSymbol } from './GraphContext'
+import { NodeProps, useCell } from './Shape'
 
 export const VueShapeProps = NodeProps.concat('primer', 'useForeignObject', 'component')
 
 export const useVueShape = (props, { slots, emit }) => {
-  const { graph } = useContext()
-  const {
-    id,
-    width=60, height=60,
-    primer='circle', useForeignObject=true, component,  // 这几个是@antv/x6-vue-shape独有的参数
-    magnet,
-    ...otherOptions
-  } = props
-  const cell = ref()
 
-  const context = shallowReactive({ cell: null })
-  provide(cellContextSymbol, context)
-
-  const added = (e) => emit('added', e)
-  const removed = (e) => emit('removed', e)
-
-  const create = () => {
-    cell.value = new VueShapeContainer({
-      id, width, height,
+  // 这里实际上只是在这个作用域传递一个createShape函数到useCell
+  return useCell(props, {slots, emit}, (props) => {
+    const {
+      id,
+      width, height,
+      primer='circle', useForeignObject=true, component,  // 这几个是@antv/x6-vue-shape独有的参数
+      magnet,
+      ...otherOptions
+    } = props
+    const cell = new VueShapeContainer({
+      id,
+      width: Number(width) || 60,
+      height: Number(height) || 60,
       primer, useForeignObject,
       // 这里将自己的slots中的内容强行放到画布中去
       // 这样图结构的交互还有一些操作逻辑交给x6
@@ -35,33 +30,8 @@ export const useVueShape = (props, { slots, emit }) => {
         : () => h('div', {key: id, class: 'vue-shape'}, slots.default ? slots.default({props, item: cell}) : null),
       ...otherOptions,
     })
-    // 增加配置是否可连接
-    // 实际测试的时候，发现foreignObject永远会覆盖primer对应的元素
-    // 设置了之后，能被别的线连上，不能触发自己连线的动作
-    if (magnet === false || magnet === true) {
-      cell.value.setAttrByPath(`${primer}/magnet`, !!props.magnet)
-    }
-    cell.value.once('added', added)
-    cell.value.once('removed', removed)
-    // 共享给子组件
-    context.cell = cell.value
-    graph.addCell(cell.value)
-  }
-  // 监听其他变化
-  useWatchProps(cell, props)
-  // 默认给组件绑定一个监听change:*的回调
-  // 增加配置是否可以连线
-  watch(() => props.magnet, magnet => (magnet === false || magnet === true) && cell.value.setAttrByPath(`${primer}/magnet`, !!magnet))
-  useCellEvent('cell:change:*', ({ key, ...ev }) => emit(`cell:change:${key}`, ev), { cell })
-  
-  onMounted(() => {
-    create()
+    return cell
   })
-  onUnmounted(() => {
-    graph.removeCell(id)
-  })
-
-  return cell
 }
 
 const VueShape = defineComponent({
@@ -70,11 +40,12 @@ const VueShape = defineComponent({
   inject: [contextSymbol],
   setup(props, context) {
     const cell = useVueShape(props, context)
-    useCellEvent('node:change:*', e => context.emit('changed', e))
-    useCellEvent('changed', e => context.emit('changed', e))
     // 优先判断名字是port的slot在不在，不存在的时候渲染默认的slot
     const { default: _default, port } = context.slots
-    return () => cell.value ? port ? port() : _default ? _default() : null : null;
+    return () => cell.value ? <div style="display:none;visibility:hidden;">
+      {port && port()}
+      {_default && _default()}
+    </div> : null
   }
 })
 
