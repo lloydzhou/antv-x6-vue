@@ -9,6 +9,11 @@
           <x6-port id="id3" />
         </PortGroup>
       </Node>
+      <Node id="9" :x="500" :y="200" label="node9" :width="300" :height="200">
+        <Node id="99" :x="550" :y="220" label="node99" :width="200" :height="150">
+          <Node id="999" :x="580" :y="240" label="node999"></Node>
+        </Node>
+      </Node>
       <Node id="2" :x="200" :y="200" label="node2">
         <Port id="id1" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}" />
       </Node>
