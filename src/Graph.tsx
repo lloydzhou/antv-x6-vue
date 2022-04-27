@@ -4,7 +4,6 @@ import { defineComponent, onMounted, ref, watch, markRaw, shallowReactive, Fragm
 import * as X6 from '@antv/x6'
 import {createContext} from './GraphContext'
 // import clone from '@antv/util/es/clone'
-import './index.less'
 
 
 export const GraphProps = [
@@ -90,7 +89,10 @@ const Graph = defineComponent({
         height: '100%',
         position: 'relative',
       }}>
-        <div data-testid="custom-element" class="graph-core" ref="graphDOM" />
+        <div data-testid="custom-element" class="graph-core" style={{
+          width: '100%',
+          height: '100%',
+        }} ref="graphDOM" />
         <div class="graph-component">
           {isReady && <Fragment>
             {slots.default ? slots.default() : null}
