@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { defineComponent, onMounted, onUnmounted, ref, watch, provide, shallowReactive } from 'vue';
+import { defineComponent, onMounted, onUnmounted, ref, watch, provide, shallowReactive, inject } from 'vue';
 
 import { Shape, Cell as BaseShape } from '@antv/x6'
 import { useContext, contextSymbol } from './GraphContext'
@@ -38,19 +38,13 @@ export const useCellEvent = (name, handler, options={}) => {
   return clear
 }
 
-export const useCell = (props, { emit }, Shape=BaseShape) => {
+export const useCell = (props, { emit }, create) => {
   const { graph } = useContext()
-  const { id, shape, magnet, ...otherOptions } = props
-  if ('width' in otherOptions && otherOptions.width === undefined) {
-    otherOptions.width = 80
-  }
-  if ('height' in otherOptions && otherOptions.height === undefined) {
-    otherOptions.height = 40
-  }
   const cell = ref()
 
   const context = shallowReactive({ cell: null })
   provide(cellContextSymbol, context)
+  const parent = inject(cellContextSymbol)
 
   const added = (e) => emit('added', e)
   const removed = (e) => emit('removed', e)
@@ -61,17 +55,28 @@ export const useCell = (props, { emit }, Shape=BaseShape) => {
   useCellEvent('cell:change:*', ({ key, ...ev }) => emit(`cell:change:${key}`, ev), { cell })
 
   onMounted(() => {
-    cell.value = new Shape({id, shape, ...otherOptions})
-    if (magnet === false || magnet === true) {
-      cell.value.setAttrByPath(`${cell.value.shape}/magnet`, !!props.magnet)
+    // cell.value = new Shape({id, shape, ...otherOptions})
+    cell.value = create(props)
+    if (props.magnet === false || props.magnet === true) {
+      cell.value.setAttrByPath(`${props.primer || cell.value.shape}/magnet`, !!props.magnet)
     }
     cell.value.once('added', added)
     cell.value.once('removed', removed)
     // 共享给子组件
     context.cell = cell.value
+    // 当前节点添加到子节点
+    if (parent && parent.cell) {
+      // cell.value.addTo(parent.cell)
+      parent.cell.embed(cell.value)
+    }
     graph.addCell(cell.value)
   })
   onUnmounted(() => {
+    // 当前节点从子节点移除
+    if (parent && parent.cell) {
+      // cell.value.removeFromParent()
+      parent.cell.unembed(cell.value)
+    }
     graph.removeCell(id)
   })
 
@@ -100,23 +105,37 @@ export const useWatchProps = (cell, props) => {
   watch(() => ({x: props.x, y: props.y}), position => cell.value.setPosition(position))
   watch(() => ({width: props.width, height: props.height}), size => cell.value.setSize(size))
   watch(() => props.angle, angle => cell.value.rotate(angle, {absolute: true}))
-  // TODO ports 感觉还是自己手动处理更新逻辑？
-  // 自己使用useCell，拿到cell.value，通过insertPort/removePort/setPortProp这几个方法处理
   watch(() => props.label, label => cell.value.setLabel(label))
   // 增加配置是否可以连线
-  watch(() => props.magnet, magnet => (magnet === false || magnet === true) && cell.value.setAttrByPath(`${cell.value.shape}/magnet`, !!magnet))
+  watch(() => props.magnet, magnet => {
+    if (magnet === false || magnet === true) {
+      cell.value.setAttrByPath(`${props.primer || cell.value.shape}/magnet`, !!magnet)
+    }
+  })
 }
 
+const createShape = (Shape, props) => {
+  const { id, shape, magnet, width, height, ...otherOptions } = props
+  return new Shape({
+    id, shape,
+    width: Number(width) || 160,
+    height: Number(height) || 40,
+    ...otherOptions
+  })
+}
 
 const Cell = defineComponent({
   name: 'Cell',
   props: CellProps,
-  inject: [contextSymbol],
+  inject: [contextSymbol, cellContextSymbol],
   setup(props, context) {
-    const cell = useCell(props, context, BaseShape)
+    const cell = useCell(props, context, createShape.bind(null, BaseShape))
     // 优先判断名字是port的slot在不在，不存在的时候渲染默认的slot
     const { default: _default, port } = context.slots
-    return () => cell.value ? port ? port() : _default ? _default() : null : null;
+    return () => cell.value ? <div style="display:none;visibility:hidden;">
+      {port && port()}
+      {_default && _default()}
+    </div> : null
   }
 })
 
@@ -131,10 +150,13 @@ Object.keys(Shape).forEach(name => {
     setup(props, context) {
       const { shape: defaultShape } = ShapeClass.defaults || {}
       const { shape=defaultShape } = props
-      const cell = useCell({...props, shape}, context, ShapeClass)
-      // 优先判断名字是port的slot在不在，不存在的时候渲染默认的slot
+      const cell = useCell({...props, shape}, context, createShape.bind(null, ShapeClass))
       const { default: _default, port } = context.slots
-      return () => cell.value ? port ? port() : _default ? _default() : null : null;
+      // port和default都有可能需要渲染
+      return () => cell.value ? <div style="display:none;visibility:hidden;">
+        {port && port()}
+        {_default && _default()}
+      </div> : null
     }
   })
 })
