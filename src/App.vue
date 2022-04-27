@@ -183,7 +183,7 @@ export default class App extends Vue {
   }
   hendleContextMenuClick(data, e) {
     console.log('hendleContextMenuClick', data, e)
-    data.onClose()
+    // data.onClose()
   }
   validateEdge({edge}) {
     console.log('validateEdge', edge)

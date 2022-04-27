@@ -124,6 +124,7 @@ export default defineComponent({
          className="x6-widget-contextmenu"
          style={{ ...defaultStyle, ...style, ...positionStyle }}
          key={id}
+         onClick={e => onClose(e)}
        >
          {visible && this.$slots.default
            ? this.$slots.default({visible, x, y, item, onClose,id})
