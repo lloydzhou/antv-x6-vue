@@ -132,6 +132,15 @@ Stencil | 内置的带分组和搜索功能的拖拽组件，还提供`StencilGr
 </x6-node>
 ```
 
+- [x] 支持群组功能。UI嵌套的时候自动调用embed和unembed函数处理父子关系
+```
+<Node id="9" :x="500" :y="200" label="node9" :width="300" :height="200">
+  <Node id="99" :x="550" :y="220" label="node99" :width="200" :height="150">
+    <Node id="999" :x="580" :y="240" label="node999"></Node>
+  </Node>
+</Node>
+```
+
 
 ## DEMO
 
