@@ -3,8 +3,7 @@ import { defineComponent, onMounted, onUnmounted, ref, watch, provide, shallowRe
 
 import { Shape, Cell as BaseShape } from '@antv/x6'
 import { useContext, contextSymbol } from './GraphContext'
-
-export const cellContextSymbol = String(Symbol('x6cellContextSymbol'))
+import { cellContextSymbol, portGroupContextSymbol } from './GraphContext'
 
 export const useCellEvent = (name, handler, options={}) => {
   const { graph } = useContext()
@@ -45,6 +44,8 @@ export const useCell = (props, { emit }, create) => {
   const context = shallowReactive({ cell: null })
   provide(cellContextSymbol, context)
   const parent = inject(cellContextSymbol)
+  // 避免injection not found警告
+  provide(portGroupContextSymbol, { name: '' })
 
   const added = (e) => emit('added', e)
   const removed = (e) => emit('removed', e)
@@ -66,8 +67,7 @@ export const useCell = (props, { emit }, create) => {
     context.cell = cell.value
     // 当前节点添加到子节点
     if (parent && parent.cell) {
-      // cell.value.addTo(parent.cell)
-      parent.cell.embed(cell.value)
+      parent.cell.addChild(cell.value)
     }
     graph.addCell(cell.value)
   })
@@ -75,7 +75,7 @@ export const useCell = (props, { emit }, create) => {
     // 当前节点从子节点移除
     if (parent && parent.cell) {
       // cell.value.removeFromParent()
-      parent.cell.unembed(cell.value)
+      parent.cell.removeChild(cell.value)
     }
     graph.removeCell(cell.value)
   })
@@ -146,7 +146,7 @@ Object.keys(Shape).forEach(name => {
   Shapes[name] = defineComponent({
     name,
     props: /Edge/.test(name) ? EdgeProps : NodeProps,
-    inject: [contextSymbol],
+    inject: [contextSymbol, cellContextSymbol],
     setup(props, context) {
       const { shape: defaultShape } = ShapeClass.defaults || {}
       const { shape=defaultShape } = props

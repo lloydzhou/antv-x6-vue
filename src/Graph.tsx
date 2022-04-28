@@ -1,8 +1,7 @@
 // @ts-nocheck
-import { defineComponent, onMounted, ref, watch, markRaw, shallowReactive, Fragment } from 'vue';
-
+import { defineComponent, onMounted, ref, watch, markRaw, shallowReactive, Fragment, provide } from 'vue';
 import * as X6 from '@antv/x6'
-import {createContext} from './GraphContext'
+import { createContext, cellContextSymbol } from './GraphContext'
 // import clone from '@antv/util/es/clone'
 
 
@@ -44,6 +43,8 @@ const Graph = defineComponent({
     });
 
     createContext(contextRef);
+    // 避免injection not found警告
+    provide(cellContextSymbol, { cell: null })
     
     const initGraphInstance = () => {
       const {

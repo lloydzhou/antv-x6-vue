@@ -3,6 +3,7 @@ import { h, defineComponent } from 'vue';
 import { VueShape as VueShapeContainer } from '@antv/x6-vue-shape';
 import { contextSymbol } from './GraphContext'
 import { NodeProps, useCell } from './Shape'
+import { cellContextSymbol } from './GraphContext'
 
 export const VueShapeProps = NodeProps.concat('primer', 'useForeignObject', 'component')
 
@@ -37,7 +38,7 @@ export const useVueShape = (props, { slots, emit }) => {
 const VueShape = defineComponent({
   name: 'VueShape',
   props: VueShapeProps,
-  inject: [contextSymbol],
+  inject: [contextSymbol, cellContextSymbol],
   setup(props, context) {
     const cell = useVueShape(props, context)
     // 优先判断名字是port的slot在不在，不存在的时候渲染默认的slot

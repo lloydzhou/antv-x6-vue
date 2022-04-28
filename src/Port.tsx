@@ -1,11 +1,8 @@
 // @ts-nocheck
 import { defineComponent, onMounted, onUnmounted, watch, provide, shallowReactive, inject } from 'vue';
-
-import { cellContextSymbol } from './Shape'
 import { mergeOption } from './utils'
+import { cellContextSymbol, portGroupContextSymbol } from './GraphContext'
 
-
-export const portGroupContextSymbol = String(Symbol('x6PortGroupContextSymbol'))
 
 export const PortGroup = defineComponent({
   name: 'PortGroup',
