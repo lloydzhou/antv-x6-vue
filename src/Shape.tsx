@@ -77,7 +77,7 @@ export const useCell = (props, { emit }, create) => {
       // cell.value.removeFromParent()
       parent.cell.unembed(cell.value)
     }
-    graph.removeCell(id)
+    graph.removeCell(cell.value)
   })
 
   return cell
