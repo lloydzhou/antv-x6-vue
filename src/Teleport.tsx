@@ -25,6 +25,7 @@ export const useTeleport = (uniqViewId = defaultViewId) => {
   }
 
   const TeleportContainer = defineComponent({
+    name: 'TeleportContainer',
     setup() {
       const context = useContext()
       onMounted(() => {

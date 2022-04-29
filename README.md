@@ -37,6 +37,7 @@ const CustomNode = defineComponent({
   }
 })
 ```
+5. 提供`useTeleport`，优化`x6-vue-shape`默认创建多个App导致渲染性能问题。同时避免出现节点数据更新不及时问题。
 
 ## 安装
 ```
