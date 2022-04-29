@@ -19,7 +19,7 @@ export const GraphProps = [
 const Graph = defineComponent({
   name: 'Graph',
   props: GraphProps,
-  setup(props) {
+  setup(props, { emit }) {
     const { width, height, ...otherOptions } = props;
     const self = markRaw({
       props,
@@ -72,6 +72,7 @@ const Graph = defineComponent({
       self.graph = new X6.Graph(self.options)
       contextRef.graph = self.graph
       isReady.value = true
+      emit('ready', { graph: self.graph })
     }
     onMounted(() => {
       initGraphInstance()

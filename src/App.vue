@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div ref="stencil" class="stencil"/>
-    <Graph>
+    <Graph @ready="ready">
       <Node id="1" :x="100" :y="100" @added="added" label="node1">
         <PortGroup name="in" position="top" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
           <Port id="id1" />
@@ -74,13 +74,14 @@
         </template>
       </ContextMenu>
       <Connecting :validateEdge="validateEdge" />
+      <TeleportContainer />
     </Graph>
   </div>
 </template>
 
 <script lang="ts">
 // @ts-nocheck
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, h, Teleport } from 'vue'
 import { Options, Vue } from 'vue-class-component';
 import Graph, { Node, Edge, VueShape, useVueShape, VueShapeProps, GraphContext, useCellEvent } from './index'
 import { Grid, Background, Clipboard, Snapline, Selection, Keyboard, Scroller, MouseWheel, MiniMap } from './index'
@@ -89,10 +90,12 @@ import { ContextMenu } from './index'
 import { Menu } from 'ant-design-vue'
 import 'ant-design-vue/es/menu/style/css'
 import { Connecting } from './index'
-import { Port, PortGroup } from './index'
+import { Port, PortGroup, useTeleport } from './index'
 
 const { contextSymbol } = GraphContext
 const MenuItem = Menu.Item
+
+const [TeleportContainer, setGraph] = useTeleport()
 
 const CustomNode = defineComponent({
   name: 'CustomNode',
@@ -126,6 +129,7 @@ const CustomNode = defineComponent({
     StencilGroup,
     ContextMenu, Menu, MenuItem,
     Port, PortGroup,
+    TeleportContainer,
   },
 })
 export default class App extends Vue {
@@ -193,6 +197,9 @@ export default class App extends Vue {
   validateEdge({edge}) {
     console.log('validateEdge', edge)
     return true
+  }
+  ready({ graph }){
+    setGraph(graph)
   }
 }
 </script>

@@ -4,6 +4,7 @@ import * as GraphContext from './GraphContext'
 import Shape, { Node, Rect, Edge, Cell, NodeProps, EdgeProps, useCell, useCellEvent } from './Shape'
 import VueShape, { useVueShape, VueShapeProps } from './VueShape'
 import Port, { PortGroup } from './Port'
+import useTeleport from './Teleport'
 import Grid from './components/Grid'
 import Background from './components/Background'
 import Clipboard from './components/Clipboard'
@@ -70,6 +71,7 @@ export {
   Stencil, StencilGroup,
   ContextMenu, useContextMenu,
   Port, PortGroup,
+  useTeleport,
   install,
 }
 
