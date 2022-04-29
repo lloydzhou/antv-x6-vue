@@ -141,6 +141,23 @@ Stencil | 内置的带分组和搜索功能的拖拽组件，还提供`StencilGr
 </Node>
 ```
 
+- [x] 使用Teleport渲染
+> 默认的`x6-vue-shape`把每一个节点渲染成一个vue的app导致渲染性能问题
+> 通过vue3提供的Teleport功能，让当前App的子组件渲染到foreignobject内部。解决性能问题的同时，也能更好的处理VueShape组件内部数据及时更新的问题
+> 默认情况需要将TeleportContainer渲染到Graph内部（注意：需要将TeleportContainer放到VueShape的前面）
+
+```
+const TeleportContainer = useTeleport()
+
+<Graph>
+  <TeleportContainer />
+  <VueShape primer="rect">
+    <div>这里是一个vue的组件</div>
+  </VueShape>
+</Graph>>
+
+```
+
 
 ## DEMO
 
