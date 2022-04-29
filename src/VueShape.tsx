@@ -4,6 +4,7 @@ import { VueShape as VueShapeContainer } from '@antv/x6-vue-shape';
 import { contextSymbol } from './GraphContext'
 import { NodeProps, useCell } from './Shape'
 import { cellContextSymbol } from './GraphContext'
+import { defaultViewId } from './Teleport'
 
 export const VueShapeProps = NodeProps.concat('primer', 'useForeignObject', 'component')
 
@@ -30,6 +31,7 @@ export const useVueShape = (props, { slots, emit }) => {
         ? component
         : () => h('div', {key: id, class: 'vue-shape'}, slots.default ? slots.default({props, item: cell}) : null),
       ...otherOptions,
+      view: props.view || defaultViewId,
     })
     return cell
   })
@@ -41,12 +43,9 @@ const VueShape = defineComponent({
   inject: [contextSymbol, cellContextSymbol],
   setup(props, context) {
     const cell = useVueShape(props, context)
-    // 优先判断名字是port的slot在不在，不存在的时候渲染默认的slot
-    const { default: _default, port } = context.slots
-    return () => cell.value ? <div style="display:none;visibility:hidden;">
-      {port && port()}
-      {_default && _default()}
-    </div> : null
+    // 渲染名字是port的slot
+    const { port } = context.slots
+    return () => cell.value ? <div style="display:none;visibility:hidden;">{port && port()}</div> : null
   }
 })
 
