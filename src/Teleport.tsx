@@ -1,6 +1,7 @@
 // @ts-nocheck
-import { h, defineComponent, Teleport, reactive } from 'vue';
+import { h, defineComponent, Teleport, reactive, onMounted } from 'vue';
 import { NodeView } from '@antv/x6'
+import { useContext } from './GraphContext'
 export const defaultViewId = 'vue-teleport-shape-view'
 
 export const useTeleport = (uniqViewId = defaultViewId) => {
@@ -25,6 +26,12 @@ export const useTeleport = (uniqViewId = defaultViewId) => {
 
   const TeleportContainer = defineComponent({
     setup() {
+      const context = useContext()
+      onMounted(() => {
+        if (context && context.graph) {
+          graph = context.graph
+        }
+      })
       return () => (
         <div style="display: none;">
           {Object.keys(items).map(id => document.getElementById(targetId(id)) ? h(items[id]) : null)}
@@ -72,7 +79,7 @@ export const useTeleport = (uniqViewId = defaultViewId) => {
 
   NodeView.registry.register(uniqViewId, VuePortalShapeView, true)
 
-  return [TeleportContainer, g => graph = g]
+  return TeleportContainer
 }
 
 export default useTeleport
