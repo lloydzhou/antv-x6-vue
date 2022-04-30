@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { h, defineComponent, Teleport, reactive, onMounted } from 'vue';
+import { h, defineComponent, Teleport, reactive, onMounted, markRaw } from 'vue';
 import { NodeView } from '@antv/x6'
 import { useContext } from './GraphContext'
 export const defaultViewId = 'vue-teleport-shape-view'
@@ -12,13 +12,13 @@ export const useTeleport = (uniqViewId = defaultViewId) => {
   const targetId = (id) => `${uniqViewId}-${id}`
 
   const connect = (id, component, node) => {
-    items[id] = defineComponent({
+    items[id] = markRaw(defineComponent({
       render: () =>  h(Teleport, {to: '#' + targetId(id)}, h(component)),
       provide: () => ({
         getGraph: () => graph,
         getNode: () => node,
       })
-    })
+    }))
   }
   const disconnect = (id) => {
     delete items[id]
@@ -33,11 +33,14 @@ export const useTeleport = (uniqViewId = defaultViewId) => {
           graph = context.graph
         }
       })
-      return () => (
-        <div style="display: none;">
-          {Object.keys(items).map(id => document.getElementById(targetId(id)) ? h(items[id]) : null)}
-        </div>
-      )
+      return () =>
+        h(
+          "div",
+          { style: "display: none;" },
+          Object.keys(items).map((id) =>
+            document.getElementById(targetId(id)) ? h(items[id]) : null
+          )
+        );
     }
   })
 
