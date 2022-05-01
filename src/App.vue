@@ -2,7 +2,6 @@
   <div class="container">
     <div ref="stencil" class="stencil"/>
     <Graph @ready="ready">
-      <TeleportContainer />
       <Node id="1" :x="100" :y="100" @added="added" label="node1">
         <PortGroup name="in" position="top" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
           <Port id="id1" />
@@ -75,6 +74,7 @@
         </template>
       </ContextMenu>
       <Connecting :validateEdge="validateEdge" />
+      <TeleportContainer />
     </Graph>
   </div>
 </template>
