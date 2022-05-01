@@ -21,7 +21,6 @@ export default defineComponent({
   inject: [contextSymbol],
   setup(props) {
     const { graph } = useContext()
-    console.log('graph', graph)
     const containerRef = ref()
 
     const clear = () => {

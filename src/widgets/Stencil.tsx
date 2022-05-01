@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { defineComponent, onMounted, onUnmounted, ref, watch, nextTick, shallowReactive, provide, inject } from 'vue';
+import { defineComponent, onMounted, onUnmounted, ref, nextTick, shallowReactive, provide, inject } from 'vue';
 import { Addon, FunctionExt } from '@antv/x6'
 import { useContext, contextSymbol, createContext } from '../GraphContext'
 import { mergeOption } from '../utils'

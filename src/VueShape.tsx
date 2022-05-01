@@ -1,10 +1,27 @@
 // @ts-nocheck
-import { h, defineComponent } from 'vue';
+import { h, defineComponent, onMounted, markRaw, reactive } from 'vue';
 import { VueShape as VueShapeContainer } from '@antv/x6-vue-shape';
-import { contextSymbol } from './GraphContext'
+import { contextSymbol, useContext } from './GraphContext'
 import { NodeProps, useCell } from './Shape'
 import { cellContextSymbol } from './GraphContext'
-import { defaultViewId } from './Teleport'
+import { useTeleport, defaultViewId } from 'antv-x6-vue-teleport-view'
+// import { useTeleport, defaultViewId } from './teleport'
+
+export const TeleportContainer = defineComponent({
+  name: 'TeleportContainer',
+  props: {
+    view: {
+      type: String,
+      default: () => defaultViewId
+    }
+  },
+  inject: [contextSymbol],
+  setup(props) {
+    const { graph } = useContext()
+    const Teleport = useTeleport(props.view)
+    return () => h(Teleport)
+  }
+})
 
 export const VueShapeProps = NodeProps.concat('primer', 'useForeignObject', 'component')
 
@@ -37,7 +54,7 @@ export const useVueShape = (props, { slots, emit }) => {
   })
 }
 
-const VueShape = defineComponent({
+export const VueShape = defineComponent({
   name: 'VueShape',
   props: VueShapeProps,
   inject: [contextSymbol, cellContextSymbol],
@@ -48,9 +65,5 @@ const VueShape = defineComponent({
     return () => cell.value ? <div style="display:none;visibility:hidden;">{port && port()}</div> : null
   }
 })
-
-VueShape.VueShapeContainer = VueShapeContainer
-VueShape.VueShapeProps = VueShapeProps
-VueShape.useVueShape = useVueShape
 
 export default VueShape

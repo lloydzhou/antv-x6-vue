@@ -1,0 +1,23 @@
+{
+  "name": "antv-x6-vue-teleport-view",
+  "version": "1.0.1",
+  "description": "teleport view for @antv/x6-vue",
+  "scripts": {
+    "prepare": "install-peers"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lloydzhou/antv-x6-vue.git"
+  },
+  "main": "index.js",
+  "peerDependencies": {
+    "@antv/x6": "^1.31.3",
+    "@antv/x6-vue-shape": "^1.3.2",
+    "vue": "^3.2.31"
+  },
+  "author": "lloydzhou",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}
