@@ -1,6 +1,6 @@
 {
   "name": "antv-x6-vue-teleport-view",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "teleport view for @antv/x6-vue",
   "scripts": {
     "prepare": "install-peers"
