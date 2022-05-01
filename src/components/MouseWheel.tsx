@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { defineComponent, onMounted, onUnmounted, ref, watch } from 'vue';
+import { defineComponent, onMounted, onUnmounted, watch } from 'vue';
 import { useContext, contextSymbol } from '../GraphContext'
 import { mergeOption } from '../utils'
 

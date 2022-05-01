@@ -81,8 +81,9 @@
 
 <script lang="ts">
 // @ts-nocheck
-import { defineComponent, ref, h, Teleport } from 'vue'
+import { defineComponent, ref, h } from 'vue'
 import { Options, Vue } from 'vue-class-component';
+import { Port, PortGroup, TeleportContainer } from './index'
 import Graph, { Node, Edge, VueShape, useVueShape, VueShapeProps, GraphContext, useCellEvent } from './index'
 import { Grid, Background, Clipboard, Snapline, Selection, Keyboard, Scroller, MouseWheel, MiniMap } from './index'
 import { Stencil, StencilGroup } from './index'
@@ -90,12 +91,9 @@ import { ContextMenu } from './index'
 import { Menu } from 'ant-design-vue'
 import 'ant-design-vue/es/menu/style/css'
 import { Connecting } from './index'
-import { Port, PortGroup, useTeleport } from './index'
 
 const { contextSymbol } = GraphContext
 const MenuItem = Menu.Item
-
-const TeleportContainer = useTeleport()
 
 const CustomNode = defineComponent({
   name: 'CustomNode',

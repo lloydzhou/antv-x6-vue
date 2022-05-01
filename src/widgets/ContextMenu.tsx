@@ -1,7 +1,6 @@
 // @ts-nocheck
 import { defineComponent, onMounted, onUnmounted, ref, shallowReactive, toRefs } from 'vue';
-import { Addon, FunctionExt } from '@antv/x6'
-import { useContext, contextSymbol, createContext } from '../GraphContext'
+import { useContext } from '../GraphContext'
 
 
 export const useContextMenu = (props) => {

@@ -3,6 +3,7 @@ import typescript from 'rollup-plugin-typescript2'
 import babel from 'rollup-plugin-babel'
 import jsx from "acorn-jsx";
 import less from 'rollup-plugin-less';
+import filesize from 'rollup-plugin-filesize'
 // import pkg from './package.json'
 import buble from 'rollup-plugin-buble'
 // import nodeResolve from 'rollup-plugin-node-resolve'
@@ -45,6 +46,7 @@ export default {
         "lodash"
       ]
     }),
+    filesize(),
     typescript({
       // tsconfig: false,
       // experimentalDecorators: true,
@@ -67,7 +69,8 @@ export default {
   acornInjectPlugins: [jsx()],
   external: [
     "vue",
-    "@antv/g6",
-    "lodash",
+    "@antv/x6",
+    "@antv/x6-vue-shape",
+    "antv-x6-vue-teleport-view",
   ]
 }
