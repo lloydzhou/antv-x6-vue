@@ -102,9 +102,9 @@ export const useWatchProps = (cell, props) => {
   watch(() => props.connector, connector => cell.value.setConnector(connector))
   watch(() => props.labels, labels => cell.value.setLabels(labels))
 
-  watch(() => ({x: props.x, y: props.y}), position => cell.value.setPosition(position))
-  watch(() => ({width: props.width, height: props.height}), size => cell.value.setSize(size))
-  watch(() => props.angle, angle => cell.value.rotate(angle, {absolute: true}))
+  watch(() => ({x: Number(props.x), y: Number(props.y)}), position => cell.value.setPosition(position))
+  watch(() => ({width: Number(props.width), height: Number(props.height)}), size => cell.value.setSize(size))
+  watch(() => Number(props.angle), angle => cell.value.rotate(angle, {absolute: true}))
   watch(() => props.label, label => cell.value.setLabel(label))
   // 增加配置是否可以连线
   watch(() => props.magnet, magnet => {
@@ -115,11 +115,14 @@ export const useWatchProps = (cell, props) => {
 }
 
 const createShape = (Shape, props) => {
-  const { id, shape, magnet, width, height, ...otherOptions } = props
+  const { id, shape, magnet, x, y, width, height, angle, ...otherOptions } = props
   return new Shape({
     id, shape,
     width: Number(width) || 160,
     height: Number(height) || 40,
+    x: Number(x) || 0,
+    y: Number(y) || 0,
+    angle: Number(angle) || 0,
     ...otherOptions
   })
 }

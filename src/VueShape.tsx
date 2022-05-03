@@ -32,6 +32,8 @@ export const useVueShape = (props, { slots, emit }) => {
     const {
       id,
       width, height,
+      x, y,
+      angle,
       primer='circle', useForeignObject=true, component,  // 这几个是@antv/x6-vue-shape独有的参数
       magnet,
       ...otherOptions
@@ -40,6 +42,9 @@ export const useVueShape = (props, { slots, emit }) => {
       id,
       width: Number(width) || 60,
       height: Number(height) || 60,
+      x: Number(x) || 0,
+      y: Number(y) || 0,
+      angle: Number(angle) || 0,
       primer, useForeignObject,
       // 这里将自己的slots中的内容强行放到画布中去
       // 这样图结构的交互还有一些操作逻辑交给x6

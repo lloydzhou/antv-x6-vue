@@ -2,14 +2,14 @@
   <div class="container">
     <div ref="stencil" class="stencil"/>
     <Graph @ready="ready">
-      <Node id="1" :x="100" :y="100" @added="added" label="node1">
+      <Node id="1" x="100" y="100" @added="added" label="node1">
         <PortGroup name="in" position="top" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
           <Port id="id1" />
           <Port id="id2" :magnet="false" />
           <x6-port id="id3" />
         </PortGroup>
       </Node>
-      <Node id="9" :x="500" :y="200" label="node9" :width="300" :height="200">
+      <Node id="9" x="500" y="200" label="node9" :width="300" :height="200">
         <Node id="99" :x="550" :y="220" label="node99" :width="200" :height="150">
           <Node id="999" :x="580" :y="240" label="node999"></Node>
         </Node>
