@@ -67,7 +67,7 @@ export const VueShape = defineComponent({
     const cell = useVueShape(props, context)
     // 渲染名字是port的slot
     const { port } = context.slots
-    return () => cell.value ? <div style="display:none;visibility:hidden;">{port && port()}</div> : null
+    return () => cell.value ? port && port(): null
   }
 })
 

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { defineComponent, onMounted, onUnmounted, ref, watch, provide, shallowReactive, inject } from 'vue';
+import { defineComponent, onMounted, onUnmounted, ref, watch, provide, shallowReactive, inject, Fragment } from 'vue';
 
 import { Shape, Cell as BaseShape } from '@antv/x6'
 import { useContext, contextSymbol } from './GraphContext'
@@ -135,10 +135,10 @@ const Cell = defineComponent({
     const cell = useCell(props, context, createShape.bind(null, BaseShape))
     // 优先判断名字是port的slot在不在，不存在的时候渲染默认的slot
     const { default: _default, port } = context.slots
-    return () => cell.value ? <div style="display:none;visibility:hidden;">
+    return () => cell.value ? <Fragment>
       {port && port()}
       {_default && _default()}
-    </div> : null
+    </Fragment> : null
   }
 })
 
@@ -156,10 +156,10 @@ Object.keys(Shape).forEach(name => {
       const cell = useCell({...props, shape}, context, createShape.bind(null, ShapeClass))
       const { default: _default, port } = context.slots
       // port和default都有可能需要渲染
-      return () => cell.value ? <div style="display:none;visibility:hidden;">
+      return () => cell.value ? <Fragment>
         {port && port()}
         {_default && _default()}
-      </div> : null
+      </Fragment> : null
     }
   })
 })

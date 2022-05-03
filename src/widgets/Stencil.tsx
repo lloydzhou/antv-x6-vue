@@ -32,7 +32,7 @@ export const StencilGroup = defineComponent({
         model.on('node:added', reset)
       })
     })
-    return () => <div>{contextRef.graph && slots.default ? slots.default({ stencil }) : null}</div>
+    return () => contextRef.graph && slots.default ? slots.default({ stencil }) : null
   }
 })
 
