@@ -118,6 +118,8 @@ Snapline | 对齐线
 Selection | 点选/框选
 MiniMap | 小地图
 Stencil | 内置的带分组和搜索功能的拖拽组件，还提供`StencilGroup`以实现分组功能
+Contextmenu | 右键菜单
+TeleportContainer | 一个默认和useVueShape绑定到同一个view的容器，使用这个组件的时候，可以不用手动调用useTeleport，也不用专门指定view
 
 ## TODO
 - [ ] Stencil支持默认分组（不使用`StencilGroup`的情况）
