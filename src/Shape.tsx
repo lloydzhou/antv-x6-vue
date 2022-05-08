@@ -134,9 +134,10 @@ const Cell = defineComponent({
   setup(props, context) {
     const cell = useCell(props, context, createShape.bind(null, BaseShape))
     // 优先判断名字是port的slot在不在，不存在的时候渲染默认的slot
-    const { default: _default, port } = context.slots
+    const { default: _default, port, tool } = context.slots
     return () => cell.value ? <Fragment>
       {port && port()}
+      {tool && tool()}
       {_default && _default()}
     </Fragment> : null
   }
@@ -154,10 +155,11 @@ Object.keys(Shape).forEach(name => {
       const { shape: defaultShape } = ShapeClass.defaults || {}
       const { shape=defaultShape } = props
       const cell = useCell({...props, shape}, context, createShape.bind(null, ShapeClass))
-      const { default: _default, port } = context.slots
+      const { default: _default, port, tool } = context.slots
       // port和default都有可能需要渲染
       return () => cell.value ? <Fragment>
         {port && port()}
+        {tool && tool()}
         {_default && _default()}
       </Fragment> : null
     }

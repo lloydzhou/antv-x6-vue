@@ -8,6 +8,9 @@
           <Port id="id2" :magnet="false" />
           <x6-port id="id3" />
         </PortGroup>
+        <NodeButton x="100%" y="100%" :offset="{x:-18,y:-18}" />
+        <x6-node-button x="100%" y="100%" :offset="{x:-18,y:-18}" />
+        <x6-node-button-remove x="100%" y="100%" :offset="{x:-18,y:-18}" />
       </Node>
       <Node id="9" x="500" y="200" label="node9" :width="300" :height="200">
         <Node id="99" :x="550" :y="220" label="node99" :width="200" :height="150">
@@ -23,7 +26,7 @@
         </x6-port-group>
       </x6-node>
       <Edge id="e1" source="1" target="2" @added="added" label="edge1" />
-      <VueShape primer="rect" id="3" :x="200" :y="300" :width="160" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}" @added="added" @cell:change:zIndex="changed">
+      <VueShape primer="rect" id="3" :x="200" :y="300" :width="160" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}">
         <div>这里是一个vue的组件</div>
         <img style="width: 30px;height:30px;" src="https://v3.cn.vuejs.org/logo.png" />
         <template #port>
@@ -91,6 +94,9 @@ import { ContextMenu } from './index'
 import { Menu } from 'ant-design-vue'
 import 'ant-design-vue/es/menu/style/css'
 import { Connecting } from './index'
+import { Tools } from './index'
+
+const { NodeButton } = Tools
 
 const { contextSymbol } = GraphContext
 const MenuItem = Menu.Item
@@ -128,6 +134,7 @@ const CustomNode = defineComponent({
     ContextMenu, Menu, MenuItem,
     Port, PortGroup,
     TeleportContainer,
+    NodeButton,
   },
 })
 export default class App extends Vue {

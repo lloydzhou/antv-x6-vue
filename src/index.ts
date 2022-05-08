@@ -13,8 +13,12 @@ import MouseWheel from './components/MouseWheel'
 import Connecting from './components/Connecting'
 
 
+import Tools from './tools'
 import Widgets from './widgets'
 const { Snapline, Selection, MiniMap, Stencil, StencilGroup, ContextMenu, useContextMenu } = Widgets
+
+const { NodeButton, NodeButtonRemove } = Tools
+
 
 
 const components = [
@@ -35,6 +39,8 @@ const components = [
   MiniMap,
   StencilGroup, Stencil,
   ContextMenu,
+  NodeButton,
+  NodeButtonRemove,
 ]
 
 const install = function (Vue) {
@@ -67,6 +73,7 @@ export {
   Connecting,
   GraphContext,
   Widgets,
+  Tools,
   MiniMap,
   Snapline,
   Stencil, StencilGroup,
