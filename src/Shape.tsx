@@ -90,24 +90,34 @@ export const EdgeProps = CellProps.concat('source', 'target', 'vertices', 'route
 export const NodeProps = CellProps.concat('x', 'y', 'width', 'height', 'angle', 'ports', 'label', 'magnet')
 
 export const useWatchProps = (cell, getProps) => {
-  watch(() => getProps().markup, markup => cell.value.setMarkup(markup), { deep: true })
-  watch(() => getProps().attrs, attrs => cell.value.setAttrs(attrs), { deep: true })
-  watch(() => getProps().zIndex, zIndex => cell.value.setZIndex(zIndex))
-  watch(() => getProps().visible, visible => cell.value.setVisible(visible))
-  watch(() => getProps().data, data => cell.value.setData(data), { deep: true })
-  watch(() => getProps().parent, p => cell.value.setParent(p))
+  watch(() => getProps().markup, markup => markup && cell.value.setMarkup(markup), { deep: true })
+  watch(() => getProps().attrs, attrs => attrs && cell.value.setAttrs(attrs), { deep: true })
+  watch(() => getProps().zIndex, zIndex => zIndex !== null && cell.value.setZIndex(zIndex))
+  watch(() => getProps().visible, visible => visible && cell.value.setVisible(visible))
+  watch(() => getProps().data, data => data && cell.value.setData(data), { deep: true })
+  watch(() => getProps().parent, p => p && cell.value.setParent(p))
 
-  watch(() => getProps().source, source => cell.value.setSource(source), { deep: true })
-  watch(() => getProps().target, target => cell.value.setTarget(target), { deep: true })
-  watch(() => getProps().vertices, vertices => cell.value.setVertices(vertices), { deep: true })
-  watch(() => getProps().router, router => cell.value.setRouter(router), { deep: true })
-  watch(() => getProps().connector, connector => cell.value.setConnector(connector), { deep: true })
-  watch(() => getProps().labels, labels => cell.value.setLabels(labels), { deep: true })
+  watch(() => getProps().source, source => source && cell.value.setSource(source), { deep: true })
+  watch(() => getProps().target, target => target && cell.value.setTarget(target), { deep: true })
+  watch(() => getProps().vertices, vertices => vertices && cell.value.setVertices(vertices), { deep: true })
+  watch(() => getProps().router, router => router && cell.value.setRouter(router), { deep: true })
+  watch(() => getProps().connector, connector => connector && cell.value.setConnector(connector), { deep: true })
+  watch(() => getProps().labels, labels => labels && cell.value.setLabels(labels), { deep: true })
 
-  watch(() => ({x: Number(getProps().x), y: Number(getProps().y)}), position => cell.value.setProp('position', position))
-  watch(() => ({width: Number(getProps().width), height: Number(getProps().height)}), size => cell.value.setProp('size', size))
-  watch(() => Number(getProps().angle), angle => cell.value.rotate(angle, {absolute: true}))
-  watch(() => getProps().label, label => cell.value.setProp('label', label))
+  watch(() => [getProps().x, getProps().y], position => {
+    const [x, y] = position
+    if (x !== null && y !== null) {
+      cell.value.setProp('position', {x: Number(x), y: Number(y)})
+    }
+  })
+  watch(() => [getProps().width, getProps().height], size => {
+    const [width, height] = size
+    if (width !== null && height !== null) {
+      cell.value.setProp('size', {width: Number(width), height: Number(height)})
+    }
+  })
+  watch(() => getProps().angle, angle => angle !== null && cell.value.rotate(Number(angle), {absolute: true}))
+  watch(() => getProps().label, label => label && cell.value.setProp('label', label))
   // 增加配置是否可以连线
   watch(() => getProps().magnet, magnet => {
     if (magnet === false || magnet === true) {
