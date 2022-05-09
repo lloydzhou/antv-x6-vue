@@ -64,7 +64,7 @@ export const VueShape = defineComponent({
   props: VueShapeProps,
   inject: [contextSymbol, cellContextSymbol],
   setup(props, context) {
-    const cell = useVueShape(props, context)
+    const cell = useVueShape(() => props, context)
     // 渲染名字是port的slot
     const { port } = context.slots
     return () => cell.value ? port && port(): null

@@ -38,6 +38,8 @@ export const useCellEvent = (name, handler, options={}) => {
 }
 
 export const useCell = (props, { emit }, create) => {
+  // 这里如果传入的不是function就包裹一层
+  const getProps = typeof props == 'function' ? props : () => props
   const { graph } = useContext()
   const cell = ref()
 
@@ -51,12 +53,12 @@ export const useCell = (props, { emit }, create) => {
   const removed = (e) => emit('removed', e)
 
   // 监听其他变化
-  useWatchProps(cell, props)
+  useWatchProps(cell, getProps)
   // 默认给组件绑定一个监听change:*的回调
   useCellEvent('cell:change:*', ({ key, ...ev }) => emit(`cell:change:${key}`, ev), { cell })
 
   onMounted(() => {
-    // cell.value = new Shape({id, shape, ...otherOptions})
+    const props = getProps()
     cell.value = create(props)
     if (props.magnet === false || props.magnet === true) {
       cell.value.setAttrByPath(`${props.primer || cell.value.shape}/magnet`, !!props.magnet)
@@ -87,29 +89,29 @@ export const CellProps = ['id', 'markup', 'attrs', 'shape', 'view', 'zIndex', 'v
 export const EdgeProps = CellProps.concat('source', 'target', 'vertices', 'router', 'connector', 'labels', 'defaultLabel')
 export const NodeProps = CellProps.concat('x', 'y', 'width', 'height', 'angle', 'ports', 'label', 'magnet')
 
-export const useWatchProps = (cell, props) => {
-  watch(() => props.markup, markup => cell.value.setMarkup(markup))
-  watch(() => props.attrs, attrs => cell.value.setAttrs(attrs))
-  watch(() => props.zIndex, zIndex => cell.value.setZIndex(zIndex))
-  watch(() => props.visible, visible => cell.value.setVisible(visible))
-  watch(() => props.data, data => cell.value.setData(data))
-  watch(() => props.parent, p => cell.value.setParent(p))
+export const useWatchProps = (cell, getProps) => {
+  watch(() => getProps().markup, markup => cell.value.setMarkup(markup), { deep: true })
+  watch(() => getProps().attrs, attrs => cell.value.setAttrs(attrs), { deep: true })
+  watch(() => getProps().zIndex, zIndex => cell.value.setZIndex(zIndex))
+  watch(() => getProps().visible, visible => cell.value.setVisible(visible))
+  watch(() => getProps().data, data => cell.value.setData(data), { deep: true })
+  watch(() => getProps().parent, p => cell.value.setParent(p))
 
-  watch(() => props.source, source => cell.value.setSource(source))
-  watch(() => props.target, target => cell.value.setTarget(target))
-  watch(() => props.vertices, vertices => cell.value.setVertices(vertices))
-  watch(() => props.router, router => cell.value.setRouter(router))
-  watch(() => props.connector, connector => cell.value.setConnector(connector))
-  watch(() => props.labels, labels => cell.value.setLabels(labels))
+  watch(() => getProps().source, source => cell.value.setSource(source), { deep: true })
+  watch(() => getProps().target, target => cell.value.setTarget(target), { deep: true })
+  watch(() => getProps().vertices, vertices => cell.value.setVertices(vertices), { deep: true })
+  watch(() => getProps().router, router => cell.value.setRouter(router), { deep: true })
+  watch(() => getProps().connector, connector => cell.value.setConnector(connector), { deep: true })
+  watch(() => getProps().labels, labels => cell.value.setLabels(labels), { deep: true })
 
-  watch(() => ({x: Number(props.x), y: Number(props.y)}), position => cell.value.setPosition(position))
-  watch(() => ({width: Number(props.width), height: Number(props.height)}), size => cell.value.setSize(size))
-  watch(() => Number(props.angle), angle => cell.value.rotate(angle, {absolute: true}))
-  watch(() => props.label, label => cell.value.setLabel(label))
+  watch(() => ({x: Number(getProps().x), y: Number(getProps().y)}), position => cell.value.setProp('position', position))
+  watch(() => ({width: Number(getProps().width), height: Number(getProps().height)}), size => cell.value.setProp('size', size))
+  watch(() => Number(getProps().angle), angle => cell.value.rotate(angle, {absolute: true}))
+  watch(() => getProps().label, label => cell.value.setProp('label', label))
   // 增加配置是否可以连线
-  watch(() => props.magnet, magnet => {
+  watch(() => getProps().magnet, magnet => {
     if (magnet === false || magnet === true) {
-      cell.value.setAttrByPath(`${props.primer || cell.value.shape}/magnet`, !!magnet)
+      cell.value.setAttrByPath(`${getProps().primer || cell.value.shape}/magnet`, !!magnet)
     }
   })
 }
@@ -132,7 +134,7 @@ const Cell = defineComponent({
   props: CellProps,
   inject: [contextSymbol, cellContextSymbol],
   setup(props, context) {
-    const cell = useCell(props, context, createShape.bind(null, BaseShape))
+    const cell = useCell(() => props, context, createShape.bind(null, BaseShape))
     // 优先判断名字是port的slot在不在，不存在的时候渲染默认的slot
     const { default: _default, port } = context.slots
     return () => cell.value ? <Fragment>
@@ -153,7 +155,7 @@ Object.keys(Shape).forEach(name => {
     setup(props, context) {
       const { shape: defaultShape } = ShapeClass.defaults || {}
       const { shape=defaultShape } = props
-      const cell = useCell({...props, shape}, context, createShape.bind(null, ShapeClass))
+      const cell = useCell(() => ({...props, shape}), context, createShape.bind(null, ShapeClass))
       const { default: _default, port } = context.slots
       // port和default都有可能需要渲染
       return () => cell.value ? <Fragment>
