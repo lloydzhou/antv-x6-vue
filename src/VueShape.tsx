@@ -1,11 +1,12 @@
 // @ts-nocheck
 import { h, defineComponent, onMounted, markRaw, reactive } from 'vue';
-import { VueShape as VueShapeContainer } from '@antv/x6-vue-shape';
+import { VueShape as VueShapeContainer, useTeleport } from '@antv/x6-vue-shape';
 import { contextSymbol, useContext } from './GraphContext'
 import { NodeProps, useCell } from './Shape'
 import { cellContextSymbol } from './GraphContext'
-import { useTeleport, defaultViewId } from 'antv-x6-vue-teleport-view'
+// import { useTeleport, defaultViewId } from 'antv-x6-vue-teleport-view'
 // import { useTeleport, defaultViewId } from './teleport'
+const defaultViewId = 'antv-x6-vue-teleport-view'
 
 export const TeleportContainer = defineComponent({
   name: 'TeleportContainer',
