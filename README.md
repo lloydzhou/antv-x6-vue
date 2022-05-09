@@ -31,7 +31,8 @@ const CustomNode = defineComponent({
   props: [...VueShapeProps, 'otherOptions'],
   inject: [contextSymbol],
   setup(props, context) {
-    const cell = useVueShape(props, context)
+    // 直接传递props给useVueShape，watch的时候不能监听到变化
+    const cell = useVueShape(() => props, context)
     useCellEvent('node:click', (e) => context.emit('click', e), { cell })
     return () => null
   }
