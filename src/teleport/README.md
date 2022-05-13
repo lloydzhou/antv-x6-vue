@@ -1,6 +1,6 @@
 # antv-x6-vue-teleport-view
 
-**注意**
+**注意**  
 当前项目代码已经合并到@antv/x6-vue-shape的1.4.0版本。
 https://github.com/antvis/X6/pull/2078
 
