@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import Graph from './index'
+import Graph from '../src/index'
 
 const app = createApp(App)
 

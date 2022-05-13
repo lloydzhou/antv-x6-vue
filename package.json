@@ -4,7 +4,7 @@
   "description": "the vue toolkit for graph analysis based on x6",
   "scripts": {
     "prepare": "install-peers",
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve example/main.ts",
     "build": "rollup -c",
     "lint": "vue-cli-service lint"
   },

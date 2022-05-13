@@ -83,14 +83,14 @@
 // @ts-nocheck
 import { defineComponent, ref, h } from 'vue'
 import { Options, Vue } from 'vue-class-component';
-import { Port, PortGroup, TeleportContainer } from './index'
-import Graph, { Node, Edge, VueShape, useVueShape, VueShapeProps, GraphContext, useCellEvent } from './index'
-import { Grid, Background, Clipboard, Snapline, Selection, Keyboard, Scroller, MouseWheel, MiniMap } from './index'
-import { Stencil, StencilGroup } from './index'
-import { ContextMenu } from './index'
+import { Port, PortGroup, TeleportContainer } from '../src/index'
+import Graph, { Node, Edge, VueShape, useVueShape, VueShapeProps, GraphContext, useCellEvent } from '../src/index'
+import { Grid, Background, Clipboard, Snapline, Selection, Keyboard, Scroller, MouseWheel, MiniMap } from '../src/index'
+import { Stencil, StencilGroup } from '../src/index'
+import { ContextMenu } from '../src/index'
 import { Menu } from 'ant-design-vue'
 import 'ant-design-vue/es/menu/style/css'
-import { Connecting } from './index'
+import { Connecting } from '../src/index'
 
 const { contextSymbol } = GraphContext
 const MenuItem = Menu.Item
