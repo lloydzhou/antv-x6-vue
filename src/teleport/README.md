@@ -1,5 +1,10 @@
 # antv-x6-vue-teleport-view
 
+**注意**
+当前项目代码已经合并到@antv/x6-vue-shape的1.4.0版本。
+https://github.com/antvis/X6/pull/2078
+
+
 优化`x6-vue-shape`默认创建多个App导致渲染性能问题。同时避免出现节点数据更新不及时问题。
 
 > 默认的`x6-vue-shape`把每一个节点渲染成一个vue的app导致渲染性能问题

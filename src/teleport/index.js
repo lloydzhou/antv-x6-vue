@@ -69,4 +69,3 @@ export const useTeleport = (uniqViewId = defaultViewId) => {
 }
 
 export default useTeleport
-
