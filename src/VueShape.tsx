@@ -68,9 +68,10 @@ export const VueShape = defineComponent({
     const cell = useVueShape(() => props, context)
     const { default: _default, port } = context.slots
     // port和default都有可能需要渲染
+    // 配置component的时候，VueShape节点使用props.component渲染，这个时候，需要渲染default
     return () => cell.value ? <Fragment>
       {port && port()}
-      {!props.component && _default && _default()}
+      {!!props.component && _default && _default()}
     </Fragment> : null
   }
 })
