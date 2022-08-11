@@ -66,9 +66,12 @@ export const VueShape = defineComponent({
   inject: [contextSymbol, cellContextSymbol],
   setup(props, context) {
     const cell = useVueShape(() => props, context)
-    // 渲染名字是port的slot
-    const { port } = context.slots
-    return () => cell.value ? port && port(): null
+    const { default: _default, port } = context.slots
+    // port和default都有可能需要渲染
+    return () => cell.value ? <Fragment>
+      {port && port()}
+      {!props.component && _default && _default()}
+    </Fragment> : null
   }
 })
 
