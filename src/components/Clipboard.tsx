@@ -46,9 +46,9 @@ export default defineComponent({
     })
     onUnmounted(() => {
       graph.disableClipboard()
-      graph.unbindKey('ctrl+c', copy)
-      graph.unbindKey('ctrl+x', cut)
-      graph.unbindKey('ctrl+v', paste)
+      graph.unbindKey('ctrl+c')
+      graph.unbindKey('ctrl+x')
+      graph.unbindKey('ctrl+v')
     })
     return () => null
   }

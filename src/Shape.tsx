@@ -32,7 +32,7 @@ export const useCellEvent = (name, handler, options={}) => {
       graph.on(name, xhandler)
     }
   })
-  onUnmounted(() => clear)
+  onUnmounted(() => clear())
   // 将取消监听的函数返回，用户可以主动取消
   return clear
 }
@@ -97,8 +97,8 @@ export const useWatchProps = (cell, getProps) => {
   watch(() => getProps().data, data => data && cell.value.setData(data), { deep: true })
   watch(() => getProps().parent, p => p && cell.value.setParent(p))
 
-  watch(() => getProps().source, source => source && cell.value.setSource(source), { deep: true })
-  watch(() => getProps().target, target => target && cell.value.setTarget(target), { deep: true })
+  watch(() => getProps().source, source => source !== null && cell.value.setSource(typeof source === 'string' ? {cell: source} : source), { deep: true })
+  watch(() => getProps().target, target => target !== null && cell.value.setTarget(typeof target === 'string' ? {cell: target} : target), { deep: true })
   watch(() => getProps().vertices, vertices => vertices && cell.value.setVertices(vertices), { deep: true })
   watch(() => getProps().router, router => router && cell.value.setRouter(router), { deep: true })
   watch(() => getProps().connector, connector => connector && cell.value.setConnector(connector), { deep: true })
