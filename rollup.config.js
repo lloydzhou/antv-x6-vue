@@ -70,7 +70,6 @@ export default {
   external: [
     "vue",
     "@antv/x6",
-    "@antv/x6-vue-shape",
-    "antv-x6-vue-teleport-view",
+    "@antv/x6-vue-shape"
   ]
 }
