@@ -23,7 +23,7 @@
         </x6-port-group>
       </x6-node>
       <Edge id="e1" source="1" target="2" @added="added" label="edge1" />
-      <VueShape primer="rect" id="3" :x="200" :y="300" :width="160" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}" @added="added" @cell:change:zIndex="changed">
+      <VueShape primer="rect" id="3" :x="200" :y="300" :width="160" :height="60" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}" @added="added" @cell:change:zIndex="changed">
         <div>这里是一个vue的组件</div>
         <img style="width: 30px;height:30px;" src="https://v3.cn.vuejs.org/logo.png" />
         <template #port>
