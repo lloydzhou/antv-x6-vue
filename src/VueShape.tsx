@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { h, defineComponent, onMounted, markRaw, reactive } from 'vue';
-import { VueShape as VueShapeContainer, useTeleport } from '@antv/x6-vue-shape';
-import { contextSymbol, useContext } from './GraphContext'
+import { h, defineComponent } from 'vue';
+import { useTeleport } from '@antv/x6-vue-shape';
+import { contextSymbol } from './GraphContext'
 import { NodeProps, useCell } from './Shape'
 import { cellContextSymbol } from './GraphContext'
 const defaultViewId = 'antv-x6-vue-teleport-view'
@@ -14,9 +14,7 @@ export const TeleportContainer = defineComponent({
       default: () => defaultViewId
     }
   },
-  inject: [contextSymbol],
   setup(props) {
-    const { graph } = useContext()
     const Teleport = useTeleport(props.view)
     return () => h(Teleport)
   }

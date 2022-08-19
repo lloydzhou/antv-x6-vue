@@ -58,7 +58,7 @@ export const useCell = (props, { emit }) => {
 
   onMounted(() => {
     const props = getProps()
-    const { id, shape, magnet, x, y, width, height, angle, ...otherOptions } = props
+    const { id, shape, x, y, width, height, angle, ...otherOptions } = props
     // 从registry获取注册的类型，获取不到就使用Cell
     const ShapeClass = X6Node.registry.get(shape) || X6Edge.registry.get(shape) || BaseShape
     console.log('create shape', id, shape, ShapeClass.name)
