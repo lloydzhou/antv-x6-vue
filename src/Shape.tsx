@@ -61,7 +61,6 @@ export const useCell = (props, { emit }) => {
     const { id, shape, x, y, width, height, angle, ...otherOptions } = props
     // 从registry获取注册的类型，获取不到就使用Cell
     const ShapeClass = X6Node.registry.get(shape) || X6Edge.registry.get(shape) || BaseShape
-    console.log('create shape', id, shape, ShapeClass.name)
     cell.value = new ShapeClass({
       id, shape,
       width: Number(width) || 160,
