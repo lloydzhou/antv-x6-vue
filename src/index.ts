@@ -2,7 +2,8 @@
 import Graph from './Graph'
 import * as GraphContext from './GraphContext'
 import Shape, { Node, Rect, Edge, Cell, NodeProps, EdgeProps, useCell, useCellEvent } from './Shape'
-import VueShape, { useVueShape, VueShapeProps, TeleportContainer } from './VueShape'
+import VueShape, { useVueShape, VueShapeProps } from './VueShape'
+import { useTeleport } from './Teleport'
 import Port, { PortGroup } from './Port'
 import Grid from './components/Grid'
 import Background from './components/Background'
@@ -20,7 +21,6 @@ const { Snapline, Selection, MiniMap, Stencil, StencilGroup, ContextMenu, useCon
 const components = [
   Graph,
   ...Object.values(Shape), // 这里将Shape这个里面所有的组件都注册一下
-  TeleportContainer,
   VueShape,
   Port, PortGroup,
   Grid,
@@ -55,7 +55,7 @@ export {
   Rect,
   Edge,
   Cell, useCell, useCellEvent, NodeProps, EdgeProps,
-  TeleportContainer,
+  useTeleport,
   VueShape, useVueShape, VueShapeProps,
   Grid,
   Background,

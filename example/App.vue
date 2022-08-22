@@ -2,6 +2,7 @@
   <div class="container">
     <div ref="stencil" class="stencil"/>
     <Graph @ready="ready">
+      <TeleportContainer />
       <Node id="1" x="100" y="100" @added="added" label="node1">
         <PortGroup name="in" position="top" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
           <Port id="id1" />
@@ -74,7 +75,6 @@
         </template>
       </ContextMenu>
       <Connecting :validateEdge="validateEdge" />
-      <TeleportContainer />
     </Graph>
   </div>
 </template>
@@ -83,7 +83,7 @@
 // @ts-nocheck
 import { defineComponent, ref, h } from 'vue'
 import { Options, Vue } from 'vue-class-component';
-import { Port, PortGroup, TeleportContainer } from '../src/index'
+import { Port, PortGroup, useTeleport } from '../src/index'
 import Graph, { Node, Edge, VueShape, useVueShape, VueShapeProps, GraphContext, useCellEvent } from '../src/index'
 import { Grid, Background, Clipboard, Snapline, Selection, Keyboard, Scroller, MouseWheel, MiniMap } from '../src/index'
 import { Stencil, StencilGroup } from '../src/index'
@@ -92,6 +92,8 @@ import { Menu } from 'ant-design-vue'
 import 'ant-design-vue/es/menu/style/css'
 import { Connecting } from '../src/index'
 
+const TeleportContainer = useTeleport()
+console.log('TeleportContainer', TeleportContainer)
 const { contextSymbol } = GraphContext
 const MenuItem = Menu.Item
 

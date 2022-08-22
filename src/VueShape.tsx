@@ -1,24 +1,9 @@
 // @ts-nocheck
 import { h, defineComponent } from 'vue';
-import { useTeleport } from '@antv/x6-vue-shape';
-import { contextSymbol } from './GraphContext'
 import { NodeProps, useCell } from './Shape'
-import { cellContextSymbol } from './GraphContext'
-const defaultViewId = 'antv-x6-vue-teleport-view'
-
-export const TeleportContainer = defineComponent({
-  name: 'TeleportContainer',
-  props: {
-    view: {
-      type: String,
-      default: () => defaultViewId
-    }
-  },
-  setup(props) {
-    const Teleport = useTeleport(props.view)
-    return () => h(Teleport)
-  }
-})
+import { contextSymbol, cellContextSymbol } from './GraphContext'
+import 'antv-x6-html2'
+import { wrap } from './Teleport'
 
 export const VueShapeProps = NodeProps.concat('primer', 'useForeignObject', 'component')
 
@@ -28,18 +13,13 @@ export const useVueShape = (props, { slots, emit }) => {
   const {
     id, primer='circle', useForeignObject=true, component,  // 这几个是@antv/x6-vue-shape独有的参数
   } = props
+  const Component = component ? component : () => h('div', {key: id, class: 'vue-shape'}, slots.default ? slots.default({props, item: cell.value}) : null)
   const cell = useCell({
     id,
     primer, useForeignObject,
-    // 这里将自己的slots中的内容强行放到画布中去
-    // 这样图结构的交互还有一些操作逻辑交给x6
-    // 通过vue绘制的组件渲染和组件内部交互逻辑交给用户
-    view: defaultViewId,
     ...props,
-    shape: 'vue-shape',
-    component: component
-      ? component
-      : () => h('div', {key: id, class: 'vue-shape'}, slots.default ? slots.default({props, item: cell.value}) : null),
+    shape: 'html2',
+    html: wrap(Component),
   }, {slots, emit})
   return cell
 }

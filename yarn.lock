@@ -2231,6 +2231,11 @@ ant-design-vue@^3.2.1:
     vue-types "^3.0.0"
     warning "^4.0.0"
 
+antv-x6-html2@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/antv-x6-html2/-/antv-x6-html2-1.0.5.tgz#358cdd9d163afe1e7c24737de441e25adede4f83"
+  integrity sha512-jojMH6Kz7IYYTXRx43eG5ajYdS6/J6i02JdQdobQghfycxO03lYUCMS7HYcLeNP/81ucbESqMTttGhPLF4dXoA==
+
 any-observable@^0.3.0:
   version "0.3.0"
   resolved "https://registry.npmmirror.com/any-observable/-/any-observable-0.3.0.tgz#af933475e5806a67d0d7df090dd5e8bef65d119b"
