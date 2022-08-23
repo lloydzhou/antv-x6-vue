@@ -3,7 +3,7 @@ import Graph from './Graph'
 import * as GraphContext from './GraphContext'
 import Shape, { Node, Rect, Edge, Cell, NodeProps, EdgeProps, useCell, useCellEvent } from './Shape'
 import VueShape, { useVueShape, VueShapeProps } from './VueShape'
-import { useTeleport } from './Teleport'
+import { TeleportContainer, useTeleport, useNodeSize } from './Teleport'
 import Port, { PortGroup } from './Port'
 import Grid from './components/Grid'
 import Background from './components/Background'
@@ -22,6 +22,7 @@ const components = [
   Graph,
   ...Object.values(Shape), // 这里将Shape这个里面所有的组件都注册一下
   VueShape,
+  TeleportContainer,
   Port, PortGroup,
   Grid,
   Background,
@@ -55,7 +56,7 @@ export {
   Rect,
   Edge,
   Cell, useCell, useCellEvent, NodeProps, EdgeProps,
-  useTeleport,
+  TeleportContainer, useTeleport, useNodeSize,
   VueShape, useVueShape, VueShapeProps,
   Grid,
   Background,
