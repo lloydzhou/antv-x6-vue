@@ -1,48 +1,29 @@
 // @ts-nocheck
-import { onMounted, shallowReactive, shallowRef, watchEffect, watch, markRaw, defineComponent, computed } from "vue";
+import { onUpdated, onMounted, shallowReactive, shallowRef, watchEffect, watch, markRaw, defineComponent, computed } from "vue";
 import { h, Teleport, Fragment, VNode, VNodeData, provide, inject, createApp } from "vue";
 import { Graph, Node, Dom } from '@antv/x6'
 
 const items = shallowReactive<{[key: string]: any}>({})
 const mounted = shallowRef<boolean>(false)
 
-export const useNodeSize = ({ node, container }) => {
-  const root = computed(() => container.firstChild && container.firstChild.getBoundingClientRect())
-  watchEffect(() => {
-    console.log('watchEffect', container, root)
-    // if (root.value.getBoundingClientRect) {
-    //   const { width, height } = root.value.getBoundingClientRect()
-    //   console.log('size', {width, height})
-    // }
+export const useNodeSize = ({ node, container, graph }) => {
+  const size = shallowReactive(node.getSize())
+  const update = () => {
+    // 开启minimap的时候，需要判断是哪一个view渲染的
+    if (node.model && node.model.graph.view.cid === graph.view.cid) {
+      if (container && container.firstChild.getBoundingClientRect) {
+        const { width, height } = container.firstChild.getBoundingClientRect()
+        size.width = width
+        size.height = height
+        // node.size({width, height})
+      }
+    }
+  }
+  onMounted(() => update())
+  onUpdated(() => update())
+  watch(() => ({...size}), (size) => {
+    node.size(size)
   })
-  
-  // const getNode = inject('getNode')
-  // const getGraph = inject('getGraph')
-  // const graph = getGraph()
-  // const view = graph.findViewByCell(node)
-  // const node = getNode()
-  // console.log('getNode', getNode, getGraph, node, view)
-  // const size = shallowReactive(getNode().getSize())
-  // watch(() => view, (view) => {
-  //   console.log('view', view)
-  // })
-  // watchEffect(() => {
-  //   console.log('watchEffect', view)
-  //   if (view) {
-  //     const container = view.selectors.foContent
-  //     console.log('container', container)
-  //     if (container && container.firstChild.getBoundingClientRect) {
-  //       const { width, height } = container.firstChild.getBoundingClientRect()
-  //       console.log('size', {width, height})
-  //       size.width = width
-  //       size.height = height
-  //     }
-  //   }
-  // })
-  // watch(() => size, (size) => {
-  //   console.log('setSize', {width, height})
-  //   node.size(size, { silent: true })
-  // })
 }
 
 export const TeleportContainer = defineComponent({

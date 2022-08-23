@@ -35,7 +35,7 @@
         </template>
       </VueShape>
       <VueShape id="444" :x="500" :y="500" :data="{num: 2}" :height="60" :attrs="{rect: {stroke: '#333'}}" :component="CustomNodeComponent" />
-      <CustomNode v-if="visible" primer="circle" id="4" :x="400" :width="100" :height="100" :y="y" :attrs="{circle: {fill: '#ddd', stroke: '#333'}, label: {text: 'CustomNode'}}" @added="added" @click="click" @cell:change:position="changed" :magnet="true" >
+      <CustomNode v-if="visible" primer="circle" id="4" :x="400" :width="100" :height="100" :y="y" :attrs="{circle: {fill: '#ddd', stroke: '#333'}}" @added="added" @click="click" @cell:change:position="changed" :magnet="true" >
         <span style="text-align: center;display: inline-block;width: 100%;margin-top: 20px;">Hello {{name}}</span>
       </CustomNode>
       <Edge id="e2" source="1" target="3" @added="added" />
@@ -102,7 +102,7 @@ const CustomNodeComponent = defineComponent({
   name: 'CustomNodeComponent',
   props: ['graph', 'node', 'data', 'container'],
   setup(props) {
-    // useNodeSize(props)
+    useNodeSize(props)
     return () => h(InputNumber, {
       min: 1,
       value: props.data.num,

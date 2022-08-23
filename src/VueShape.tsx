@@ -18,30 +18,13 @@ export const useVueShape = (props, { slots, emit }) => {
     props: ['graph', 'node', 'container'],
     setup(props) {
       const { node, graph, container } = props
-      // console.log('DataWatcher', node, props)
       const state = shallowReactive({ data: node.getData() })
-      const size = shallowReactive(node.size())
       onMounted(() => {
         node.on('change:data', () => {
           state.data = node.getData()
         })
       })
-      watch(() => size, (size) => {
-        console.log('watch size', size)
-        node.size(size)
-      })
-      return () => {
-        if (typeof container.firstChild.getBoundingClientRect === 'function') {
-          const { width, height } = container.firstChild.getBoundingClientRect()
-          console.log('watchEffect', {width, height}, size, node)
-          nextTick(() => {
-            size.width = width
-            size.height = height
-            node.size({width, height}, { silent: true })
-          })
-        }
-        return h(Component, {...props, data: state.data})
-      }
+      return () => h(Component, {...props, data: state.data})
     }
   })
   
