@@ -55,30 +55,33 @@ export function wrap(Component: any) {
   let vm: any = null
 
   return {
-    mount: async (props: any) => {
-      const { graph, node, container } = props
-      const id = `${graph.view.cid}:${node.id}`
-      Dom.requestAnimationFrame(() => {
-        if (mounted.value) {
-          // 如果Teleport组件已经挂载，就使用，否则使用原始createApp
-          // 这里使用graph.view.id做前缀
-          connect(id, node, graph, Component, container)
-        } else {
-          vm = createApp({
-            render() {
-              return h(Component as any, { ...props })
-            },
-            provide() {
-              return {
-                context: props,
-              }
-            },
-          })
-          vm.mount(container)
-        }
+    mount: function(props: any) {
+      return new Promise((resolve) => {
+        const { graph, node, container } = props
+        const id = `${graph.view.cid}:${node.id}`
+        Dom.requestAnimationFrame(() => {
+          if (mounted.value) {
+            // 如果Teleport组件已经挂载，就使用，否则使用原始createApp
+            // 这里使用graph.view.id做前缀
+            connect(id, node, graph, Component, container)
+          } else {
+            vm = createApp({
+              render() {
+                return h(Component as any, { ...props })
+              },
+              provide() {
+                return {
+                  context: props,
+                }
+              },
+            })
+            vm.mount(container)
+          }
+          resolve()
+        })
       })
     },
-    unmount: async (props: any) => {
+    unmount: function(props: any) {
       const { graph, node } = props
       if (mounted.value) {
         // 如果Teleport组件挂载过就从items列表里面移除，否则使用unmount移除
@@ -89,6 +92,7 @@ export function wrap(Component: any) {
           vm.unmount()
         }
       }
+      return Promise.resolve()
     }
   }
 }

@@ -15,7 +15,7 @@ import buble from 'rollup-plugin-buble'
 export default {
   input: 'src/index.ts',
   output: [{
-    name: 'graphin-vue',
+    name: 'antv-x6-vue',
     format: 'umd',
     sourcemap: true,
     file: "dist/index.js",
@@ -23,7 +23,7 @@ export default {
     globals: {
       vue: 'Vue',
       '@antv/x6': 'X6',
-      '@antv/x6-vue-shape': 'X6VueShape',
+      "resize-detector": "ResizeDetector"
     }
   }],
   plugins: [
@@ -71,6 +71,6 @@ export default {
   external: [
     "vue",
     "@antv/x6",
-    "@antv/x6-vue-shape"
+    "resize-detector"
   ]
 }

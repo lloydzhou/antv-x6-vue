@@ -43,13 +43,6 @@
   resolved "https://registry.yarnpkg.com/@antv/graphin-icons/-/graphin-icons-1.0.0.tgz#86ba9e9ab6565bfe2ea1096e8678e76c279053f1"
   integrity sha512-2nogK6ZrDklnfIOJrqOAgD7iFLjfZIjLbA8pDUbeXN5c9b0Mu84oCfyqg8OmWwvi9Gt80eUzoplo73gKjZECJg==
 
-"@antv/x6-vue-shape@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@antv/x6-vue-shape/-/x6-vue-shape-1.4.0.tgz#fb841fcc50c68fd1b47cd76089dedc9e9c6acc91"
-  integrity sha512-ohWyDB3xt6CQQUGolTbK1Vxklr0VYsAg87iadj3rdoPfuNljoRvlzTlDFXxVHzyVdwNOXqx0Yd/EQVdubP8e8g==
-  dependencies:
-    vue-demi "^0.7.4"
-
 "@antv/x6@^1.33.1":
   version "1.33.1"
   resolved "https://registry.yarnpkg.com/@antv/x6/-/x6-1.33.1.tgz#1d47e6c62f489abc910072d4640316087e7057ba"
@@ -2231,10 +2224,10 @@ ant-design-vue@^3.2.1:
     vue-types "^3.0.0"
     warning "^4.0.0"
 
-antv-x6-html2@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/antv-x6-html2/-/antv-x6-html2-1.0.5.tgz#358cdd9d163afe1e7c24737de441e25adede4f83"
-  integrity sha512-jojMH6Kz7IYYTXRx43eG5ajYdS6/J6i02JdQdobQghfycxO03lYUCMS7HYcLeNP/81ucbESqMTttGhPLF4dXoA==
+antv-x6-html2@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/antv-x6-html2/-/antv-x6-html2-1.0.6.tgz#f2dae65c2e49e6a3a2132f29601056c8d9e10928"
+  integrity sha512-39Vl1qHPhh+9rNXQYzKH0G8T/GTVi0/ocRdbKBf97NB6Py6JhIXXyEdnLJqCvwiAMPqf8j1G+KCjQXNEHOmCfw==
 
 any-observable@^0.3.0:
   version "0.3.0"
@@ -10473,11 +10466,6 @@ vue-class-component@^8.0.0-rc.1:
   version "8.0.0-rc.1"
   resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-8.0.0-rc.1.tgz#db692cd97656eb9a08206c03d0b7398cdb1d9420"
   integrity sha512-w1nMzsT/UdbDAXKqhwTmSoyuJzUXKrxLE77PCFVuC6syr8acdFDAq116xgvZh9UCuV0h+rlCtxXolr3Hi3HyPQ==
-
-vue-demi@^0.7.4:
-  version "0.7.5"
-  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.7.5.tgz#88dee7492fc99a0f911ff03fc02c658fa2a79af8"
-  integrity sha512-eFSQSvbQdY7C9ujOzvM6tn7XxwLjn0VQDXQsiYBLBwf28Na+2nTQR4BBBcomhmdP6mmHlBKAwarq6a0BPG87hQ==
 
 vue-eslint-parser@^7.0.0, vue-eslint-parser@^7.10.0:
   version "7.11.0"
