@@ -98,5 +98,8 @@
       "vue-cli-service lint",
       "git add"
     ]
+  },
+  "dependencies": {
+    "resize-detector": "^0.3.0"
   }
 }
