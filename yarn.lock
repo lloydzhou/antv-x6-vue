@@ -50,10 +50,10 @@
   dependencies:
     vue-demi "^0.7.4"
 
-"@antv/x6@^1.31.3":
-  version "1.31.4"
-  resolved "https://registry.yarnpkg.com/@antv/x6/-/x6-1.31.4.tgz#c5ba46b260ff04321246850d34aa0353cb2cff93"
-  integrity sha512-XgMIjaCGA3sJe7mcWoBHMuHoZ4AVVWjZSohWNFvg6b29p3x1kJEBAm7hunWMfw8oURUiJjq453sQ7DHD3zGwIw==
+"@antv/x6@^1.33.1":
+  version "1.33.1"
+  resolved "https://registry.yarnpkg.com/@antv/x6/-/x6-1.33.1.tgz#1d47e6c62f489abc910072d4640316087e7057ba"
+  integrity sha512-NW3mUDW+Od9hqas0URoaeih0we4gLipqdNEC7ozM7wRFEzpi9CDzfPZerHmhdKasUMwjIyyrN56uJEHGVnrp4Q==
   dependencies:
     csstype "^3.0.3"
     jquery "^3.5.1"

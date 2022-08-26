@@ -7,7 +7,7 @@ import { wrap } from './Teleport'
 import { addListener, removeListener } from "resize-detector";
 import { debounce } from './utils'
 
-export const VueShapeProps = NodeProps.concat('primer', 'useForeignObject', 'component')
+export const VueShapeProps = NodeProps.concat('primer', 'useForeignObject', 'component', 'autoResize')
 
 export const useVueShape = (props, { slots, emit }) => {
   const {
