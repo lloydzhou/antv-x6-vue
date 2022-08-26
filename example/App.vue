@@ -2,6 +2,7 @@
   <div class="container">
     <div ref="stencil" class="stencil"/>
     <Graph @ready="ready">
+      <TeleportContainer />
       <Node id="1" x="100" y="100" @added="added" label="node1">
         <PortGroup name="in" position="top" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
           <Port id="id1" />
@@ -23,7 +24,7 @@
         </x6-port-group>
       </x6-node>
       <Edge id="e1" source="1" target="2" @added="added" label="edge1" />
-      <VueShape primer="rect" id="3" :x="200" :y="300" :width="160" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}" @added="added" @cell:change:zIndex="changed">
+      <VueShape primer="rect" id="3" :x="200" :y="300" :width="160" :height="60" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}" @added="added" @cell:change:zIndex="changed">
         <div>这里是一个vue的组件</div>
         <img style="width: 30px;height:30px;" src="https://v3.cn.vuejs.org/logo.png" />
         <template #port>
@@ -33,7 +34,8 @@
         </PortGroup>
         </template>
       </VueShape>
-      <CustomNode v-if="visible" primer="circle" id="4" :x="400" :width="100" :height="100" :y="y" :attrs="{circle: {fill: '#ddd', stroke: '#333'}, label: {text: 'CustomNode'}}" @added="added" @click="click" @cell:change:position="changed" :magnet="true" >
+      <VueShape id="444" :x="500" :y="500" :data="{num: 2}" :height="60" :attrs="{rect: {stroke: '#333'}}" :component="CustomNodeComponent" />
+      <CustomNode v-if="visible" primer="circle" id="4" :x="400" :width="100" :height="100" :y="y" :attrs="{circle: {fill: '#ddd', stroke: '#333'}}" @added="added" @click="click" @cell:change:position="changed" :magnet="true" >
         <span style="text-align: center;display: inline-block;width: 100%;margin-top: 20px;">Hello {{name}}</span>
       </CustomNode>
       <Edge id="e2" source="1" target="3" @added="added" />
@@ -74,33 +76,49 @@
         </template>
       </ContextMenu>
       <Connecting :validateEdge="validateEdge" />
-      <TeleportContainer />
     </Graph>
   </div>
 </template>
 
 <script lang="ts">
 // @ts-nocheck
-import { defineComponent, ref, h } from 'vue'
+import { defineComponent, ref, h, markRaw } from 'vue'
+import { inject } from 'vue'
 import { Options, Vue } from 'vue-class-component';
 import { Port, PortGroup, TeleportContainer } from '../src/index'
 import Graph, { Node, Edge, VueShape, useVueShape, VueShapeProps, GraphContext, useCellEvent } from '../src/index'
 import { Grid, Background, Clipboard, Snapline, Selection, Keyboard, Scroller, MouseWheel, MiniMap } from '../src/index'
 import { Stencil, StencilGroup } from '../src/index'
 import { ContextMenu } from '../src/index'
-import { Menu } from 'ant-design-vue'
+import { Menu, InputNumber } from 'ant-design-vue'
 import 'ant-design-vue/es/menu/style/css'
+import 'ant-design-vue/es/input-number/style/css'
 import { Connecting } from '../src/index'
 
 const { contextSymbol } = GraphContext
 const MenuItem = Menu.Item
+
+const CustomNodeComponent = defineComponent({
+  name: 'CustomNodeComponent',
+  props: ['graph', 'node', 'data', 'container'],
+  setup(props) {
+    return () => h(InputNumber, {
+      min: 1,
+      value: props.data.num,
+      onChange: (num) => {
+        console.log(props.node)
+        props.node.setData({ num })
+      }
+    })
+  }
+})
 
 const CustomNode = defineComponent({
   name: 'CustomNode',
   props: [...VueShapeProps, 'otherOptions'],
   inject: [contextSymbol],
   setup(props, context) {
-    const cell = useVueShape(props, context)
+    const cell = useVueShape({ ...props, data: { num: 2 }, component: markRaw(CustomNodeComponent) }, context)
     useCellEvent('node:click', (e) => context.emit('click', e), { cell })
     return () => null
   }
@@ -140,6 +158,8 @@ export default class App extends Vue {
   name = "antv"
 
   addedNodes = []
+
+  CustomNodeComponent = markRaw(CustomNodeComponent)
 
   created() {
     setTimeout(() => {

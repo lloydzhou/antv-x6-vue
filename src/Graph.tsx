@@ -1,8 +1,10 @@
 // @ts-nocheck
-import { defineComponent, onMounted, ref, watch, markRaw, shallowReactive, Fragment, provide } from 'vue';
+import { defineComponent, onMounted, ref, watch, watchEffect, markRaw, shallowReactive, Fragment, provide } from 'vue';
 import * as X6 from '@antv/x6'
 import { createContext, cellContextSymbol } from './GraphContext'
 // import clone from '@antv/util/es/clone'
+import { addListener, removeListener } from 'resize-detector'
+import { debounce } from './utils'
 
 
 export const GraphProps = [
@@ -64,7 +66,7 @@ const Graph = defineComponent({
         container: graphDOM.value,
         width: self.width,
         height: self.height,
-        autoResize: autoResize !== false,
+        // autoResize: autoResize !== false,
         panning: panning !== false,
         ...otherOptions,
       })
@@ -74,6 +76,23 @@ const Graph = defineComponent({
       isReady.value = true
       emit('ready', { graph: self.graph })
     }
+
+    // autoresize
+    watchEffect((cleanup) => {
+      const resizeListener = debounce((e) => {
+        const { width, height } = e.getBoundingClientRect()
+        self.graph.resize(width, height)
+      })
+      if (props.autoResize !== false && graphDOM.value) {
+        const root = graphDOM.value.parentNode
+        resizeListener(root)
+        addListener(root, resizeListener)
+        cleanup(() => {
+          removeListener(root, resizeListener)
+        })
+      }
+    })
+
     onMounted(() => {
       initGraphInstance()
     })

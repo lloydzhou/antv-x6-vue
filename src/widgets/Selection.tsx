@@ -45,9 +45,10 @@ export default defineComponent({
         )
       )
       // 从那边获取的值是{0: 'ctrl', 1: 'meta'}不是一个Array
-      if (selecting.multiple && !selecting.multipleSelectionModifiers.length) {
-        selecting.multipleSelectionModifiers = ['ctrl', 'meta']
-      }
+      // console.log('selecting', selecting)
+      // if (selecting.multiple && !selecting.multipleSelectionModifiers.length) {
+      //   selecting.multipleSelectionModifiers = ['ctrl', 'meta']
+      // }
       graph.options.selecting = selecting
       graph.selection.widget = graph.hook.createSelection()
       graph.enableSelection()

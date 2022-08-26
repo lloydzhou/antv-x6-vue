@@ -1,63 +1,67 @@
 // @ts-nocheck
-import { h, defineComponent, onMounted, markRaw, reactive } from 'vue';
-import { VueShape as VueShapeContainer, useTeleport } from '@antv/x6-vue-shape';
-import { contextSymbol, useContext } from './GraphContext'
+import { h, defineComponent, shallowReactive, onMounted, onUnmounted, markRaw, nextTick, watch, watchEffect, shallowRef } from 'vue';
 import { NodeProps, useCell } from './Shape'
-import { cellContextSymbol } from './GraphContext'
-// import { useTeleport, defaultViewId } from 'antv-x6-vue-teleport-view'
-// import { useTeleport, defaultViewId } from './teleport'
-const defaultViewId = 'antv-x6-vue-teleport-view'
+import { contextSymbol, cellContextSymbol } from './GraphContext'
+import 'antv-x6-html2'
+import { wrap } from './Teleport'
+import { addListener, removeListener } from "resize-detector";
+import { debounce } from './utils'
 
-export const TeleportContainer = defineComponent({
-  name: 'TeleportContainer',
-  props: {
-    view: {
-      type: String,
-      default: () => defaultViewId
-    }
-  },
-  inject: [contextSymbol],
-  setup(props) {
-    const { graph } = useContext()
-    const Teleport = useTeleport(props.view)
-    return () => h(Teleport)
-  }
-})
-
-export const VueShapeProps = NodeProps.concat('primer', 'useForeignObject', 'component')
+export const VueShapeProps = NodeProps.concat('primer', 'useForeignObject', 'component', 'autoResize')
 
 export const useVueShape = (props, { slots, emit }) => {
+  const {
+    id,
+    autoResize=true,
+    primer='circle', useForeignObject=true, component,  // 这几个是@antv/x6-vue-shape独有的参数
+  } = props
+  const Component = markRaw(component ? component : () => slots.default ? slots.default({props, item: cell.value}) : null)
 
-  // 这里实际上只是在这个作用域传递一个createShape函数到useCell
-  return useCell(props, {slots, emit}, (props) => {
-    const {
-      id,
-      width, height,
-      x, y,
-      angle,
-      primer='circle', useForeignObject=true, component,  // 这几个是@antv/x6-vue-shape独有的参数
-      magnet,
-      ...otherOptions
-    } = props
-    const cell = new VueShapeContainer({
-      id,
-      width: Number(width) || 60,
-      height: Number(height) || 60,
-      x: Number(x) || 0,
-      y: Number(y) || 0,
-      angle: Number(angle) || 0,
-      primer, useForeignObject,
-      // 这里将自己的slots中的内容强行放到画布中去
-      // 这样图结构的交互还有一些操作逻辑交给x6
-      // 通过vue绘制的组件渲染和组件内部交互逻辑交给用户
-      component: component
-        ? component
-        : () => h('div', {key: id, class: 'vue-shape'}, slots.default ? slots.default({props, item: cell}) : null),
-      ...otherOptions,
-      view: props.view || defaultViewId,
-    })
-    return cell
+  const DataWatcher = defineComponent({
+    name: 'DataWatcher',
+    props: ['graph', 'node', 'container'],
+    setup(props) {
+      const { node, graph, container } = props
+      const state = shallowReactive({ data: node.getData() })
+      const root = shallowRef()
+      const resizeListener = debounce((e) => {
+        // console.log('resizeListener', e)
+        const { width, height } = e.getBoundingClientRect()
+        node.size({width, height})
+      })
+      onMounted(() => {
+        node.on('change:data', () => {
+          state.data = node.getData()
+        })
+        // 自动调整大小，开启minimap的时候，需要判断是哪一个view渲染的
+        if (autoResize && node.model && node.model.graph.view.cid === graph.view.cid) {
+          resizeListener(root.value)
+          addListener(root.value, resizeListener)
+        }
+      })
+      onUnmounted(() => {
+        removeListener(root.value, resizeListener)
+      })
+      return () => h(
+        'div',
+        {
+          key: id,
+          class: 'vue-shape',
+          ref: n => root.value = n,
+        },
+        h(Component, {...props, data: state.data})
+      );
+    }
   })
+  
+  const cell = useCell({
+    id,
+    primer, useForeignObject,
+    ...props,
+    shape: 'html2',
+    html: markRaw(wrap(DataWatcher)),
+  }, {slots, emit})
+  return cell
 }
 
 export const VueShape = defineComponent({
@@ -65,7 +69,7 @@ export const VueShape = defineComponent({
   props: VueShapeProps,
   inject: [contextSymbol, cellContextSymbol],
   setup(props, context) {
-    const cell = useVueShape(() => props, context)
+    const cell = useVueShape(props, context)
     const { default: _default, port } = context.slots
     // port和default都有可能需要渲染
     // 配置component的时候，VueShape节点使用props.component渲染，这个时候，需要渲染default

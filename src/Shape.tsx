@@ -1,7 +1,6 @@
 // @ts-nocheck
 import { defineComponent, onMounted, onUnmounted, ref, watch, provide, shallowReactive, inject, Fragment } from 'vue';
-
-import { Shape, Cell as BaseShape } from '@antv/x6'
+import { Node as X6Node, Edge as X6Edge, Shape, Cell as BaseShape } from '@antv/x6'
 import { useContext, contextSymbol } from './GraphContext'
 import { cellContextSymbol, portGroupContextSymbol } from './GraphContext'
 
@@ -37,7 +36,7 @@ export const useCellEvent = (name, handler, options={}) => {
   return clear
 }
 
-export const useCell = (props, { emit }, create) => {
+export const useCell = (props, { emit }) => {
   // 这里如果传入的不是function就包裹一层
   const getProps = typeof props == 'function' ? props : () => props
   const { graph } = useContext()
@@ -59,7 +58,18 @@ export const useCell = (props, { emit }, create) => {
 
   onMounted(() => {
     const props = getProps()
-    cell.value = create(props)
+    const { id, shape, x, y, width, height, angle, ...otherOptions } = props
+    // 从registry获取注册的类型，获取不到就使用Cell
+    const ShapeClass = X6Node.registry.get(shape) || X6Edge.registry.get(shape) || BaseShape
+    cell.value = new ShapeClass({
+      id, shape,
+      width: Number(width) || 160,
+      height: Number(height) || 40,
+      x: Number(x) || 0,
+      y: Number(y) || 0,
+      angle: Number(angle) || 0,
+      ...otherOptions
+    })
     if (props.magnet === false || props.magnet === true) {
       cell.value.setAttrByPath(`${props.primer || cell.value.shape}/magnet`, !!props.magnet)
     }
@@ -95,7 +105,7 @@ export const useWatchProps = (cell, getProps) => {
   watch(() => getProps().zIndex, zIndex => zIndex !== null && cell.value.setZIndex(zIndex))
   watch(() => getProps().visible, visible => visible && cell.value.setVisible(visible))
   watch(() => getProps().data, data => data && cell.value.setData(data), { deep: true })
-  watch(() => getProps().parent, p => p && cell.value.setParent(p))
+  watch(() => getProps().parent, p => p && cell.value.setProp('parent', p))
 
   watch(() => getProps().source, source => source !== null && cell.value.setSource(typeof source === 'string' ? {cell: source} : source), { deep: true })
   watch(() => getProps().target, target => target !== null && cell.value.setTarget(typeof target === 'string' ? {cell: target} : target), { deep: true })
@@ -126,25 +136,12 @@ export const useWatchProps = (cell, getProps) => {
   })
 }
 
-const createShape = (Shape, props) => {
-  const { id, shape, magnet, x, y, width, height, angle, ...otherOptions } = props
-  return new Shape({
-    id, shape,
-    width: Number(width) || 160,
-    height: Number(height) || 40,
-    x: Number(x) || 0,
-    y: Number(y) || 0,
-    angle: Number(angle) || 0,
-    ...otherOptions
-  })
-}
-
 const Cell = defineComponent({
   name: 'Cell',
   props: CellProps,
   inject: [contextSymbol, cellContextSymbol],
   setup(props, context) {
-    const cell = useCell(() => props, context, createShape.bind(null, BaseShape))
+    const cell = useCell(props, context)
     // 优先判断名字是port的slot在不在，不存在的时候渲染默认的slot
     const { default: _default, port } = context.slots
     return () => cell.value ? <Fragment>
@@ -165,7 +162,7 @@ Object.keys(Shape).forEach(name => {
     setup(props, context) {
       const { shape: defaultShape } = ShapeClass.defaults || {}
       const { shape=defaultShape } = props
-      const cell = useCell(() => ({...props, shape}), context, createShape.bind(null, ShapeClass))
+      const cell = useCell({...props, shape}, context)
       const { default: _default, port } = context.slots
       // port和default都有可能需要渲染
       return () => cell.value ? <Fragment>

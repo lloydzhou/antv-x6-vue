@@ -1,8 +1,9 @@
+import { terser } from 'rollup-plugin-terser'
 import vue from 'rollup-plugin-vue'
 import typescript from 'rollup-plugin-typescript2'
 import babel from 'rollup-plugin-babel'
 import jsx from "acorn-jsx";
-import less from 'rollup-plugin-less';
+// import less from 'rollup-plugin-less';
 import filesize from 'rollup-plugin-filesize'
 // import pkg from './package.json'
 import buble from 'rollup-plugin-buble'
@@ -14,19 +15,18 @@ import buble from 'rollup-plugin-buble'
 export default {
   input: 'src/index.ts',
   output: [{
-    name: 'graphin-vue',
+    name: 'antv-x6-vue',
     format: 'umd',
+    sourcemap: true,
     file: "dist/index.js",
     banner: '// @ts-nocheck\nimport {h} from "vue"\n',
-  }, {
-    format: 'es',
-    file: "dist/index.es.js",
-    banner: '// @ts-nocheck\nimport {h} from "vue"\n',
+    globals: {
+      vue: 'Vue',
+      '@antv/x6': 'X6',
+      "resize-detector": "ResizeDetector"
+    }
   }],
   plugins: [
-    less({
-      output: 'dist/index.css'
-    }),
     // nodeResolve({
     //   jsnext: true,
     //   main: true,
@@ -46,6 +46,7 @@ export default {
         "lodash"
       ]
     }),
+    terser(),
     filesize(),
     typescript({
       // tsconfig: false,
@@ -70,7 +71,6 @@ export default {
   external: [
     "vue",
     "@antv/x6",
-    "@antv/x6-vue-shape",
-    "antv-x6-vue-teleport-view",
+    "resize-detector"
   ]
 }
