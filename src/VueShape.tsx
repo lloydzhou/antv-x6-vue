@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { h, defineComponent, shallowReactive, onMounted, markRaw, nextTick, watch, watchEffect, shallowRef } from 'vue';
+import { h, defineComponent, shallowReactive, onMounted, onUnmounted, markRaw, nextTick, watch, watchEffect, shallowRef } from 'vue';
 import { NodeProps, useCell } from './Shape'
 import { contextSymbol, cellContextSymbol } from './GraphContext'
 import 'antv-x6-html2'
@@ -37,8 +37,10 @@ export const useVueShape = (props, { slots, emit }) => {
         if (autoResize && node.model && node.model.graph.view.cid === graph.view.cid) {
           resizeListener(root.value)
           addListener(root.value, resizeListener)
-          return () => removeListener(root.value, resizeListener)
         }
+      })
+      onUnmounted(() => {
+        removeListener(root.value, resizeListener)
       })
       return () => h(
         'div',
