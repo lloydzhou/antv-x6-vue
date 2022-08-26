@@ -6,26 +6,6 @@ import { Graph, Node, Dom } from '@antv/x6'
 const items = shallowReactive<{[key: string]: any}>({})
 const mounted = shallowRef<boolean>(false)
 
-export const useNodeSize = ({ node, container, graph }) => {
-  const size = shallowReactive(node.getSize())
-  const update = () => {
-    // 开启minimap的时候，需要判断是哪一个view渲染的
-    if (node.model && node.model.graph.view.cid === graph.view.cid) {
-      if (container && container.firstChild.getBoundingClientRect) {
-        const { width, height } = container.firstChild.getBoundingClientRect()
-        size.width = width
-        size.height = height
-        // node.size({width, height})
-      }
-    }
-  }
-  onMounted(() => update())
-  onUpdated(() => update())
-  watch(() => ({...size}), (size) => {
-    node.size(size)
-  })
-}
-
 export const TeleportContainer = defineComponent({
   name: 'TeleportContainer',
   setup() {

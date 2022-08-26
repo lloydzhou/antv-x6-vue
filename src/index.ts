@@ -3,7 +3,7 @@ import Graph from './Graph'
 import * as GraphContext from './GraphContext'
 import Shape, { Node, Rect, Edge, Cell, NodeProps, EdgeProps, useCell, useCellEvent } from './Shape'
 import VueShape, { useVueShape, VueShapeProps } from './VueShape'
-import { TeleportContainer, useTeleport, useNodeSize } from './Teleport'
+import { TeleportContainer, useTeleport } from './Teleport'
 import Port, { PortGroup } from './Port'
 import Grid from './components/Grid'
 import Background from './components/Background'
@@ -56,7 +56,7 @@ export {
   Rect,
   Edge,
   Cell, useCell, useCellEvent, NodeProps, EdgeProps,
-  TeleportContainer, useTeleport, useNodeSize,
+  TeleportContainer, useTeleport,
   VueShape, useVueShape, VueShapeProps,
   Grid,
   Background,

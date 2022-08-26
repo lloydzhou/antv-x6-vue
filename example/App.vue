@@ -85,7 +85,7 @@
 import { defineComponent, ref, h, markRaw } from 'vue'
 import { inject } from 'vue'
 import { Options, Vue } from 'vue-class-component';
-import { Port, PortGroup, TeleportContainer, useNodeSize } from '../src/index'
+import { Port, PortGroup, TeleportContainer } from '../src/index'
 import Graph, { Node, Edge, VueShape, useVueShape, VueShapeProps, GraphContext, useCellEvent } from '../src/index'
 import { Grid, Background, Clipboard, Snapline, Selection, Keyboard, Scroller, MouseWheel, MiniMap } from '../src/index'
 import { Stencil, StencilGroup } from '../src/index'
@@ -102,7 +102,6 @@ const CustomNodeComponent = defineComponent({
   name: 'CustomNodeComponent',
   props: ['graph', 'node', 'data', 'container'],
   setup(props) {
-    useNodeSize(props)
     return () => h(InputNumber, {
       min: 1,
       value: props.data.num,

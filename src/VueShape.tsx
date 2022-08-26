@@ -1,17 +1,21 @@
 // @ts-nocheck
-import { h, defineComponent, shallowReactive, onMounted, markRaw, nextTick, watch } from 'vue';
+import { h, defineComponent, shallowReactive, onMounted, markRaw, nextTick, watch, watchEffect, shallowRef } from 'vue';
 import { NodeProps, useCell } from './Shape'
 import { contextSymbol, cellContextSymbol } from './GraphContext'
 import 'antv-x6-html2'
 import { wrap } from './Teleport'
+import { addListener, removeListener } from "resize-detector";
+import { debounce } from './utils'
 
 export const VueShapeProps = NodeProps.concat('primer', 'useForeignObject', 'component')
 
 export const useVueShape = (props, { slots, emit }) => {
   const {
-    id, primer='circle', useForeignObject=true, component,  // 这几个是@antv/x6-vue-shape独有的参数
+    id,
+    autoResize=true,
+    primer='circle', useForeignObject=true, component,  // 这几个是@antv/x6-vue-shape独有的参数
   } = props
-  const Component = markRaw(component ? component : () => h('div', {key: id, class: 'vue-shape'}, slots.default ? slots.default({props, item: cell.value}) : null))
+  const Component = markRaw(component ? component : () => slots.default ? slots.default({props, item: cell.value}) : null)
 
   const DataWatcher = defineComponent({
     name: 'DataWatcher',
@@ -19,12 +23,32 @@ export const useVueShape = (props, { slots, emit }) => {
     setup(props) {
       const { node, graph, container } = props
       const state = shallowReactive({ data: node.getData() })
+      const root = shallowRef()
+      const resizeListener = debounce((e) => {
+        // console.log('resizeListener', e)
+        const { width, height } = e.getBoundingClientRect()
+        node.size({width, height})
+      })
       onMounted(() => {
         node.on('change:data', () => {
           state.data = node.getData()
         })
+        // 自动调整大小，开启minimap的时候，需要判断是哪一个view渲染的
+        if (autoResize && node.model && node.model.graph.view.cid === graph.view.cid) {
+          resizeListener(root.value)
+          addListener(root.value, resizeListener)
+          return () => removeListener(root.value, resizeListener)
+        }
       })
-      return () => h(Component, {...props, data: state.data})
+      return () => h(
+        'div',
+        {
+          key: id,
+          class: 'vue-shape',
+          ref: n => root.value = n,
+        },
+        h(Component, {...props, data: state.data})
+      );
     }
   })
   
