@@ -16,13 +16,14 @@ export default {
   input: 'src/index.ts',
   output: [{
     name: 'antv-x6-vue',
-    format: 'umd',
+    format: 'es',
     sourcemap: true,
     file: "dist/index.js",
     banner: '// @ts-nocheck\nimport {h} from "vue"\n',
     globals: {
       vue: 'Vue',
       '@antv/x6': 'X6',
+      "antv-x6-html2": "antc-x6-html2",
       "resize-detector": "ResizeDetector"
     }
   }],
@@ -46,7 +47,7 @@ export default {
         "lodash"
       ]
     }),
-    terser(),
+    // terser(),
     filesize(),
     typescript({
       // tsconfig: false,
@@ -71,6 +72,7 @@ export default {
   external: [
     "vue",
     "@antv/x6",
+    "antv-x6-html2",
     "resize-detector"
   ]
 }

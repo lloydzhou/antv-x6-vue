@@ -1,6 +1,6 @@
 {
   "name": "antv-x6-vue",
-  "version": "1.2.5",
+  "version": "1.2.7",
   "description": "the vue toolkit for graph analysis based on x6",
   "scripts": {
     "prepare": "install-peers",
@@ -106,6 +106,7 @@
     ]
   },
   "dependencies": {
+    "antv-x6-html2": "^1.0.6",
     "resize-detector": "^0.3.0"
   }
 }

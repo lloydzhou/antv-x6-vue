@@ -10,6 +10,9 @@ import { debounce } from './utils'
 export const VueShapeProps = NodeProps.concat('primer', 'useForeignObject', 'component', 'autoResize')
 
 export const useVueShape = (props, { slots, emit }) => {
+
+  // 兼容之间旧的数据
+  props = typeof props === 'function' ? props() : props
   const {
     id,
     autoResize=true,
@@ -33,15 +36,24 @@ export const useVueShape = (props, { slots, emit }) => {
         node.on('change:data', () => {
           state.data = node.getData()
         })
-        // 自动调整大小，开启minimap的时候，需要判断是哪一个view渲染的
-        if (autoResize && node.model && node.model.graph.view.cid === graph.view.cid) {
-          resizeListener(root.value)
-          addListener(root.value, resizeListener)
+      })
+      watchEffect((cleanup) => {
+        const resizeListener = debounce((e) => {
+          const { width, height } = e.getBoundingClientRect()
+          node.size({width, height})
+        })
+        if (props.autoResize !== false && root.value) {
+          // 开启minimap的时候，需要判断是哪一个view渲染的
+          if (node.model && node.model.graph && node.model.graph.view.cid === graph.view.cid) {
+            resizeListener(root.value)
+            addListener(root.value, resizeListener)
+            cleanup(() => {
+              removeListener(root.value, resizeListener)
+            })
+          }
         }
       })
-      onUnmounted(() => {
-        removeListener(root.value, resizeListener)
-      })
+
       return () => h(
         'div',
         {

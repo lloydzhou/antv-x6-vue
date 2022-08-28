@@ -81,7 +81,9 @@ const Graph = defineComponent({
     watchEffect((cleanup) => {
       const resizeListener = debounce((e) => {
         const { width, height } = e.getBoundingClientRect()
-        self.graph.resize(width, height)
+        if (self.graph) {
+          self.graph.resize(width, height)
+        }
       })
       if (props.autoResize !== false && graphDOM.value) {
         const root = graphDOM.value.parentNode
