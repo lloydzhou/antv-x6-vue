@@ -27,11 +27,6 @@ export const useVueShape = (props, { slots, emit }) => {
       const { node, graph, container } = props
       const state = shallowReactive({ data: node.getData() })
       const root = shallowRef()
-      const resizeListener = debounce((e) => {
-        // console.log('resizeListener', e)
-        const { width, height } = e.getBoundingClientRect()
-        node.size({width, height})
-      })
       onMounted(() => {
         node.on('change:data', () => {
           state.data = node.getData()
@@ -40,9 +35,10 @@ export const useVueShape = (props, { slots, emit }) => {
       watchEffect((cleanup) => {
         const resizeListener = debounce((e) => {
           const { width, height } = e.getBoundingClientRect()
+          // console.log('resizeListener', node.id, node.size(), {width, height})
           node.size({width, height})
         })
-        if (props.autoResize !== false && root.value) {
+        if (autoResize !== false && root.value) {
           // 开启minimap的时候，需要判断是哪一个view渲染的
           if (node.model && node.model.graph && node.model.graph.view.cid === graph.view.cid) {
             resizeListener(root.value)
