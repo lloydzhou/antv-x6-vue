@@ -100,33 +100,39 @@ export const EdgeProps = CellProps.concat('source', 'target', 'vertices', 'route
 export const NodeProps = CellProps.concat('x', 'y', 'width', 'height', 'angle', 'ports', 'label', 'magnet')
 
 export const useWatchProps = (cell, getProps) => {
+  // 数值类型的转换后可能是NAN和MIN比较一下校验合法性
+  const MIN = -1e20
   watch(() => getProps().markup, markup => markup && cell.value.setMarkup(markup), { deep: true })
   watch(() => getProps().attrs, attrs => attrs && cell.value.setAttrs(attrs), { deep: true })
-  watch(() => getProps().zIndex, zIndex => zIndex !== null && cell.value.setZIndex(zIndex))
-  watch(() => getProps().visible, visible => visible && cell.value.setVisible(visible))
+  watch(() => Number(getProps().zIndex), zIndex => zIndex >= MIN && cell.value.setZIndex(zIndex))
+  watch(() => getProps().visible, visible => (visible === false || visible === true) && cell.value.setVisible(visible))
   watch(() => getProps().data, data => data && cell.value.setData(data), { deep: true })
   watch(() => getProps().parent, p => p && cell.value.setProp('parent', p))
 
-  watch(() => getProps().source, source => source !== null && cell.value.setSource(typeof source === 'string' ? {cell: source} : source), { deep: true })
-  watch(() => getProps().target, target => target !== null && cell.value.setTarget(typeof target === 'string' ? {cell: target} : target), { deep: true })
+  watch(() => getProps().source, source => source && cell.value.setSource(typeof source === 'string' ? {cell: source} : source), { deep: true })
+  watch(() => getProps().target, target => target && cell.value.setTarget(typeof target === 'string' ? {cell: target} : target), { deep: true })
   watch(() => getProps().vertices, vertices => vertices && cell.value.setVertices(vertices), { deep: true })
   watch(() => getProps().router, router => router && cell.value.setRouter(router), { deep: true })
   watch(() => getProps().connector, connector => connector && cell.value.setConnector(connector), { deep: true })
   watch(() => getProps().labels, labels => labels && cell.value.setLabels(labels), { deep: true })
 
-  watch(() => [getProps().x, getProps().y], position => {
+  watch(() => [Number(getProps().x), Number(getProps().y)], position => {
     const [x, y] = position
-    if (x !== null && y !== null) {
-      cell.value.setProp('position', {x: Number(x), y: Number(y)})
-    }
+    const pposition = cell.value.getProp('position')
+    cell.value.setProp('position', {
+      x: x > MIN ? x : pposition.x,
+      y: y > MIN ? y : pposition.y,
+    })
   })
-  watch(() => [getProps().width, getProps().height], size => {
+  watch(() => [Number(getProps().width), Number(getProps().height)], size => {
     const [width, height] = size
-    if (width !== null && height !== null) {
-      cell.value.setProp('size', {width: Number(width), height: Number(height)})
-    }
+    const psize = cell.value.getProp('size')
+    cell.value.setProp('size', {
+      width: width > MIN ? width : psize.width,
+      height: height > MIN ? height : psize.height,
+    })
   })
-  watch(() => getProps().angle, angle => angle !== null && cell.value.rotate(Number(angle), {absolute: true}))
+  watch(() => Number(getProps().angle), angle => angle > MIN && cell.value.rotate(angle, {absolute: true}))
   watch(() => getProps().label, label => label && cell.value.setProp('label', label))
   // 增加配置是否可以连线
   watch(() => getProps().magnet, magnet => {

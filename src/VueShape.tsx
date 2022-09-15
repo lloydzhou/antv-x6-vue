@@ -12,13 +12,13 @@ export const VueShapeProps = NodeProps.concat('primer', 'useForeignObject', 'com
 export const useVueShape = (props, { slots, emit }) => {
 
   // 兼容之间旧的数据
-  props = typeof props === 'function' ? props() : props
+  const p = typeof props === 'function' ? props() : props
   const {
     id,
     autoResize=true,
     primer='circle', useForeignObject=true, component,  // 这几个是@antv/x6-vue-shape独有的参数
-  } = props
-  const Component = markRaw(component ? component : () => slots.default ? slots.default({props, item: cell.value}) : null)
+  } = p
+  const Component = markRaw(component ? component : () => slots.default ? slots.default({props: p, item: cell.value}) : null)
 
   const DataWatcher = defineComponent({
     name: 'DataWatcher',
@@ -62,13 +62,13 @@ export const useVueShape = (props, { slots, emit }) => {
     }
   })
   
-  const cell = useCell({
+  const cell = useCell(() => ({
     id,
     primer, useForeignObject,
-    ...props,
+    ...(typeof props === 'function' ? props() : props),
     shape: 'html2',
     html: markRaw(wrap(DataWatcher)),
-  }, {slots, emit})
+  }), {slots, emit})
   return cell
 }
 
