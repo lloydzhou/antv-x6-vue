@@ -34,9 +34,9 @@ export const useVueShape = (props, { slots, emit }) => {
       })
       watchEffect((cleanup) => {
         const resizeListener = debounce((e) => {
-          const { width, height } = e.getBoundingClientRect()
+          const { width, height } = getComputedStyle(e)
           // console.log('resizeListener', node.id, node.size(), {width, height})
-          node.size({width, height})
+          node.size({width: parseFloat(width), height: parseFloat(height)})
         })
         if (autoResize !== false && root.value) {
           // 开启minimap的时候，需要判断是哪一个view渲染的
