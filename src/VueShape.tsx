@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { h, defineComponent, shallowReactive, onMounted, onUnmounted, markRaw, nextTick, watch, watchEffect, shallowRef } from 'vue';
+import { h, defineComponent, shallowReactive, onMounted, onUnmounted, markRaw, nextTick, watch, watchEffect, shallowRef, Fragment } from 'vue';
 import { NodeProps, useCell } from './Shape'
 import { contextSymbol, cellContextSymbol } from './GraphContext'
 import 'antv-x6-html2'
