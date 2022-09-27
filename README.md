@@ -45,6 +45,10 @@ const CustomNode = defineComponent({
 yarn add antv-x6-vue
 ```
 
+## DEMO
+1. [DAG画布](https://codesandbox.io/s/antv-x6-vue-dag-utiy62)参照`x6`官方的DAG示例实现
+
+
 ## Components
 - [x] 提供`Graph`容器以及`GraphContext.useContext`获取`x6`的`graph`对象。可以利用这个对象操作画布，绑定事件。
 - [x] 包装`Shape`作为`vue`组件＋使用`x6-vue-shape`封装自定义组件，暴露的组件有：
