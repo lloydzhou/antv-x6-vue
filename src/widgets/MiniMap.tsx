@@ -50,9 +50,9 @@ export default defineComponent({
       graph.options.minimap = options
       graph.minimap.widget = graph.hook.createMiniMap()
     }
-    watch(() => props, () => create(), {deep: true})
-    onMounted(() => create())
-    onUnmounted(() => clear())
+    // watch(() => props, () => create(), {deep: true})
+    // onMounted(() => create())
+    // onUnmounted(() => clear())
     return () => {
       const { style = {} } = props
       return <div ref={node => containerRef.value = node} style={{

@@ -18,9 +18,9 @@ export default defineComponent({
       graph.disableKeyboard()
       graph.enableKeyboard()
     }
-    watch(() => props, () => update(), {deep: true})
-    onMounted(() => update())
-    onUnmounted(() => graph.disableKeyboard())
+    // watch(() => props, () => update(), {deep: true})
+    // onMounted(() => update())
+    // onUnmounted(() => graph.disableKeyboard())
     return () => null
   }
 })

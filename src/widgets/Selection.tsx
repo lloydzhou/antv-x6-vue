@@ -57,9 +57,9 @@ export default defineComponent({
       graph.on('cell:unselected', unselected)
       graph.on('selection:changed', changed)
     }
-    watch(() => props, () => create(), {deep: true})
-    onMounted(() => create())
-    onUnmounted(() => clear())
+    // watch(() => props, () => create(), {deep: true})
+    // onMounted(() => create())
+    // onUnmounted(() => clear())
     return () => null
   }
 })

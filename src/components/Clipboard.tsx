@@ -15,7 +15,7 @@ export default defineComponent({
         graph.enableClipboard()
       }
     }
-    watch(() => props.enabled, (enabled) => enableClipboard(enabled))
+    // watch(() => props.enabled, (enabled) => enableClipboard(enabled))
     const copy = () => {
       const cells = graph.getSelectedCells()
       if (cells.length) {
@@ -38,18 +38,18 @@ export default defineComponent({
         emit('paste', { cells, graph })
       }
     }
-    onMounted(() => {
-      enableClipboard()
-      graph.bindKey('ctrl+c', copy)
-      graph.bindKey('ctrl+x', cut)
-      graph.bindKey('ctrl+v', paste)
-    })
-    onUnmounted(() => {
-      graph.disableClipboard()
-      graph.unbindKey('ctrl+c')
-      graph.unbindKey('ctrl+x')
-      graph.unbindKey('ctrl+v')
-    })
+    // onMounted(() => {
+    //   enableClipboard()
+    //   graph.bindKey('ctrl+c', copy)
+    //   graph.bindKey('ctrl+x', cut)
+    //   graph.bindKey('ctrl+v', paste)
+    // })
+    // onUnmounted(() => {
+    //   graph.disableClipboard()
+    //   graph.unbindKey('ctrl+c')
+    //   graph.unbindKey('ctrl+x')
+    //   graph.unbindKey('ctrl+v')
+    // })
     return () => null
   }
 })

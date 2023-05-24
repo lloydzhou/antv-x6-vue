@@ -37,23 +37,23 @@ export const Port = defineComponent({
       }
     }
     // 监听magnet变化，动态设置magnet
-    watch(() => props.magnet, setMagnet)
-    onMounted(() => {
-      const { id, magnet, group, ...options } = props
-      // Port单独使用的时候，groupcontext为空
-      const { name: defaultGroup } = groupContext || {}
-      if (cell) {
-        if (cell.hasPort(id)) {
-          cell.setPortProp(id, mergeOption({ ...options, group: group || defaultGroup }, {}))
-        } else {
-          cell.addPort(mergeOption({ ...options, id, group: group || defaultGroup }, {}))
-        }
-        setMagnet(magnet !== false)
-      }
-    })
-    onUnmounted(() => {
-      cell && cell.removePort(props.id)
-    })
+    // watch(() => props.magnet, setMagnet)
+    // onMounted(() => {
+    //   const { id, magnet, group, ...options } = props
+    //   // Port单独使用的时候，groupcontext为空
+    //   const { name: defaultGroup } = groupContext || {}
+    //   if (cell) {
+    //     if (cell.hasPort(id)) {
+    //       cell.setPortProp(id, mergeOption({ ...options, group: group || defaultGroup }, {}))
+    //     } else {
+    //       cell.addPort(mergeOption({ ...options, id, group: group || defaultGroup }, {}))
+    //     }
+    //     setMagnet(magnet !== false)
+    //   }
+    // })
+    // onUnmounted(() => {
+    //   cell && cell.removePort(props.id)
+    // })
     return () => null
   }
 })

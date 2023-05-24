@@ -24,7 +24,7 @@
         </x6-port-group>
       </x6-node>
       <Edge id="e1" source="1" target="2" @added="added" label="edge1" />
-      <VueShape primer="rect" id="3" :x="200" :y="300" :width="160" :height="60" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}" @added="added" @cell:change:zIndex="changed">
+      <VueShape primer="rect" id="3" :x="200" :y="300" :width="160" :height="60" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}" @added="added" @change:zIndex="changed">
         <div>这里是一个vue的组件</div>
         <img style="width: 30px;height:30px;" src="https://v3.cn.vuejs.org/logo.png" />
         <template #port>
@@ -35,7 +35,7 @@
         </template>
       </VueShape>
       <VueShape id="444" :x="500" :y="500" :data="{num: 2}" :height="60" :attrs="{rect: {stroke: '#333'}}" :component="CustomNodeComponent" />
-      <CustomNode v-if="visible" primer="circle" id="4" :x="400" :width="100" :height="100" :y="y" :attrs="{circle: {fill: '#ddd', stroke: '#333'}}" @added="added" @click="click" @cell:change:position="changed" :magnet="true" >
+      <CustomNode v-if="visible" primer="circle" id="4" :x="400" :width="100" :height="100" :y="y" :attrs="{circle: {fill: '#ddd', stroke: '#333'}}" @added="added" @click="click" @change:position="changed" :magnet="true" >
         <span style="text-align: center;display: inline-block;width: 100%;margin-top: 20px;">Hello {{name}}</span>
       </CustomNode>
       <Edge id="e2" source="1" target="3" @added="added" />

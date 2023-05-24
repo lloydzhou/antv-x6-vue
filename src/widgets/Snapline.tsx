@@ -20,9 +20,9 @@ export default defineComponent({
       mergeOption(options, graph.snapline.widget.options)
       graph.enableSnapline()
     }
-    watch(() => props, () => updateSnapline(), {deep: true})
-    onMounted(() => updateSnapline())
-    onUnmounted(() => graph.disableSnapline())
+    // watch(() => props, () => updateSnapline(), {deep: true})
+    // onMounted(() => updateSnapline())
+    // onUnmounted(() => graph.disableSnapline())
     return () => null
   }
 })
