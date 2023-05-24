@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div ref="stencil" class="stencil"/>
-    <Graph @ready="ready">
+    <Graph @ready="ready" :async="true">
       <TeleportContainer />
       <Node id="1" x="100" y="100" @added="added" label="node1">
         <PortGroup name="in" position="top" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
@@ -82,18 +82,18 @@
 
 <script lang="ts">
 // @ts-nocheck
-import { defineComponent, ref, h, markRaw } from 'vue'
+import { defineComponent, ref, h, markRaw, reactive, toRefs, onMounted } from 'vue'
 import { inject } from 'vue'
 import { Options, Vue } from 'vue-class-component';
-import { Port, PortGroup, TeleportContainer } from '../src/index'
-import Graph, { Node, Edge, VueShape, useVueShape, VueShapeProps, GraphContext, useCellEvent } from '../src/index'
-import { Grid, Background, Clipboard, Snapline, Selection, Keyboard, Scroller, MouseWheel, MiniMap } from '../src/index'
-import { Stencil, StencilGroup } from '../src/index'
-import { ContextMenu } from '../src/index'
+import { Port, PortGroup, TeleportContainer } from '../lib/index'
+import Graph, { Node, Edge, VueShape, useVueShape, VueShapeProps, GraphContext, useCellEvent } from '../lib/index'
+import { Grid, Background, Clipboard, Snapline, Selection, Keyboard, Scroller, MouseWheel, MiniMap } from '../lib/index'
+import { Stencil, StencilGroup } from '../lib/index'
+import { ContextMenu } from '../lib/index'
 import { Menu, InputNumber } from 'ant-design-vue'
 import 'ant-design-vue/es/menu/style/css'
 import 'ant-design-vue/es/input-number/style/css'
-import { Connecting } from '../src/index'
+import { Connecting } from '../lib/index'
 
 const { contextSymbol } = GraphContext
 const MenuItem = Menu.Item
@@ -124,7 +124,7 @@ const CustomNode = defineComponent({
   }
 })
 
-@Options({
+export default defineComponent({
   components: {
     Graph,
     Node,
@@ -134,7 +134,7 @@ const CustomNode = defineComponent({
     Clipboard,
     Snapline,
     Selection,
-    Scroller,
+    // Scroller,
     Keyboard,
     MouseWheel,
     Connecting,
@@ -147,79 +147,89 @@ const CustomNode = defineComponent({
     Port, PortGroup,
     TeleportContainer,
   },
-})
-export default class App extends Vue {
-
-  showGrid = true
-  showScroller = true
-  visible = true
-  y = 0
-  stencil = ref()
-  name = "antv"
-
-  addedNodes = []
-
-  CustomNodeComponent = markRaw(CustomNodeComponent)
-
-  created() {
-    setTimeout(() => {
-      // this.showGrid = false
-      // this.showScroller= false
-      // this.visible = false
-      this.y = 400
-      this.name = 'x6'
-    }, 5000)
-  }
-  copy(e) {
-    console.log('copy', e)
-  }
-  paste(e) {
-    console.log('paste', e)
-  }
-  added(e) {
-    console.log('added', e)
-  }
-  click(e) {
-    console.log('click', e)
-  }
-  selected(e) {
-    console.log('selected', e)
-  }
-  unselected(e) {
-    console.log('unselected', e)
-  }
-  changed(e) {
-    console.log('changed', e)
-  }
-  validateNode(node, options) {
-    console.log('validateNode', node, options)
-    const label = node.getLabel()
-    const { width, height } = node.getSize()
-    const { x, y } = node.getPosition()
-    this.addedNodes.push({
-      id: `add_node_${this.addedNodes.length}`,
-      label,
-      x,
-      y,
-      width,
-      height,
-      magnet: true, // 直接通过这个变量控制是否能连接
+  setup(props) {
+    const state = reactive({
+      showGrid: true,
+      showScroller: true,
+      visible: true,
+      y: 0,
+      name: "antv",
+      addedNodes: [],
     })
-    // 这里将数据存到当前对象，永远返回false，拖拽的节点不放入画布，使用一个新的节点替换位置
-    return Promise.resolve(false)
+    const stencil = ref()
+    const CustomNodeComponent = CustomNodeComponent
+
+    onMounted(() => {
+      setTimeout(() => {
+        // this.showGrid = false
+        // this.showScroller= false
+        // this.visible = false
+        state.y = 400
+        state.name = 'x6'
+      }, 5000)
+    })
+
+    const methods = {
+      copy(e) {
+        console.log('copy', e)
+      },
+      paste(e) {
+        console.log('paste', e)
+      },
+      added(e) {
+        console.log('added', e)
+      },
+      click(e) {
+        console.log('click', e)
+      },
+      selected(e) {
+        console.log('selected', e)
+      },
+      unselected(e) {
+        console.log('unselected', e)
+      },
+      changed(e) {
+        console.log('changed', e)
+      },
+      validateNode(node, options) {
+        console.log('validateNode', node, options)
+        const label = node.getLabel()
+        const { width, height } = node.getSize()
+        const { x, y } = node.getPosition()
+        this.addedNodes.push({
+          id: `add_node_${this.addedNodes.length}`,
+          label,
+          x,
+          y,
+          width,
+          height,
+          magnet: true, // 直接通过这个变量控制是否能连接
+        })
+        // 这里将数据存到当前对象，永远返回false，拖拽的节点不放入画布，使用一个新的节点替换位置
+        return Promise.resolve(false)
+      },
+      hendleContextMenuClick(data, e) {
+        console.log('hendleContextMenuClick', data, e)
+        // data.onClose()
+      },
+      validateEdge({edge}) {
+        console.log('validateEdge', edge)
+        return true
+      },
+      ready({ graph }){
+        // setGraph(graph)
+      },
+    }
+
+    return {
+      ...toRefs(state),
+      ...methods,
+      CustomNodeComponent,
+      stencil,
+    }
   }
-  hendleContextMenuClick(data, e) {
-    console.log('hendleContextMenuClick', data, e)
-    // data.onClose()
-  }
-  validateEdge({edge}) {
-    console.log('validateEdge', edge)
-    return true
-  }
-  ready({ graph }){
-    // setGraph(graph)
-  }
-}
+})
+
 </script>
 
 <style lang="less">

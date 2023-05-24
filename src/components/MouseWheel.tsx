@@ -1,4 +1,4 @@
-// @ts-nocheck
+import { MouseWheel as _MouseWheel } from '@antv/x6'
 import { defineComponent, onMounted, onUnmounted, watch } from 'vue';
 import { useContext, contextSymbol } from '../GraphContext'
 import { mergeOption } from '../utils'
@@ -8,15 +8,14 @@ const defaultOptions = {
   modifiers: 'ctrl',
 }
 
-export default defineComponent({
+export const MouseWheel: DefineComponent<MouseWheel.Options> = defineComponent({
   name: 'MouseWheel',
-  props: ['enabled', 'global', 'factor', 'zoomAtMousePosition', 'modifiers', 'guard'],
   inject: [contextSymbol],
-  setup(props) {
+  setup(_, { attrs }) {
     const { graph } = useContext()
     const create = () => {
       graph.disableMouseWheel()
-      const { enabled, ...otherOptions } = props
+      const { enabled, ...otherOptions } = attrs
       const mousewheel = mergeOption(
         graph.options.mousewheel || {},
         mergeOption(
@@ -30,7 +29,7 @@ export default defineComponent({
       graph.options.mousewheel = mousewheel
       graph.enableMouseWheel()
     }
-    watch(() => props, () => create(), {deep: true})
+    watch(() => attrs, () => create(), {deep: true})
     onMounted(() => create())
     onUnmounted(() => graph.disableMouseWheel())
     return () => null

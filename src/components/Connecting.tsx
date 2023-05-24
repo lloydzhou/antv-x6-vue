@@ -1,5 +1,6 @@
 // @ts-nocheck
-import { defineComponent, onMounted, onUnmounted, ref } from 'vue';
+import { Options } from '@antv/x6'
+import { defineComponent, onMounted, onUnmounted, ref, DefineComponent } from 'vue';
 import { useContext, contextSymbol } from '../GraphContext'
 import { mergeOption } from '../utils'
 
@@ -27,16 +28,16 @@ const defaultOptions = {
   validateEdge: () => true,
 }
 
-export default defineComponent({
+export const Connecting: DefineComponent<Options.Connecting> = defineComponent({
   name: 'Connecting',
-  props: [...Object.keys(defaultOptions)],
   inject: [contextSymbol],
-  setup(props) {
+  setup(_, { attrs }) {
     const { graph } = useContext()
     const options = ref()
     onMounted(() => {
+      const { enabled, ...other } = attrs
       options.value = {...graph.options.connecting}
-      const newOptions = mergeOption(defaultOptions, {...props, enabled: props.enabled !== false})
+      const newOptions = mergeOption(defaultOptions, {...other, enabled: enabled !== false})
       mergeOption(newOptions, graph.options.connecting)
     })
     onUnmounted(() => {

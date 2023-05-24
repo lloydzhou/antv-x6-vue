@@ -1,8 +1,8 @@
 // @ts-nocheck
-import { defineComponent, onMounted, onUnmounted, watch } from 'vue';
+import { defineComponent, onMounted, onUnmounted, watch, DefineComponent } from 'vue';
 import { useContext, contextSymbol } from '../GraphContext'
 
-export default defineComponent({
+export const Clipboard: DefineComponent<{enabled: boolean}> = defineComponent({
   name: 'Clipboard',
   props: ['enabled'],
   inject: [contextSymbol],

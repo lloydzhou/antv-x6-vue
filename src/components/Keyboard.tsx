@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { Keyboard as _Keyboard } from '@antv/x6'
 import { defineComponent, onMounted, onUnmounted, watch } from 'vue';
 import { useContext, contextSymbol } from '../GraphContext'
 
@@ -6,11 +7,10 @@ const defaultOptions = {
   global: true,
 }
 
-export default defineComponent({
+export const Keyboard: DefineComponent<Keyboard.Options> = defineComponent({
   name: 'Keyboard',
-  props: ['enabled', 'global', 'format', 'guard'],
   inject: [contextSymbol],
-  setup(props) {
+  setup(_, {attrs}) {
     const { graph } = useContext()
     const update = () => {
       // console.log('draw KEYBOARD', props)
@@ -18,7 +18,7 @@ export default defineComponent({
       graph.disableKeyboard()
       graph.enableKeyboard()
     }
-    watch(() => props, () => update(), {deep: true})
+    watch(() => attrs, () => update(), {deep: true})
     onMounted(() => update())
     onUnmounted(() => graph.disableKeyboard())
     return () => null

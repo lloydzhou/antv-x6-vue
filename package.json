@@ -4,8 +4,9 @@
   "description": "the vue toolkit for graph analysis based on x6",
   "scripts": {
     "prepare": "install-peers",
+    "dev": "tsc -w & vue-cli-service serve example/main.ts",
     "serve": "vue-cli-service serve example/main.ts",
-    "build": "rollup -c",
+    "build": "tsc -p tsconfig.porduction.json",
     "lint": "vue-cli-service lint"
   },
   "repository": {

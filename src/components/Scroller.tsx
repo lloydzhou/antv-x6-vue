@@ -1,5 +1,6 @@
 // @ts-nocheck
-import { defineComponent, onMounted, onUnmounted, watch } from 'vue';
+import { Scroller as _Scroller } from '@antv/x6'
+import { defineComponent, onMounted, onUnmounted, watch, DefineComponent } from 'vue';
 import { useContext, contextSymbol } from '../GraphContext'
 import { mergeOption } from '../utils'
 
@@ -9,11 +10,10 @@ const defaultOptions = {
   autoResize: true,
 }
 
-export default defineComponent({
+export const Scroller: DefineComponent<_Scroller.Options> = defineComponent({
   name: 'Scroller',
-  props: ['enabled', 'className', 'width', 'height', 'modifiers', 'pageWidth', 'pageHeight', 'pageBreak', 'autoResize', 'resizeOptions', 'minVisibleWidth', 'minVisibleHeight', 'padding', 'background'],
   inject: [contextSymbol],
-  setup(props) {
+  setup(_, {attrs}) {
     const { graph } = useContext()
     const clear = () => {
       if (graph.scroller.widget) {
@@ -24,7 +24,7 @@ export default defineComponent({
       // 1. 先停止监听
       clear()
       // 2. 重新生成对应的widget（由于manager在graph上是readonly的只能更改内层的widget）
-      const { enabled, ...otherOptions } = props
+      const { enabled, ...otherOptions } = attrs
       const scroller = mergeOption(
         graph.options.scroller || {},
         mergeOption(
@@ -39,7 +39,7 @@ export default defineComponent({
       graph.scroller.widget = graph.hook.createScroller()
       graph.drawGrid(graph.options.grid)
     }
-    watch(() => props, () => create(), {deep: true})
+    watch(() => attrs, () => create(), {deep: true})
     onMounted(() => create())
     onUnmounted(() => clear())
     return () => null

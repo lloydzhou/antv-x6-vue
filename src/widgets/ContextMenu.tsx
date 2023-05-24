@@ -3,7 +3,7 @@ import { defineComponent, onMounted, onUnmounted, ref, shallowReactive, toRefs }
 import { useContext } from '../GraphContext'
 
 
-export const useContextMenu = (props) => {
+export const useContextMenu: {[key: string]: any} = (props) => {
   const { bindType = 'node', bindEvent='contextmenu', container } = props;
   const { graph } = useContext()
   /** createContext内的数据 */
@@ -92,7 +92,7 @@ const defaultStyle: CSSProperties = {
   boxShadow: '0 4px 12px rgb(0 0 0 / 15%)',
 };
 
-export default defineComponent({
+export default defineComponent<{bindType?: string, bindEvent?: string, style?: CSSProperties}>({
   name: 'ContextMenu',
   props: ['bindType', 'bindEvent', 'style'],
   setup(props) {

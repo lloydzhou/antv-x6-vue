@@ -1,5 +1,6 @@
 // @ts-nocheck
-import { defineComponent, onMounted, onUnmounted, watch } from 'vue';
+import { Grid as _Grid } from '@antv/x6'
+import { defineComponent, onMounted, onUnmounted, watch, DefineComponent } from 'vue';
 import { useContext, contextSymbol } from '../GraphContext'
 import { mergeOption } from '../utils'
 
@@ -14,19 +15,17 @@ const defaultOptions = {
   }
 }
 
-export default defineComponent({
+export const Grid: DefineComponent<_Grid.Options> = defineComponent({
   name: 'Grid',
-  props: ['type', 'args', 'visible', 'size'],
   inject: [contextSymbol],
-  setup(props) {
+  setup(_, {attrs}) {
     const { graph } = useContext()
     const draw = () => {
-      // console.log('draw Grid', props)
-      const options = mergeOption(defaultOptions, {...props})
+      const options = mergeOption(defaultOptions, {...attrs})
       graph.hideGrid()
       graph.drawGrid(options)
     }
-    watch(() => props, () => draw(), {deep: true})
+    watch(() => attrs, () => draw(), {deep: true})
     onMounted(() => draw())
     onUnmounted(() => graph.clearGrid())
     return () => null

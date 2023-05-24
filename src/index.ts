@@ -5,13 +5,15 @@ import Shape, { Node, Rect, Edge, Cell, NodeProps, EdgeProps, useCell, useCellEv
 import VueShape, { useVueShape, VueShapeProps } from './VueShape'
 import { TeleportContainer, useTeleport } from './Teleport'
 import Port, { PortGroup } from './Port'
-import Grid from './components/Grid'
-import Background from './components/Background'
-import Clipboard from './components/Clipboard'
-import Scroller from './components/Scroller'
-import Keyboard from './components/Keyboard'
-import MouseWheel from './components/MouseWheel'
-import Connecting from './components/Connecting'
+import * as Components from './components'
+const { Grid, Background, Clipboard, Scroller, Keyboard, MouseWheel, Connecting } = Components
+// import Grid from './components/Grid'
+// import Background from './components/Background'
+// import Clipboard from './components/Clipboard'
+// import Scroller from './components/Scroller'
+// import Keyboard from './components/Keyboard'
+// import MouseWheel from './components/MouseWheel'
+// import Connecting from './components/Connecting'
 
 
 import Widgets from './widgets'
