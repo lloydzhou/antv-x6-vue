@@ -23,7 +23,15 @@ export default {
     globals: {
       vue: 'Vue',
       '@antv/x6': 'X6',
-      "antv-x6-html2": "antc-x6-html2",
+      "@antv/x6-plugin-clipboard": "Clipboard",
+      "@antv/x6-plugin-dnd": "Dnd",
+      "@antv/x6-plugin-keyboard": "Keyboard",
+      "@antv/x6-plugin-minimap": "MiniMap",
+      "@antv/x6-plugin-scroller": "Scroller",
+      "@antv/x6-plugin-selection": "Selection",
+      "@antv/x6-plugin-snapline": "Snapline",
+      "@antv/x6-plugin-stencil": "Stencil",
+      "x6-html-shape": "HTMLShape",
       "resize-detector": "ResizeDetector"
     }
   }],
@@ -72,7 +80,15 @@ export default {
   external: [
     "vue",
     "@antv/x6",
-    "antv-x6-html2",
+    "@antv/x6-plugin-clipboard",
+    "@antv/x6-plugin-dnd",
+    "@antv/x6-plugin-keyboard",
+    "@antv/x6-plugin-minimap",
+    "@antv/x6-plugin-scroller",
+    "@antv/x6-plugin-selection",
+    "@antv/x6-plugin-snapline",
+    "@antv/x6-plugin-stencil",
+    "x6-html-shape",
     "resize-detector"
   ]
 }
