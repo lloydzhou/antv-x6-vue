@@ -86,7 +86,7 @@ import { defineComponent, ref, h, markRaw } from 'vue'
 import { inject } from 'vue'
 import { Options, Vue } from 'vue-class-component';
 import { Port, PortGroup, TeleportContainer } from '../src/index'
-import Graph, { Node, Edge, VueShape, useVueShape, VueShapeProps, GraphContext, useCellEvent } from '../src/index'
+import Graph, { Node, Edge, VueShape, useVueShape, GraphContext } from '../src/index'
 import { Grid, Background, Clipboard, Snapline, Selection, Keyboard, Scroller, MouseWheel, MiniMap } from '../src/index'
 import { Stencil, StencilGroup } from '../src/index'
 import { ContextMenu } from '../src/index'
@@ -106,7 +106,7 @@ const CustomNodeComponent = defineComponent({
       min: 1,
       value: props.data.num,
       onChange: (num) => {
-        console.log(props.node)
+        console.log(props.node, num)
         props.node.setData({ num })
       }
     })
@@ -115,11 +115,10 @@ const CustomNodeComponent = defineComponent({
 
 const CustomNode = defineComponent({
   name: 'CustomNode',
-  props: [...VueShapeProps, 'otherOptions'],
   inject: [contextSymbol],
-  setup(props, context) {
-    const cell = useVueShape({ ...props, data: { num: 2 }, component: markRaw(CustomNodeComponent) }, context)
-    useCellEvent('node:click', (e) => context.emit('click', e), { cell })
+  setup(_, context) {
+    const cell = useVueShape({ ...context.attrs, data: { num: 2 }, component: markRaw(CustomNodeComponent) }, context)
+    // useCellEvent('node:click', (e) => context.emit('click', e), { cell })
     return () => null
   }
 })

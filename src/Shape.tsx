@@ -5,38 +5,6 @@ import { useContext, contextSymbol } from './GraphContext'
 import { cellContextSymbol, portGroupContextSymbol } from './GraphContext'
 import { processProps, bindEvent } from './utils'
 
-export const useCellEvent = (name, handler, options={}) => {
-  const { graph } = useContext()
-  const { cell, once } = options
-
-  const xhandler = (e) => {
-    // 如果传了cell参数就使用cell_id判断一下触发事件的回调是不是对应到具体的元素上面
-    const target = e.node || e.edge || e.cell || (e.view && e.view.cell)
-    const target_id = target ? target.id : undefined
-    const cell_id = cell ? cell.value ? cell.value.id : cell.id : undefined
-    // console.log('xhandler', target_id, '===', cell_id, name, e)
-    if (target_id) {
-      if (target_id === cell_id) {
-        // 如果事件是针对
-        handler(e)
-      }
-    } else {
-      handler(e)
-    }
-  }
-  const clear = () => !once && graph.off(name, xhandler)
-  onMounted(() => {
-    if (once) {
-      graph.once(name, xhandler)
-    } else {
-      graph.on(name, xhandler)
-    }
-  })
-  onUnmounted(() => clear())
-  // 将取消监听的函数返回，用户可以主动取消
-  return clear
-}
-
 const createCell = (p) => {
   const { props, events } = processProps(p)
   const { id, shape, x, y, width, height, angle, ...otherOptions } = props
@@ -53,7 +21,7 @@ const createCell = (p) => {
   })
 }
 
-export const useCell = (props, { emit }) => {
+export const useCell = (props) => {
   // 这里如果传入的不是function就包裹一层
   const { graph } = useContext()
   const cell = ref()
@@ -66,7 +34,6 @@ export const useCell = (props, { emit }) => {
 
   // 监听其他变化
   watch(() => props, newProps => {
-    console.log('watch update', newProps)
     const newCell = createCell(newProps)
     const prop = newCell.getProp()
     if (!ObjectExt.isEqual(cell.value.getProp(), prop)) {
@@ -102,7 +69,6 @@ export const useCell = (props, { emit }) => {
     }
     graph.removeCell(cell.value)
     if (removeEvent.value) {
-      console.log('removeEvent', cell.value.id)
       removeEvent.value()
     }
   })
@@ -131,7 +97,6 @@ const Cell = defineComponent({
 
 const Shapes = {}
 
-console.log('shape', Shape)
 // BorderedImage
 // Circle
 // Cylinder
@@ -158,10 +123,10 @@ Object.keys(Shape).forEach(name => {
     name,
     // props: /Edge/.test(name) ? EdgeProps : NodeProps,
     inject: [contextSymbol, cellContextSymbol],
-    setup(_, { attrs: props, slots, emit }) {
+    setup(_, { attrs: props, slots }) {
       const { shape: defaultShape } = ShapeClass.defaults || {}
       const { shape=defaultShape } = props
-      const cell = useCell({...props, shape}, { emit })
+      const cell = useCell({...props, shape})
       const { default: _default, port } = slots
       // port和default都有可能需要渲染
       return () => cell.value ? <Fragment>

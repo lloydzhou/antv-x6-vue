@@ -1,8 +1,8 @@
 // @ts-nocheck
 import Graph from './Graph'
 import * as GraphContext from './GraphContext'
-import Shape, { Node, Rect, Edge, Cell, NodeProps, EdgeProps, useCell, useCellEvent } from './Shape'
-import VueShape, { useVueShape, VueShapeProps } from './VueShape'
+import Shape, { Node, Rect, Edge, Cell, NodeProps, EdgeProps, useCell } from './Shape'
+import VueShape, { useVueShape } from './VueShape'
 import { TeleportContainer, useTeleport } from './Teleport'
 import Port, { PortGroup } from './Port'
 import Grid from './components/Grid'
@@ -55,9 +55,9 @@ export {
   Node,
   Rect,
   Edge,
-  Cell, useCell, useCellEvent, NodeProps, EdgeProps,
+  Cell, useCell, NodeProps, EdgeProps,
   TeleportContainer, useTeleport,
-  VueShape, useVueShape, VueShapeProps,
+  VueShape, useVueShape,
   Grid,
   Background,
   Clipboard,

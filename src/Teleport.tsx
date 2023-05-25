@@ -1,20 +1,19 @@
 // @ts-nocheck
-import { onUpdated, onMounted, shallowReactive, shallowRef, watchEffect, watch, markRaw, defineComponent, computed } from "vue";
-import { h, Teleport, Fragment, VNode, VNodeData, provide, inject, createApp } from "vue";
-import { Graph, Node, Dom } from '@antv/x6'
+import { shallowReactive, defineComponent } from "vue";
+import { h, Fragment } from "vue";
 import createTeleportRender from 'x6-html-shape/dist/teleport'
+import createVue3Render from 'x6-html-shape/dist/vue'
 
 const state = shallowReactive<{[key: string]: any}>({items: []})
 
 export const TeleportContainer = defineComponent({
   name: 'TeleportContainer',
   setup() {
-    return () =>
-      h(
-        Fragment,
-        {},
-        state.items.map((item) => h(item)),
-      )
+    return () => h(
+      Fragment,
+      {},
+      state.items.map((item) => h(item)),
+    )
   },
 })
 

@@ -8,9 +8,8 @@ import { createRender } from './Teleport'
 import { addListener, removeListener } from "resize-detector";
 import { debounce } from './utils'
 
-export const VueShapeProps = NodeProps.concat('primer', 'useForeignObject', 'component', 'autoResize')
 
-export const useVueShape = (props, { slots, emit }) => {
+export const useVueShape = (props, { slots }) => {
 
   const {
     id,
@@ -62,13 +61,16 @@ export const useVueShape = (props, { slots, emit }) => {
   })
   
   
+  const render = createRender(DataWatcher)
+  const shape = 'v-shape-' + Math.random ().toString(36).slice(-8)
+  register({shape, render})
   const cell = useCell({
     id,
     primer, useForeignObject,
     ...(typeof props === 'function' ? props() : props),
-    shape: 'x6-html-shape',
+    shape,
     render: markRaw(createRender(DataWatcher)),
-  }, {slots, emit})
+  })
   return cell
 }
 
