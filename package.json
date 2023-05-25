@@ -108,7 +108,7 @@
     ]
   },
   "dependencies": {
-    "antv-x6-html2": "^1.0.5",
-    "resize-detector": "^0.3.0"
+    "resize-detector": "^0.3.0",
+    "x6-html-shape": "^0.3"
   }
 }
