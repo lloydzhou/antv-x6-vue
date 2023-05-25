@@ -76,18 +76,14 @@ export const useCell = (props) => {
   return cell
 }
 
-export const CellProps = ['id', 'markup', 'attrs', 'shape', 'view', 'zIndex', 'visible', 'data', 'parent']
-export const EdgeProps = CellProps.concat('source', 'target', 'vertices', 'router', 'connector', 'labels', 'defaultLabel')
-export const NodeProps = CellProps.concat('x', 'y', 'width', 'height', 'angle', 'ports', 'label', 'magnet')
-
 const Cell = defineComponent({
   name: 'Cell',
-  props: CellProps,
+  inheritAttrs: false,
   inject: [contextSymbol, cellContextSymbol],
-  setup(props, context) {
-    const cell = useCell(props, context)
+  setup(_, { slots, attrs: props }) {
+    const cell = useCell(props)
     // 优先判断名字是port的slot在不在，不存在的时候渲染默认的slot
-    const { default: _default, port } = context.slots
+    const { default: _default, port } = slots
     return () => cell.value ? <Fragment>
       {port && port()}
       {_default && _default()}
@@ -97,31 +93,11 @@ const Cell = defineComponent({
 
 const Shapes = {}
 
-// BorderedImage
-// Circle
-// Cylinder
-// DoubleEdge
-// Edge
-// Ellipse
-// EmbeddedImage
-// Empty
-// HTML
-// HeaderedRect
-// Image
-// InscribedImage
-// Path
-// Polygon
-// Polyline
-// Rect
-// ShadowEdge
-// TextBlock
-
 Object.keys(Shape).forEach(name => {
   const ShapeClass = Shape[name]
   Shapes[name] = defineComponent({
     inheritAttrs: false,
     name,
-    // props: /Edge/.test(name) ? EdgeProps : NodeProps,
     inject: [contextSymbol, cellContextSymbol],
     setup(_, { attrs: props, slots }) {
       const { shape: defaultShape } = ShapeClass.defaults || {}

@@ -2234,11 +2234,6 @@ ant-design-vue@^3.2.1:
     vue-types "^3.0.0"
     warning "^4.0.0"
 
-antv-x6-html2@^1.0.5:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/antv-x6-html2/-/antv-x6-html2-1.0.9.tgz#7a6585db0bf32c3e222202cec76b509d73b467a5"
-  integrity sha512-3E5gQaRwGT7dGqfHJAKNN65ZpfA98X/Ss7v/tyVk07cdzhGCMoVs/oDBlXzH7yzmVgCMPyCacjzmAlMQpUYKAg==
-
 any-observable@^0.3.0:
   version "0.3.0"
   resolved "https://registry.npmmirror.com/any-observable/-/any-observable-0.3.0.tgz#af933475e5806a67d0d7df090dd5e8bef65d119b"
@@ -10838,6 +10833,11 @@ ws@^6.0.0, ws@^6.2.1:
   integrity sha512-zmhltoSR8u1cnDsD43TX59mzoMZsLKqUweyYBAIvTngR3shc0W6aOZylZmq/7hqyVxPdi+5Ud2QInblgyE72fw==
   dependencies:
     async-limiter "~1.0.0"
+
+x6-html-shape@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/x6-html-shape/-/x6-html-shape-0.4.1.tgz#92d00d234e71b6c65c90ff46afb3f54f823eb394"
+  integrity sha512-sOQd7kdzAYY1W17xuSnl58PjEDG8tuLtCjg7maXHxDxB1bBb7CsvFMVpcNTfT9LrjGUp8PGHIB2QGgkUn7k3Eg==
 
 xtend@^4.0.0, xtend@~4.0.1:
   version "4.0.2"
