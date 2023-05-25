@@ -26,7 +26,7 @@
       <Edge id="e1" source="1" target="2" @added="added" label="edge1" />
       <VueShape primer="rect" id="3" :x="200" :y="300" :width="160" :height="60" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}" @added="added" @change:zIndex="changed">
         <div>这里是一个vue的组件</div>
-        <img style="width: 30px;height:30px;" src="https://v3.cn.vuejs.org/logo.png" />
+        <img style="width: 30px;height:30px;" src="https://vitejs.dev/logo.svg" />
         <template #port>
         <PortGroup name="in" position="top" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
           <Port id="id1" />
