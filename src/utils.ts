@@ -1,4 +1,7 @@
 // @ts-nocheck
+import { watchEffect, defineComponent, shallowRef } from 'vue'
+import { useContext, contextSymbol } from './GraphContext'
+
 export function debounce<T extends []>(fn: (...args: T) => void, delay = 60) {
   let timer: number | null = null
 
@@ -57,4 +60,25 @@ export const bindEvent = (node, events, graph) => {
   return () => ubindEvents.forEach(h => h())
 }   
 
+export const createPluginComponent = (name, Plugin) => {
+  return defineComponent({
+    name,
+    inheritAttrs: false,
+    inject: [contextSymbol],
+    setup(_, { attrs: options }) {
+      const { graph } = useContext()
+      const plugin = shallowRef<typeof Plugin>()
+      watchEffect((cleanup) => {
+        plugin.value = new Plugin(options)
+        graph.use(plugin.value)
+        cleanup(() => {
+          if (plugin.value) {
+            plugin.value.dispose()
+          }
+        })
+      })
+      return () => null
+    }
+  })
+}
 

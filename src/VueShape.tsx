@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { h, defineComponent, shallowReactive, onMounted, onUnmounted, markRaw, nextTick, watch, watchEffect, shallowRef, Fragment } from 'vue';
-import { NodeProps, useCell } from './Shape'
+import { h, defineComponent, shallowReactive, onMounted, markRaw, watchEffect, shallowRef, Fragment } from 'vue';
+import { useCell } from './Shape'
 import { contextSymbol, cellContextSymbol } from './GraphContext'
 import { register } from 'x6-html-shape'
 // import createRender from 'x6-html-shape/dist/teleport'
@@ -22,7 +22,7 @@ export const useVueShape = (props, { slots }) => {
     name: 'DataWatcher',
     props: ['graph', 'node', 'container'],
     setup(props) {
-      const { node, graph, container } = props
+      const { node, graph } = props
       const state = shallowReactive({ data: node.getData() })
       const root = shallowRef()
       onMounted(() => {

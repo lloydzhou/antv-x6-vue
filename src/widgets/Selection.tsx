@@ -1,8 +1,8 @@
 // @ts-nocheck
-import { defineComponent, onMounted, onUnmounted, watch } from 'vue';
+import { defineComponent, onMounted, onUnmounted, watchEffect, shallowRef } from 'vue';
 import { useContext, contextSymbol } from '../GraphContext'
 import { mergeOption } from '../utils'
-
+import { Selection } from "@antv/x6-plugin-selection";
 
 const defaultOptions = {
   multiple: true,
@@ -13,53 +13,37 @@ const defaultOptions = {
 
 export default defineComponent({
   name: 'Selection',
-  props: ['enabled', 'multiple', 'rubberband', 'rubberNode', 'rubberEdge', 'strict', 'modifiers', 'movable', 'content', 'filter'],
+  inheritAttrs: false,
   inject: [contextSymbol],
-  setup(props, { emit }) {
+  emits: ["selected", "unselected", "changed"],
+  setup(_, { attrs: props, emit }) {
     const { graph } = useContext()
+
+    const plugin = shallowRef<typeof Selection>()
+    watchEffect((cleanup) => {
+      plugin.value = new Selection(mergeOption(defaultOptions, {...props}))
+      graph.use(plugin.value)
+      cleanup(() => {
+        if (plugin.value) {
+          plugin.value.dispose()
+        }
+      })
+    })
 
     const selected = (e) => emit('selected', e)
     const unselected = (e) => emit('unselected', e)
     const changed = (e) => emit('changed', e)
 
-    const clear = () => {
-      graph.cleanSelection()
-      graph.disableSelection()
-      graph.off('cell:selected', selected)
-      graph.off('cell:unselected', unselected)
-      graph.off('selection:changed', changed)
-    }
-    const create = () => {
-      // 1. 先停止监听
-      clear()
-      // 2. 重新生成对应的widget（由于manager在graph上是readonly的只能更改内层的widget）
-      const { enabled, ...otherOptions } = props
-      const selecting = mergeOption(
-        graph.selection.widgetOptions || {},
-        mergeOption(
-          defaultOptions,
-          {
-            ...otherOptions,
-            enabled: enabled !== false
-          }
-        )
-      )
-      // 从那边获取的值是{0: 'ctrl', 1: 'meta'}不是一个Array
-      // console.log('selecting', selecting)
-      // if (selecting.multiple && !selecting.multipleSelectionModifiers.length) {
-      //   selecting.multipleSelectionModifiers = ['ctrl', 'meta']
-      // }
-      graph.options.selecting = selecting
-      graph.selection.widget = graph.hook.createSelection()
-      graph.enableSelection()
-      graph.selection.enable()
+    onMounted(() => {
       graph.on('cell:selected', selected)
       graph.on('cell:unselected', unselected)
       graph.on('selection:changed', changed)
-    }
-    // watch(() => props, () => create(), {deep: true})
-    // onMounted(() => create())
-    // onUnmounted(() => clear())
+    })
+    onUnmounted(() => {
+      graph.off('cell:selected', selected)
+      graph.off('cell:unselected', unselected)
+      graph.off('selection:changed', changed)
+    })
     return () => null
   }
 })

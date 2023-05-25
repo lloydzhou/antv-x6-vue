@@ -56,6 +56,48 @@
   resolved "https://registry.yarnpkg.com/@antv/x6-geometry/-/x6-geometry-2.0.5.tgz#c158317d74135bedd78c2fdeb76f9c7cfa0ef0aa"
   integrity sha512-MId6riEQkxphBpVeTcL4ZNXL4lScyvDEPLyIafvWMcWNTGK0jgkK7N20XSzqt8ltJb0mGUso5s56mrk8ysHu2A==
 
+"@antv/x6-plugin-clipboard@^2.1.6":
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/@antv/x6-plugin-clipboard/-/x6-plugin-clipboard-2.1.6.tgz#98886d5b16a175b67f142ef66c75907de7c1b069"
+  integrity sha512-roZPLnZx6PK8MBvee0QMo90fz/TXeF0WNe4EGin2NBq5M1I5XTWrYvA6N2XVIiWAAI67gjQeEE8TpkL7f8QdqA==
+
+"@antv/x6-plugin-dnd@^2.0.5":
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@antv/x6-plugin-dnd/-/x6-plugin-dnd-2.0.5.tgz#48d67eee6ea7cb4817331ea5d0429f2e5b7fe58f"
+  integrity sha512-g8GGJS2XmM8C59juOBiFqaR/f8i8y8tqw9sJNwta7s1Phh3hwDd7o4kk36Kk5eTKkfZfnjEyWHMOqp/h+EDibQ==
+
+"@antv/x6-plugin-keyboard@^2.0":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@antv/x6-plugin-keyboard/-/x6-plugin-keyboard-2.2.1.tgz#a6bf1d1dbec7b520ebb5090fdb275b2f4e3ea42e"
+  integrity sha512-sqfN0h4txVO211uIeKBd3zQ/IN2zPzDThWNTEhRx7Lecg1fO7uRXWBbOA48j3EgpRFXVexdSzIEVJEx+IWUdYw==
+  dependencies:
+    mousetrap "^1.6.5"
+
+"@antv/x6-plugin-minimap@^2.0.5":
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@antv/x6-plugin-minimap/-/x6-plugin-minimap-2.0.5.tgz#bd4699408715b4709e77e83edf14ceb0e767b1f6"
+  integrity sha512-6L+W80AvoEZG4cwRxgPxvYLeKhqkBJEt4hTnZ2NWWcvBx02F9RJKRZVEEUemqE12mKUv4HT6WtbQV0QIfkTEMw==
+
+"@antv/x6-plugin-scroller@^2.0.9":
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/@antv/x6-plugin-scroller/-/x6-plugin-scroller-2.0.9.tgz#804657cb4f77d574cb252a6291abe132441c3474"
+  integrity sha512-f3fluvSIbZBp+c5iKyidAoz19i0beWOnPA0CPfu/K4C+Jf1eWNgaFXbN3hcHPQRvFRJiPtvPApK30aCaik9Omg==
+
+"@antv/x6-plugin-selection@^2.1.7":
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/@antv/x6-plugin-selection/-/x6-plugin-selection-2.1.7.tgz#8964041d595b732bec5883a1f77757bededec594"
+  integrity sha512-ODfYLNwKSaLgIYMYfMW4dYQ9KKFOVBEdH0BzvyG8mfRol+JtZuyrm4BRbAvMryQKHrSxs4JCYXTFd2F7ZTuxLQ==
+
+"@antv/x6-plugin-snapline@^2.1.7":
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/@antv/x6-plugin-snapline/-/x6-plugin-snapline-2.1.7.tgz#1b4e3be0a281ba324117b7ac7b9b8c39e484cce2"
+  integrity sha512-AsysoCb9vES0U2USNhEpYuO/W8I0aYfkhlbee5Kt4NYiMfQfZKQyqW/YjDVaS2pm38C1NKu1LdPVk/BBr4CasA==
+
+"@antv/x6-plugin-stencil@^2.0":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@antv/x6-plugin-stencil/-/x6-plugin-stencil-2.0.3.tgz#41602abcba2f995bf37ad6bf9b83a797a4fd26a7"
+  integrity sha512-pQkTIbMCezTqo38fofuFGnI30Rk0j5gHc/+Ndml1RHVEV0p8i1HGRAR5we7SVTcT56AHlP46H+oRFReQmVgvKA==
+
 "@antv/x6@^2.0":
   version "2.11.1"
   resolved "https://registry.yarnpkg.com/@antv/x6/-/x6-2.11.1.tgz#d0ae8d9137b52bf1c3724c882c13ed9ac124d6fb"
@@ -7086,6 +7128,11 @@ mkdirp@^1.0.3, mkdirp@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
+
+mousetrap@^1.6.5:
+  version "1.6.5"
+  resolved "https://registry.yarnpkg.com/mousetrap/-/mousetrap-1.6.5.tgz#8a766d8c272b08393d5f56074e0b5ec183485bf9"
+  integrity sha512-QNo4kEepaIBwiT8CDhP98umTetp+JNfQYBWvC1pc6/OAibuXtRcxZ58Qz8skvEHYvURne/7R8T5VoOI7rDsEUA==
 
 move-concurrently@^1.0.1:
   version "1.0.1"

@@ -2,7 +2,7 @@
 import { shallowReactive, defineComponent } from "vue";
 import { h, Fragment } from "vue";
 import createTeleportRender from 'x6-html-shape/dist/teleport'
-import createVue3Render from 'x6-html-shape/dist/vue'
+// import createVue3Render from 'x6-html-shape/dist/vue'
 
 const state = shallowReactive<{[key: string]: any}>({items: []})
 

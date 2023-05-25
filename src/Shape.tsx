@@ -1,12 +1,12 @@
 // @ts-nocheck
-import { defineComponent, onMounted, onUnmounted, ref, watch, watchEffect, provide, shallowReactive, inject, Fragment } from 'vue';
+import { defineComponent, onMounted, onUnmounted, ref, watch, provide, shallowReactive, inject, Fragment } from 'vue';
 import { Node as X6Node, Edge as X6Edge, Shape, Cell as BaseShape, ObjectExt } from '@antv/x6'
 import { useContext, contextSymbol } from './GraphContext'
 import { cellContextSymbol, portGroupContextSymbol } from './GraphContext'
 import { processProps, bindEvent } from './utils'
 
 const createCell = (p) => {
-  const { props, events } = processProps(p)
+  const { props } = processProps(p)
   const { id, shape, x, y, width, height, angle, ...otherOptions } = props
   // 从registry获取注册的类型，获取不到就使用Cell
   const ShapeClass = X6Node.registry.get(shape) || X6Edge.registry.get(shape) || BaseShape

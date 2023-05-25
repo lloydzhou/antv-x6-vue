@@ -1,21 +1,28 @@
 // @ts-nocheck
-import { defineComponent, onMounted, onUnmounted, watch } from 'vue';
+import { defineComponent, onMounted, onUnmounted, watchEffect, shallowRef } from 'vue';
 import { useContext, contextSymbol } from '../GraphContext'
+import { Clipboard } from "@antv/x6-plugin-clipboard";
 
 export default defineComponent({
   name: 'Clipboard',
-  props: ['enabled'],
+  inheritAttrs: false,
   inject: [contextSymbol],
-  setup(props, { emit }) {
+  emits: ["copy", "cut", "paste"],
+  setup(_, { attrs: props, emit }) {
     const { graph } = useContext()
-    const enableClipboard = (enabled) => {
-      // console.log('draw Background', props)
-      graph.disableClipboard()
-      if (enabled !== false) {
-        graph.enableClipboard()
-      }
-    }
-    // watch(() => props.enabled, (enabled) => enableClipboard(enabled))
+    const plugin = shallowRef<typeof Clipboard>()
+    watchEffect((cleanup) => {
+      plugin.value = new Clipboard(props)
+      graph.use(plugin.value)
+      cleanup(() => {
+        if (plugin.value) {
+          plugin.value.dispose()
+        }
+      })
+    })
+
+    const isKeyboardEnabled = () => graph.isKeyboardEnabled && graph.isKeyboardEnabled()
+
     const copy = () => {
       const cells = graph.getSelectedCells()
       if (cells.length) {
@@ -38,18 +45,20 @@ export default defineComponent({
         emit('paste', { cells, graph })
       }
     }
-    // onMounted(() => {
-    //   enableClipboard()
-    //   graph.bindKey('ctrl+c', copy)
-    //   graph.bindKey('ctrl+x', cut)
-    //   graph.bindKey('ctrl+v', paste)
-    // })
-    // onUnmounted(() => {
-    //   graph.disableClipboard()
-    //   graph.unbindKey('ctrl+c')
-    //   graph.unbindKey('ctrl+x')
-    //   graph.unbindKey('ctrl+v')
-    // })
+    onMounted(() => {
+      if (isKeyboardEnabled()) {
+        graph.bindKey('ctrl+c', copy)
+        graph.bindKey('ctrl+x', cut)
+        graph.bindKey('ctrl+v', paste)
+      }
+    })
+    onUnmounted(() => {
+      if (isKeyboardEnabled()) {
+        graph.unbindKey('ctrl+c')
+        graph.unbindKey('ctrl+x')
+        graph.unbindKey('ctrl+v')
+      }
+    })
     return () => null
   }
 })

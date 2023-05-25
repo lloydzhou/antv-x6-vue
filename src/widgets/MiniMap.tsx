@@ -1,5 +1,6 @@
 // @ts-nocheck
-import { defineComponent, onMounted, onUnmounted, ref, watch } from 'vue';
+import { MiniMap } from "@antv/x6-plugin-minimap";
+import { defineComponent, watchEffect, shallowRef } from 'vue';
 import { useContext, contextSymbol } from '../GraphContext'
 import { mergeOption } from '../utils'
 
@@ -17,42 +18,32 @@ const defaultOptions = {
 
 export default defineComponent({
   name: 'MiniMap',
-  props: ['enabled', 'width', 'height', 'padding', 'scalable', 'minScale', 'maxScale', 'graphOptions', 'createGraph', 'style'],
+  inheritAttrs: false,
   inject: [contextSymbol],
-  setup(props) {
+  setup(_, { attrs: props }) {
     const { graph } = useContext()
-    const containerRef = ref()
-
-    const clear = () => {
-      if (graph.minimap.widget) {
-        graph.minimap.widget.dispose()
+    const containerRef = shallowRef()
+    
+    const plugin = shallowRef<typeof MiniMap>()
+    watchEffect((cleanup) => {
+      if (containerRef.value) {
+        plugin.value = new MiniMap(mergeOption({
+          ...defaultOptions,
+          graphOptions: { background: graph.options.background, grid: graph.options.grid },
+        }, {
+          ...props,
+          enabled: props.enabled !== false,
+          container: containerRef.value,
+        }))
+        graph.use(plugin.value)
       }
-    }
-    const create = () => {
-      // 1. 先停止监听
-      clear()
-      // 2. 重新生成对应的widget（由于manager在graph上是readonly的只能更改内层的widget）
-      const { enabled, ...otherOptions } = props
-      const options = mergeOption(
-        graph.options.minimap || {},
-        mergeOption(
-          {
-            ...defaultOptions,
-            graphOptions: { background: graph.options.background, grid: graph.options.grid },
-          },
-          {
-            ...otherOptions,
-            enabled: enabled !== false,
-            container: containerRef.value,
-          }
-        )
-      )
-      graph.options.minimap = options
-      graph.minimap.widget = graph.hook.createMiniMap()
-    }
-    // watch(() => props, () => create(), {deep: true})
-    // onMounted(() => create())
-    // onUnmounted(() => clear())
+      cleanup(() => {
+        if (plugin.value) {
+          plugin.value.dispose()
+        }
+      })
+    })
+
     return () => {
       const { style = {} } = props
       return <div ref={node => containerRef.value = node} style={{
