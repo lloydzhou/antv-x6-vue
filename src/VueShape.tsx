@@ -1,6 +1,7 @@
 // @ts-nocheck
-import { h, defineComponent, shallowReactive, onMounted, markRaw, watchEffect, shallowRef, Fragment } from 'vue';
-import { useCell } from './Shape'
+import { h, defineComponent, shallowReactive, onMounted, markRaw, watchEffect, shallowRef, Fragment, watch } from 'vue';
+import { ObjectExt } from '@antv/x6'
+import { useCell, createCell } from './Shape'
 import { contextSymbol, cellContextSymbol } from './GraphContext'
 import { register } from 'x6-html-shape'
 // import createRender from 'x6-html-shape/dist/teleport'
@@ -59,7 +60,7 @@ export const useVueShape = (props, { slots }) => {
       );
     }
   })
-  
+
   
   const render = createRender(DataWatcher)
   const shape = 'v-shape-' + Math.random ().toString(36).slice(-8)
@@ -69,7 +70,7 @@ export const useVueShape = (props, { slots }) => {
     primer, useForeignObject,
     ...(typeof props === 'function' ? props() : props),
     shape,
-    render: markRaw(createRender(DataWatcher)),
+    render,
   })
   return cell
 }
@@ -78,8 +79,20 @@ export const VueShape = defineComponent({
   name: 'VueShape',
   inheritAttrs: false,
   inject: [contextSymbol, cellContextSymbol],
-  setup(_, context) {
+  setup(props, context) {
     const cell = useVueShape(context.attrs, context)
+    // 监听其他变化 watch不能放到useCell内部
+    watch(() => context.attrs, newProps => {
+      const newCell = createCell(newProps)
+      const prop = newCell.getProp()
+      if (!ObjectExt.isEqual(cell.value.getProp(), prop)) {
+        Object.keys(prop).forEach((key) => {
+          if (['id', 'parent', 'shape'].indexOf(key) === -1) {
+            cell.value.setProp(key, prop[key])
+          }
+        })
+      }
+    }, { deep: true })
     const { default: _default, port } = context.slots
     // port和default都有可能需要渲染
     // 配置component的时候，VueShape节点使用props.component渲染，这个时候，需要渲染default

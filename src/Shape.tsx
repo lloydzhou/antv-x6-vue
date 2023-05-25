@@ -5,7 +5,7 @@ import { useContext, contextSymbol } from './GraphContext'
 import { cellContextSymbol, portGroupContextSymbol } from './GraphContext'
 import { processProps, bindEvent } from './utils'
 
-const createCell = (p) => {
+export const createCell = (p) => {
   const { props } = processProps(p)
   const { id, shape, x, y, width, height, angle, ...otherOptions } = props
   // 从registry获取注册的类型，获取不到就使用Cell
@@ -32,18 +32,6 @@ export const useCell = (props) => {
   // 避免injection not found警告
   provide(portGroupContextSymbol, { name: '' })
 
-  // 监听其他变化
-  watch(() => props, newProps => {
-    const newCell = createCell(newProps)
-    const prop = newCell.getProp()
-    if (!ObjectExt.isEqual(cell.value.getProp(), prop)) {
-      Object.keys(prop).forEach((key) => {
-        if (['id', 'parent', 'shape'].indexOf(key) === -1) {
-          cell.value.setProp(key, prop[key])
-        }
-      })
-    }
-  })
   const removeEvent = ref()
   onMounted(() => {
     // 从registry获取注册的类型，获取不到就使用Cell
@@ -76,21 +64,6 @@ export const useCell = (props) => {
   return cell
 }
 
-const Cell = defineComponent({
-  name: 'Cell',
-  inheritAttrs: false,
-  inject: [contextSymbol, cellContextSymbol],
-  setup(_, { slots, attrs: props }) {
-    const cell = useCell(props)
-    // 优先判断名字是port的slot在不在，不存在的时候渲染默认的slot
-    const { default: _default, port } = slots
-    return () => cell.value ? <Fragment>
-      {port && port()}
-      {_default && _default()}
-    </Fragment> : null
-  }
-})
-
 const Shapes = {}
 
 Object.keys(Shape).forEach(name => {
@@ -103,6 +76,18 @@ Object.keys(Shape).forEach(name => {
       const { shape: defaultShape } = ShapeClass.defaults || {}
       const { shape=defaultShape } = props
       const cell = useCell({...props, shape})
+      // 监听其他变化
+      watch(() => props, newProps => {
+        const newCell = createCell(newProps)
+        const prop = newCell.getProp()
+        if (!ObjectExt.isEqual(cell.value.getProp(), prop)) {
+          Object.keys(prop).forEach((key) => {
+            if (['id', 'parent', 'shape'].indexOf(key) === -1) {
+              cell.value.setProp(key, prop[key])
+            }
+          })
+        }
+      }, { deep: true })
       const { default: _default, port } = slots
       // port和default都有可能需要渲染
       return () => cell.value ? <Fragment>
@@ -115,11 +100,12 @@ Object.keys(Shape).forEach(name => {
 
 const { Rect, Edge } = Shapes
 const Node = Rect
+const Cell = Rect
 Node.name = 'Node'
 export {
   Shape,
-  Cell,
   Node,
+  Cell,
   Rect,
   Edge,
 }
