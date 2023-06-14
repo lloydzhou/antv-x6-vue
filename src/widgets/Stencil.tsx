@@ -1,9 +1,9 @@
 // @ts-nocheck
 import { defineComponent, onMounted, onUnmounted, ref, nextTick, shallowReactive, provide, inject } from 'vue';
-import { Addon, FunctionExt } from '@antv/x6'
+import { FunctionExt } from '@antv/x6'
+import { Stencil } from '@antv/x6-plugin-stencil'
 import { useContext, contextSymbol, createContext } from '../GraphContext'
 import { mergeOption } from '../utils'
-const { Stencil } = Addon
 
 export const stencilContextSymbol = String(Symbol('x6StencilContextSymbol'))
 export const StencilGroup = defineComponent({

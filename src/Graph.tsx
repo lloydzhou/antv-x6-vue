@@ -1,27 +1,18 @@
 // @ts-nocheck
-import { defineComponent, onMounted, ref, watch, watchEffect, markRaw, shallowReactive, Fragment, provide } from 'vue';
+import { DefineComponent, defineComponent, onMounted, onUnmounted, ref, watch, watchEffect, markRaw, shallowReactive, Fragment, provide } from 'vue';
 import * as X6 from '@antv/x6'
 import { createContext, cellContextSymbol } from './GraphContext'
 // import clone from '@antv/util/es/clone'
 import { addListener, removeListener } from 'resize-detector'
-import { debounce } from './utils'
+import { debounce, processProps, bindEvent } from './utils'
 
 
-export const GraphProps = [
-  'width', 'height', 'autoResize', 'panning',
-  'grid', 'background', 'snapline', 'scroller', 'minimap', 'history', 'clipboard', 'keyboard', 'mousewheel', 'selecting',
-  'rotating', 'resizing', 'translating', 'transforming', 'embedding', 'connecting', 'highlighting', 'interacting', 'sorting',
-  'async', 'frozen', 'checkView', 'magnetThreshold', 'moveThreshold', 'clickThreshold',
-  'preventDefaultContextMenu', 'preventDefaultBlankAction',
-  'guard', 'allowRubberband', 'allowPanning',
-  'getCellView', 'createCellView', 'getHTMLComponent',
-  'onPortRendered', 'onEdgeLabelRendered', 'onToolItemCreated', 'model',
-]
-
-const Graph = defineComponent({
+const Graph: DefineComponent<X6.Graph> = defineComponent({
+  inheritAttrs: false,
   name: 'Graph',
-  props: GraphProps,
-  setup(props, { emit }) {
+  emits: ['ready'],
+  setup(_, { emit, attrs }) {
+    const { props={}, events={} } = processProps(attrs)
     const { width, height, ...otherOptions } = props;
     const self = markRaw({
       props,
@@ -31,7 +22,7 @@ const Graph = defineComponent({
       layout: {},
       options: { ...otherOptions },
     })
-    const isReady = ref(false)
+    const isReady = ref(null)
 
     // self.props不会同步变化
     watch(() => props, (newProps) => self.props = {...newProps})
@@ -73,7 +64,7 @@ const Graph = defineComponent({
 
       self.graph = new X6.Graph(self.options)
       contextRef.graph = self.graph
-      isReady.value = true
+      isReady.value = bindEvent(null, events, self.graph)
       emit('ready', { graph: self.graph })
     }
 
@@ -98,6 +89,9 @@ const Graph = defineComponent({
     onMounted(() => {
       initGraphInstance()
     })
+    onUnmounted(() => {
+      isReady.value && isReady.value()
+    })
 
     return {
       graphDOM,
@@ -117,7 +111,7 @@ const Graph = defineComponent({
           height: '100%',
         }} ref="graphDOM" />
         <div class="graph-component">
-          {isReady && <Fragment>
+          {!!isReady && <Fragment>
             {slots.default ? slots.default() : null}
             {slots.components ? slots.components() : null}
           </Fragment>}
